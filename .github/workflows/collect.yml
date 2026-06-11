@@ -56,7 +56,11 @@ jobs:
           python run_pipeline.py --sims ${{ github.event.inputs.sims || '10000' }}
 
       # 5. Commit updated DB + Parquet + predictions.json back to the repo
-      #    If nothing changed (no new data), this is a no-op.
+      #    Pull first to avoid non-fast-forward rejection when local commits
+      #    land on main between checkout and push.
+      - name: Pull latest before committing
+        run: git pull --rebase origin main
+
       - name: Commit updated data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
