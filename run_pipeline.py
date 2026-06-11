@@ -169,12 +169,27 @@ def run(skip_collect: bool = False, n_sims: int = 10000) -> dict:
     elo_data = latest_elo(conn)
     groups   = group_map(conn)
 
+    # Lock in confirmed results so simulations start from the actual scoreboard
+    confirmed = conn.execute("""
+        SELECT f.home_team, f.away_team, mr.result, f.group_letter
+        FROM match_results mr
+        JOIN fixtures f ON mr.fixture_id = f.fixture_id
+        WHERE f.stage = 'group'
+    """).fetchall()
+    locked_by_group: dict[str, list[tuple[str, str, str]]] = {}
+    for home, away, result, grp in confirmed:
+        if grp:
+            locked_by_group.setdefault(grp, []).append((home, away, result))
+    if confirmed:
+        log.info("  Locking %d confirmed group result(s) before simulation", len(confirmed))
+
     group_standings: dict[str, list[dict]] = {}
     sim_rows = []
 
     for g, team_ids in groups.items():
         elo_for_group = {tid: elo_data.get(tid, 1700) for tid in team_ids}
-        sim = simulate_group(team_ids, elo_for_group, n_sims, HOME_ADVANTAGE_ELO)
+        sim = simulate_group(team_ids, elo_for_group, n_sims, HOME_ADVANTAGE_ELO,
+                             locked_results=locked_by_group.get(g) or None)
 
         ranked = sorted(team_ids, key=lambda t: sim[t]["advance_prob"], reverse=True)
         group_standings[g] = []

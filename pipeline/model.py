@@ -193,27 +193,51 @@ def simulate_group(
     teams: list[str],
     elo_ratings: dict[str, float],
     n_simulations: int = 10000,
-    home_advantage: float = 0.0
+    home_advantage: float = 0.0,
+    locked_results: list[tuple[str, str, str]] | None = None,
 ) -> dict:
     """
     Monte Carlo simulation of a group stage round-robin.
 
+    locked_results: list of (home_id, away_id, result) for already-played matches,
+    where result is 'home_win' | 'draw' | 'away_win'. Locked matches contribute
+    fixed points in every iteration; only remaining fixtures are simulated.
+
     Returns advancement probabilities and average expected points for each team.
     """
-    # Track how often each team finishes in each position (handle any group size)
     n_teams = len(teams)
     position_counts = {t: {p: 0 for p in range(1, n_teams + 1)} for t in teams}
     advance_counts  = {t: 0 for t in teams}
     total_points    = {t: 0.0 for t in teams}
 
-    # All round-robin pairs
-    pairs = [(teams[i], teams[j]) for i in range(len(teams)) for j in range(i+1, len(teams))]
+    # Separate locked (played) from remaining (unplayed) fixtures
+    locked_map: dict[tuple[str, str], str] = {}
+    if locked_results:
+        for home, away, res in locked_results:
+            locked_map[(home, away)] = res
+
+    all_pairs = [(teams[i], teams[j]) for i in range(len(teams)) for j in range(i+1, len(teams))]
+
+    # Compute fixed points/GD from confirmed results (same every iteration)
+    base_pts: dict[str, int] = {t: 0 for t in teams}
+    base_gd:  dict[str, int] = {t: 0 for t in teams}
+    remaining_pairs = []
+    for home, away in all_pairs:
+        res = locked_map.get((home, away))
+        if res == "home_win":
+            base_pts[home] += 3; base_gd[home] += 1; base_gd[away] -= 1
+        elif res == "draw":
+            base_pts[home] += 1; base_pts[away] += 1
+        elif res == "away_win":
+            base_pts[away] += 3; base_gd[away] += 1; base_gd[home] -= 1
+        else:
+            remaining_pairs.append((home, away))
 
     for _ in range(n_simulations):
-        points = {t: 0 for t in teams}
-        gd     = {t: 0 for t in teams}  # goal difference proxy for tiebreaking
+        points = dict(base_pts)
+        gd     = dict(base_gd)
 
-        for home, away in pairs:
+        for home, away in remaining_pairs:
             e_home = elo_ratings.get(home, 1700)
             e_away = elo_ratings.get(away, 1700)
             probs  = elo_probabilities(e_home, e_away, home_advantage)
@@ -228,12 +252,10 @@ def simulate_group(
                 points[away] += 3
                 gd[away] += 1; gd[home] -= 1
 
-        # Rank teams: sort by pts desc, then GD desc, then random tiebreak
         ranked = sorted(teams, key=lambda t: (points[t], gd[t], random.random()), reverse=True)
         for pos, team in enumerate(ranked, 1):
             position_counts[team][pos] += 1
             total_points[team] += points[team]
-        # Top 2 advance (8 best 3rd-place teams also advance, handled in tournament sim)
         for team in ranked[:2]:
             advance_counts[team] += 1
 
