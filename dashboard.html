@@ -586,9 +586,12 @@ async function renderMatches() {
     SELECT bp.fixture_id, bp.home_name, bp.away_name, bp.match_date,
            bp.kickoff_utc, bp.group_letter, bp.round, bp.home_team, bp.away_team,
            bp.home_win, bp.draw, bp.away_win, bp.confidence, bp.n_observations,
-           bp.status, bp.home_score, bp.away_score,
+           bp.status,
+           COALESCE(mr.home_score, -1) AS home_score,
+           COALESCE(mr.away_score, -1) AS away_score,
            t1.seed_elo AS elo_home, t2.seed_elo AS elo_away
     FROM bayesian_probs bp
+    LEFT JOIN match_results mr ON bp.fixture_id = mr.fixture_id
     JOIN teams t1 ON bp.home_team=t1.team_id
     JOIN teams t2 ON bp.away_team=t2.team_id
     ORDER BY bp.match_date, bp.fixture_id`);

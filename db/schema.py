@@ -190,6 +190,7 @@ def export_parquet(conn: duckdb.DuckDBPyConnection) -> None:
         "bayesian_probs": """
             SELECT bp.fixture_id, bp.home_win, bp.draw, bp.away_win,
                    bp.confidence, bp.n_observations,
+                   CAST(bp.computed_at AS VARCHAR) AS computed_at,
                    t1.name AS home_name, t2.name AS away_name,
                    f.home_team, f.away_team,
                    f.group_letter,
