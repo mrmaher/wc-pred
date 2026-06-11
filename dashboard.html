@@ -337,7 +337,6 @@ const BUNDLES = duckdb.getJsDelivrBundles();
 const BASE = window.location.pathname.endsWith('/')
   ? window.location.href
   : window.location.href.replace(/\/[^\/]*$/, '/');
-const CACHE_BUST = '?v=' + Math.floor(Date.now() / 3600000); // changes every hour
 const PARQUET = BASE + 'data/parquet/';
 
 let db, conn;
@@ -367,13 +366,17 @@ async function initDB() {
 
 async function loadData() {
   try {
+    // Unique timestamp per call — bypasses browser cache AND duckdb-wasm's internal HTTP cache
+    const bust = '?cb=' + Date.now();
     const files = ['fixtures','teams','bayesian_probs',
                    'group_sim_results','ko_sim_results','elo_snapshots',
                    'odds_snapshots','match_results',
                    'ko_sim_history','group_sim_history'];
+    // Drop any internally cached parquet files so duckdb-wasm re-fetches from the CDN
+    try { await db.dropFiles(); } catch(_) {}
     for (const f of files) {
       try {
-        await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet${CACHE_BUST}')`);
+        await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet${bust}')`);
       } catch(e) { console.warn(`Could not load ${f}.parquet:`, e.message); }
     }
     await renderAll();

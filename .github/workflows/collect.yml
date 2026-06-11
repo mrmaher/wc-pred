@@ -72,7 +72,21 @@ jobs:
             data/predictions.json
           push_options: '--force-with-lease'
 
-      # 7. Confirm what was written (visible in Actions logs)
+      # 7. Verify new timestamps were written to the DB
+      - name: Verify pipeline output
+        run: |
+          python3 -c "
+import duckdb
+conn = duckdb.connect('data/wc2026.db', read_only=True)
+row = conn.execute('SELECT MAX(computed_at), COUNT(*) FROM group_sim_results').fetchone()
+print(f'group_sim_results: latest={row[0]}  total_rows={row[1]}')
+row2 = conn.execute('SELECT MAX(computed_at), COUNT(*) FROM ko_sim_results').fetchone()
+print(f'ko_sim_results:    latest={row2[0]}  total_rows={row2[1]}')
+row3 = conn.execute('SELECT MAX(collected_at), COUNT(*) FROM elo_snapshots').fetchone()
+print(f'elo_snapshots:     latest={row3[0]}  total_rows={row3[1]}')
+"
+
+      # 8. Confirm what was written (visible in Actions logs)
       - name: Summary
         run: |
           echo "### Pipeline complete" >> $GITHUB_STEP_SUMMARY
