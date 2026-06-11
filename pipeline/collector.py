@@ -204,6 +204,8 @@ _NAME_ALIASES: dict[str, str] = {
 
 def _normalise(name: str) -> str:
     """Lower-case + apply alias map so bookmaker names match DB names."""
+    if not name:
+        return ""
     n = name.lower().strip()
     return _NAME_ALIASES.get(n, n)
 
