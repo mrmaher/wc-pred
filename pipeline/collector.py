@@ -295,6 +295,60 @@ def _update_elo_from_result(conn: duckdb.DuckDBPyConnection,
              home_id, elo_h, new_elo_h, away_id, elo_a, new_elo_a)
 
 
+# ── Fixture time sync ─────────────────────────────────────────────────────────
+
+def sync_fixture_times(conn: duckdb.DuckDBPyConnection) -> int:
+    """
+    Fetch kickoff UTC times for all WC fixtures from football-data.org and
+    write them into fixtures.kickoff_utc. Safe to call repeatedly — only
+    updates rows where kickoff_utc is NULL or the value changed.
+    No-op if FOOTBALL_DATA_API_KEY is not set.
+    """
+    if FOOTBALL_DATA_API_KEY == "YOUR_KEY_HERE":
+        log.info("Fixture times: FOOTBALL_DATA_API_KEY not set — skipping")
+        return 0
+
+    # Fetch all matches (scheduled + finished) to get utcDate for every fixture
+    url = f"{FOOTBALL_DATA_BASE}/competitions/{FOOTBALL_DATA_WC_ID}/matches"
+    req = urllib.request.Request(url, headers={
+        "X-Auth-Token": FOOTBALL_DATA_API_KEY,
+        "User-Agent": "WC2026Predictor/2.0"
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        log.warning("Fixture times fetch failed: %s", e)
+        return 0
+
+    fixtures = conn.execute("""
+        SELECT f.fixture_id, t1.name AS home_name, t2.name AS away_name
+        FROM fixtures f
+        JOIN teams t1 ON f.home_team = t1.team_id
+        JOIN teams t2 ON f.away_team = t2.team_id
+    """).fetchall()
+
+    updated = 0
+    for m in data.get("matches", []):
+        utc_str = m.get("utcDate")
+        if not utc_str:
+            continue
+        home_api = m.get("homeTeam", {}).get("name", "")
+        away_api = m.get("awayTeam", {}).get("name", "")
+        fid = _match_fixture({"home_team": home_api, "away_team": away_api}, fixtures)
+        if not fid:
+            continue
+        conn.execute(
+            "UPDATE fixtures SET kickoff_utc = ? WHERE fixture_id = ? AND (kickoff_utc IS NULL OR kickoff_utc != ?)",
+            (utc_str, fid, utc_str)
+        )
+        updated += 1
+
+    conn.commit()
+    log.info("Fixture times: synced %d kickoff times", updated)
+    return updated
+
+
 # ── Auto results ingestion ────────────────────────────────────────────────────
 
 def collect_results(conn: duckdb.DuckDBPyConnection) -> int:
@@ -374,9 +428,11 @@ def run_collection() -> dict:
     elo_rows    = collect_elo(conn)
     odds_rows   = collect_odds(conn)
     result_rows = collect_results(conn)
+    time_rows   = sync_fixture_times(conn)
 
     conn.close()
-    return {"elo_snapshots": elo_rows, "odds_snapshots": odds_rows, "results": result_rows}
+    return {"elo_snapshots": elo_rows, "odds_snapshots": odds_rows,
+            "results": result_rows, "fixture_times": time_rows}
 
 
 if __name__ == "__main__":

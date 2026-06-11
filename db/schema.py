@@ -52,6 +52,7 @@ def init_schema(conn: duckdb.DuckDBPyConnection) -> None:
         group_letter    VARCHAR,
         round           INTEGER,
         match_date      DATE,
+        kickoff_utc     TIMESTAMPTZ,
         home_team       VARCHAR REFERENCES teams(team_id),
         away_team       VARCHAR REFERENCES teams(team_id),
         status          VARCHAR DEFAULT 'scheduled',  -- 'scheduled'|'live'|'finished'
@@ -137,6 +138,13 @@ def init_schema(conn: duckdb.DuckDBPyConnection) -> None:
     );
     """)
 
+    # ── Migrations (safe to re-run) ───────────────────────────────────────────
+    try:
+        conn.execute("ALTER TABLE fixtures ADD COLUMN kickoff_utc TIMESTAMPTZ")
+        log.info("Migration: added fixtures.kickoff_utc")
+    except Exception:
+        pass  # column already exists
+
     conn.commit()
 
 
@@ -181,12 +189,14 @@ def export_parquet(conn: duckdb.DuckDBPyConnection) -> None:
         "teams": "SELECT * FROM teams",
         "bayesian_probs": """
             SELECT bp.*, t1.name AS home_name, t2.name AS away_name,
-                   f.match_date, f.group_letter, f.round,
-                   f.home_team, f.away_team
+                   f.match_date, f.kickoff_utc, f.group_letter, f.round,
+                   f.home_team, f.away_team, f.status,
+                   mr.home_score, mr.away_score
             FROM bayesian_probs bp
             JOIN fixtures f ON bp.fixture_id = f.fixture_id
             JOIN teams t1 ON f.home_team = t1.team_id
             JOIN teams t2 ON f.away_team = t2.team_id
+            LEFT JOIN match_results mr ON bp.fixture_id = mr.fixture_id
             WHERE bp.computed_at = (
                 SELECT MAX(computed_at) FROM bayesian_probs bp2
                 WHERE bp2.fixture_id = bp.fixture_id

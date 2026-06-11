@@ -644,11 +644,22 @@ async function renderMatches() {
       ? `Group ${m.group_letter} · R${m.round||'?'}`
       : `Knockout · R${m.round||'?'}`;
 
+    // Format kickoff as "Jun 11 · 3:00 PM ET"
+    let kickoffStr = m.match_date || 'TBD';
+    if (m.kickoff_utc) {
+      try {
+        const ko = new Date(m.kickoff_utc);
+        const datePart = ko.toLocaleDateString('en-US', {timeZone:'America/New_York', month:'short', day:'numeric'});
+        const timePart = ko.toLocaleTimeString('en-US', {timeZone:'America/New_York', hour:'numeric', minute:'2-digit'});
+        kickoffStr = `${datePart} · ${timePart} ET`;
+      } catch(_) {}
+    }
+
     return `<div class="match-card" style="${finished?'border-color:rgba(16,185,129,.3)':''}">
       <div class="match-meta">
         <span class="m-badge">${stageBadge}</span>
-        <span class="m-date" style="${finished?'color:var(--green);font-weight:600':''}">
-          ${finished?'✓ Final':''}${!finished?(m.match_date||'TBD'):''}
+        <span class="m-date" style="${finished?'color:var(--green);font-weight:600':'font-size:.6rem;color:var(--muted)'}">
+          ${finished?'✓ Final · '+kickoffStr:kickoffStr}
         </span>
       </div>
       <div class="m-teams">
