@@ -9,6 +9,7 @@
     --bg:#0a0e1a; --surface:#111827; --surface2:#1a2235; --border:#1e2d45;
     --accent:#3b82f6; --accent2:#60a5fa; --gold:#f59e0b; --green:#10b981;
     --red:#ef4444; --orange:#f97316; --text:#e2e8f0; --muted:#64748b;
+    --purple:#8b5cf6; --teal:#14b8a6;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh}
@@ -27,6 +28,9 @@
        padding:7px 15px;cursor:pointer;font-size:.8rem;font-weight:600;transition:background .2s}
   .btn:hover{background:var(--accent2);color:#0f172a}
   .btn:disabled{opacity:.4;cursor:not-allowed}
+  .btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);
+             border-radius:8px;padding:7px 15px;cursor:pointer;font-size:.8rem;font-weight:600;transition:all .2s}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--text)}
 
   .nav{display:flex;border-bottom:1px solid var(--border);padding:0 28px;
        background:var(--surface);overflow-x:auto}
@@ -44,17 +48,15 @@
   .card-title{font-size:.72rem;font-weight:600;color:var(--muted);text-transform:uppercase;
               letter-spacing:.08em;margin-bottom:14px}
 
-  /* Stats strip */
   .stats-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:20px}
   .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
              padding:14px;text-align:center}
   .stat-val{font-size:1.7rem;font-weight:800;color:var(--accent2);line-height:1}
   .stat-label{font-size:.67rem;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
 
-  /* Champion grid */
   .champ-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
   .champ-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;
-              padding:14px;text-align:center;transition:border-color .2s,transform .15s}
+              padding:14px;text-align:center;transition:border-color .2s,transform .15s;cursor:pointer}
   .champ-card:hover{border-color:var(--accent);transform:translateY(-2px)}
   .champ-card.g1{border-color:var(--gold);background:rgba(245,158,11,.07)}
   .champ-card.g2{border-color:#9ca3af}
@@ -64,7 +66,6 @@
   .champ-prob{font-size:1.25rem;font-weight:800;color:var(--gold)}
   .champ-sub{font-size:.64rem;color:var(--muted);margin-top:2px}
 
-  /* Group cards */
   .groups-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
   .group-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
   .group-hdr{background:linear-gradient(90deg,var(--surface2),var(--surface));padding:10px 14px;
@@ -86,7 +87,6 @@
   .mbar-fill{height:100%;border-radius:2px;transition:width .6s ease}
   .col-h{font-size:.62rem;color:var(--muted);text-align:center;font-weight:600;letter-spacing:.04em}
 
-  /* Match cards */
   .match-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}
   .match-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
               padding:15px;position:relative;transition:border-color .2s,transform .15s}
@@ -114,7 +114,6 @@
   .value-flag{position:absolute;top:9px;right:9px;background:var(--gold);color:#0a0e1a;
               border-radius:4px;padding:2px 6px;font-size:.62rem;font-weight:800}
 
-  /* Bracket */
   .bracket-wrap{overflow-x:auto;padding-bottom:10px}
   .bracket{display:flex;gap:0;min-width:840px}
   .b-round{display:flex;flex-direction:column;min-width:190px;padding:0 7px}
@@ -130,29 +129,68 @@
   .b-team:hover{background:rgba(59,130,246,.08)}
   .b-prob{font-size:.68rem;color:var(--green);font-weight:700}
 
-  /* KO deep-run table */
   .tbl{width:100%;border-collapse:collapse;font-size:.8rem}
   .tbl th{padding:9px 11px;text-align:left;color:var(--muted);font-size:.66rem;
           text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--border)}
   .tbl td{padding:10px 11px;border-bottom:1px solid rgba(30,45,69,.35);vertical-align:middle}
   .tbl tr:hover td{background:var(--surface2)}
 
-  /* Filter bar */
   .fbar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
   .fbtn{background:var(--surface2);border:1px solid var(--border);color:var(--muted);
         border-radius:20px;padding:5px 13px;font-size:.76rem;cursor:pointer;font-weight:500;transition:all .15s}
   .fbtn:hover,.fbtn.active{background:var(--accent);border-color:var(--accent);color:#fff}
+
+  /* ── Simulations ─────────────────────────────── */
+  .sim-controls{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+                padding:18px;margin-bottom:18px}
+  .sim-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+  .sim-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  .sim-team-row{display:grid;grid-template-columns:1fr auto auto;align-items:center;
+                gap:10px;padding:9px 14px;border-bottom:1px solid rgba(30,45,69,.35)}
+  .sim-team-row:last-child{border-bottom:none}
+  .sim-bars{display:flex;height:28px;border-radius:4px;overflow:hidden;margin:2px 0}
+  .sim-bar-seg{display:flex;align-items:center;justify-content:center;font-size:.58rem;
+               font-weight:700;color:rgba(255,255,255,.9);min-width:14px;transition:width .6s ease}
+
+  /* ── Trends / Sparklines ─────────────────────── */
+  .trends-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+  .trend-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;
+              padding:13px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+  .trend-card:hover{border-color:var(--accent)}
+  .trend-info{flex:1;min-width:0}
+  .trend-name{font-size:.88rem;font-weight:700;margin-bottom:2px;
+              white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .trend-current{font-size:1.15rem;font-weight:800;color:var(--gold);line-height:1}
+  .trend-sub{font-size:.63rem;color:var(--muted);margin-top:2px}
+  .trend-delta{font-size:.7rem;font-weight:600;margin-top:3px}
+  .trend-delta.up{color:var(--green)}
+  .trend-delta.dn{color:var(--red)}
+  .sparkline-wrap{flex-shrink:0;width:80px;height:36px}
+  svg.spark{width:80px;height:36px;overflow:visible}
+
+  /* ── Data Sources ────────────────────────────── */
+  .source-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+  .source-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px}
+  .source-hdr{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px}
+  .source-name{font-size:.95rem;font-weight:700}
+  .source-tag{font-size:.62rem;font-weight:600;border-radius:12px;padding:2px 9px}
+  .tag-live{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.3)}
+  .tag-static{background:rgba(100,116,139,.15);color:var(--muted);border:1px solid var(--border)}
+  .tag-pending{background:rgba(245,158,11,.12);color:var(--gold);border:1px solid rgba(245,158,11,.3)}
+  .source-desc{font-size:.78rem;color:var(--muted);line-height:1.65;margin-bottom:12px}
+  .source-meta{font-size:.71rem;color:var(--text)}
+  .source-meta span{color:var(--muted)}
+  .recency-bar{height:4px;background:var(--border);border-radius:2px;margin-top:8px;overflow:hidden}
+  .recency-fill{height:100%;border-radius:2px;background:var(--green);transition:width .6s}
+  .recency-label{font-size:.6rem;color:var(--muted);margin-top:3px}
 
   /* Loading */
   .loading{text-align:center;padding:50px 20px;color:var(--muted)}
   .spinner{display:inline-block;animation:spin 1s linear infinite;font-size:1.5rem}
   @keyframes spin{to{transform:rotate(360deg)}}
   .empty{text-align:center;padding:36px;color:var(--muted);font-size:.88rem}
-
-  /* DB status bar */
   #db-status{background:var(--surface2);border-bottom:1px solid var(--border);
              padding:7px 28px;font-size:.73rem;display:flex;align-items:center;gap:8px}
-
   ::-webkit-scrollbar{width:5px;height:5px}
   ::-webkit-scrollbar-track{background:var(--bg)}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
@@ -186,9 +224,13 @@
   <div class="tab" data-section="groups">Group Stage</div>
   <div class="tab" data-section="matches">Match Predictions</div>
   <div class="tab" data-section="knockout">Knockout Bracket</div>
+  <div class="tab" data-section="simulations">Simulations</div>
+  <div class="tab" data-section="trends">Probability Trends</div>
+  <div class="tab" data-section="sources">Data Sources</div>
 </nav>
 
 <main>
+  <!-- ── Overview ───────────────────────────────────────────────────── -->
   <section class="section active" id="section-overview">
     <div id="stats-strip" class="stats-strip"></div>
     <div class="card">
@@ -201,16 +243,19 @@
     </div>
   </section>
 
+  <!-- ── Group Stage ─────────────────────────────────────────────────── -->
   <section class="section" id="section-groups">
     <div class="fbar" id="group-fbar"></div>
     <div id="groups-grid" class="groups-grid"><div class="loading"><span class="spinner">⚙</span></div></div>
   </section>
 
+  <!-- ── Match Predictions ───────────────────────────────────────────── -->
   <section class="section" id="section-matches">
     <div class="fbar" id="match-fbar"></div>
     <div id="match-grid" class="match-grid"><div class="loading"><span class="spinner">⚙</span></div></div>
   </section>
 
+  <!-- ── Knockout Bracket ────────────────────────────────────────────── -->
   <section class="section" id="section-knockout">
     <div class="card">
       <div class="card-title">Round of 32 — Expected Bracket</div>
@@ -221,18 +266,57 @@
       <div id="ko-table" style="overflow-x:auto"></div>
     </div>
   </section>
+
+  <!-- ── Simulations ─────────────────────────────────────────────────── -->
+  <section class="section" id="section-simulations">
+    <div class="sim-controls">
+      <div class="card-title" style="margin-bottom:10px">🎲 Monte Carlo Group Simulations</div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.65;margin-bottom:14px">
+        Each group is simulated 10,000 times using Elo-derived win/draw/loss probabilities.
+        Stacked bars show the probability distribution across all four finishing positions.
+        Green = 1st · Blue = 2nd · Amber = 3rd · Red = 4th.
+      </p>
+      <div class="fbar" id="sim-fbar"></div>
+    </div>
+    <div id="sim-grid" class="sim-grid"><div class="loading"><span class="spinner">⚙</span></div></div>
+  </section>
+
+  <!-- ── Probability Trends ──────────────────────────────────────────── -->
+  <section class="section" id="section-trends">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" style="margin-bottom:8px">📈 Champion Probability Over Time</div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.65">
+        Sparklines show how each team's champion probability has evolved across pipeline snapshots.
+        GitHub Actions runs every 6 hours — trends sharpen as match results feed back into Elo ratings.
+        <span style="color:var(--green)">↑ green delta</span> = probability rising ·
+        <span style="color:var(--red)">↓ red delta</span> = falling.
+      </p>
+    </div>
+    <div class="fbar" id="trends-fbar"></div>
+    <div id="trends-grid" class="trends-grid"><div class="loading"><span class="spinner">⚙</span></div></div>
+  </section>
+
+  <!-- ── Data Sources ────────────────────────────────────────────────── -->
+  <section class="section" id="section-sources">
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-title" style="margin-bottom:8px">📋 Data Pipeline Reference</div>
+      <p style="font-size:.8rem;color:var(--muted);line-height:1.65">
+        All sources, update cadence, and data recency for the 2026 WC Predictor pipeline.
+        GitHub Actions collects and rebuilds every 6 hours throughout the tournament.
+      </p>
+    </div>
+    <div id="source-grid" class="source-grid"></div>
+    <div class="card" style="margin-top:4px">
+      <div class="card-title">Database Snapshot</div>
+      <div id="db-snapshot" style="overflow-x:auto"></div>
+    </div>
+  </section>
 </main>
 
-<!-- duckdb-wasm (CDN) -->
 <script type="module">
-// ═══════════════════════════════════════════════════════════════════════════════
-// DuckDB-WASM bootstrap
-// ═══════════════════════════════════════════════════════════════════════════════
 import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/+esm';
 
 const BUNDLES = duckdb.getJsDelivrBundles();
-
-// Resolve parquet base URL (works locally via http.server AND on GitHub Pages)
 const BASE = window.location.pathname.endsWith('/')
   ? window.location.href
   : window.location.href.replace(/\/[^\/]*$/, '/');
@@ -241,51 +325,40 @@ const PARQUET = BASE + 'data/parquet/';
 let db, conn;
 let activeGroupFilter = 'all';
 let activeMatchFilter = 'all';
+let activeSimFilter   = 'all';
+let activeTrendFilter = 'all';
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ── Init ────────────────────────────────────────────────────────────────────
 async function initDB() {
   setStatus('Selecting duckdb-wasm bundle…');
   const bundle = await duckdb.selectBundle(BUNDLES);
-
   const worker_url = URL.createObjectURL(
     new Blob([`importScripts("${bundle.mainWorker}");`], { type: 'text/javascript' })
   );
   const worker = new Worker(worker_url);
   const logger = new duckdb.ConsoleLogger(duckdb.LogLevel.WARNING);
   db = new duckdb.AsyncDuckDB(logger, worker);
-
   setStatus('Instantiating duckdb-wasm…');
   await db.instantiate(bundle.mainModule, bundle.pthreadWorker);
   conn = await db.connect();
-
   setStatus('Loading Parquet data…');
   await loadData();
-
   document.getElementById('refresh-btn').disabled = false;
   setStatus('✓ Live — querying Parquet via duckdb-wasm', true);
 }
 
 async function loadData() {
-  setStatus('Loading Parquet data…');
   try {
-    // Register parquet files as views so we can query them with SQL
     const files = ['fixtures','teams','bayesian_probs',
                    'group_sim_results','ko_sim_results','elo_snapshots'];
     for (const f of files) {
       try {
-        await conn.query(`
-          CREATE OR REPLACE VIEW ${f}
-          AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet')
-        `);
-      } catch(e) {
-        console.warn(`Could not load ${f}.parquet:`, e.message);
-      }
+        await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet')`);
+      } catch(e) { console.warn(`Could not load ${f}.parquet:`, e.message); }
     }
     await renderAll();
   } catch(e) {
     setStatus('⚠ Error loading data — ' + e.message, false, true);
-    console.error(e);
-    // Fallback to predictions.json
     loadFallback();
   }
 }
@@ -298,59 +371,42 @@ async function refreshData() {
 
 function setStatus(msg, ok=false, warn=false) {
   document.getElementById('db-status-text').textContent = msg;
-  const spinner = document.querySelector('#db-status .spinner');
-  if (ok)   { spinner.textContent = '✓'; spinner.style.animation = 'none'; }
-  if (warn) { spinner.textContent = '⚠'; spinner.style.animation = 'none'; }
+  const sp = document.querySelector('#db-status .spinner');
+  if (ok)   { sp.textContent='✓'; sp.style.animation='none'; }
+  if (warn) { sp.textContent='⚠'; sp.style.animation='none'; }
 }
 
-// ── Query helper ──────────────────────────────────────────────────────────────
 async function q(sql) {
-  const result = await conn.query(sql);
-  return result.toArray().map(row => row.toJSON());
+  const r = await conn.query(sql);
+  return r.toArray().map(row => row.toJSON());
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// Render
-// ═══════════════════════════════════════════════════════════════════════════════
-
+// ── Render all ──────────────────────────────────────────────────────────────
 async function renderAll() {
   await Promise.all([
-    renderOverview(),
-    renderGroups(),
-    renderMatches(),
-    renderKnockout()
+    renderOverview(), renderGroups(), renderMatches(),
+    renderKnockout(), renderSimulations(), renderTrends(), renderSources()
   ]);
 }
 
-// ── Overview ──────────────────────────────────────────────────────────────────
+// ── Overview ────────────────────────────────────────────────────────────────
 async function renderOverview() {
-  const [champs, gMeta] = await Promise.all([
-    q(`SELECT ks.team_id, ks.team_name, ks.champion, ks.final, ks.semi_final,
-              gs.advance_prob
-       FROM ko_sim_results ks
-       LEFT JOIN (
-         SELECT team_id, MAX(advance_prob) AS advance_prob
-         FROM group_sim_results GROUP BY team_id
-       ) gs ON ks.team_id = gs.team_id
-       ORDER BY ks.champion DESC LIMIT 20`),
-    q(`SELECT COUNT(DISTINCT team_id) AS n_teams,
-              COUNT(DISTINCT group_letter) AS n_groups
-       FROM group_sim_results`),
+  const [champs, gMeta, latestRun, hasOdds] = await Promise.all([
+    q(`SELECT ks.team_id, ks.team_name, ks.champion, ks.final, ks.semi_final
+       FROM ko_sim_results ks ORDER BY ks.champion DESC LIMIT 20`),
+    q(`SELECT COUNT(DISTINCT team_id) AS n_teams, COUNT(DISTINCT group_letter) AS n_groups FROM group_sim_results`),
+    q(`SELECT MAX(computed_at) AS t FROM group_sim_results`),
+    q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source='eloratings'`)
   ]);
 
-  const nTeams  = gMeta[0]?.n_teams  || 48;
-  const nGroups = gMeta[0]?.n_groups || 12;
-
-  // Stats
   document.getElementById('stats-strip').innerHTML = [
-    {val: nTeams,  label:'Teams'},
-    {val: nGroups, label:'Groups'},
-    {val: '72',    label:'Group Matches'},
-    {val: champs.length, label:'KO Projections'},
+    {val: gMeta[0]?.n_teams||48,  label:'Teams'},
+    {val: gMeta[0]?.n_groups||12, label:'Groups'},
+    {val: '72',                   label:'Group Matches'},
+    {val: champs.length,          label:'KO Projections'},
   ].map(s=>`<div class="stat-card"><div class="stat-val">${s.val}</div>
              <div class="stat-label">${s.label}</div></div>`).join('');
 
-  // Champion grid
   const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣'];
   document.getElementById('champ-grid').innerHTML = champs.map((t,i)=>`
     <div class="champ-card ${i===0?'g1':i===1?'g2':i===2?'g3':''}">
@@ -361,76 +417,57 @@ async function renderOverview() {
       <div class="champ-sub" style="color:var(--accent2)">Final: ${pct(t.final)}</div>
     </div>`).join('');
 
-  // Model note
   document.getElementById('model-note').innerHTML = `
     <strong style="color:var(--text)">Bayesian blending:</strong>
     Each match starts with an Elo-derived prior (weight = 10 observations).
     As odds data arrives, each snapshot is weighted by <em>exp(−ln2 × age / half-life)</em>.
-    The half-life adapts: 48h when the match is a week away, 12h within a week, 2h on match day —
-    so the model becomes progressively more market-driven as kickoff approaches.
+    Half-life adapts: 48h when match is a week away · 12h within a week · 2h on match day.
     <br><br>
     <strong style="color:var(--text)">Confidence score:</strong>
-    0% = pure Elo model. 100% = fully informed by market observations.
-    All data lives in <code>data/wc2026.db</code>, updated automatically by GitHub Actions every 6 hours.`;
+    0% = pure Elo · 100% = fully market-informed.
+    Data lives in <code>data/wc2026.db</code>, updated every 6 hours via GitHub Actions.`;
 
-  // Update header badges
-  const latestRun = await q(`SELECT MAX(computed_at) AS t FROM group_sim_results`);
   const runTime = latestRun[0]?.t ? new Date(latestRun[0].t).toLocaleString() : '—';
   document.getElementById('updated-badge').textContent = 'Updated ' + runTime;
-
-  const hasOdds = await q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source='eloratings'`);
-  const oddsAvail = (hasOdds[0]?.n || 0) > 0;
-  document.getElementById('odds-badge').textContent   = oddsAvail ? 'Elo + Live Odds' : 'Elo Model';
-  document.getElementById('odds-badge').className     = 'badge' + (oddsAvail ? ' live' : '');
+  const oddsAvail = (hasOdds[0]?.n||0) > 0;
+  document.getElementById('odds-badge').textContent = oddsAvail ? 'Elo + Live Odds' : 'Elo Model';
+  document.getElementById('odds-badge').className = 'badge' + (oddsAvail?' live':'');
 }
 
-// ── Groups ────────────────────────────────────────────────────────────────────
+// ── Groups ──────────────────────────────────────────────────────────────────
 async function renderGroups() {
   const rows = await q(`
     SELECT group_letter, team_id, team_name, elo, confederation,
            advance_prob, finish_1st, finish_2nd, avg_points
-    FROM group_sim_results
-    ORDER BY group_letter, advance_prob DESC
-  `);
+    FROM group_sim_results ORDER BY group_letter, advance_prob DESC`);
 
   const groups = [...new Set(rows.map(r=>r.group_letter))].sort();
-
-  // Filter bar
   document.getElementById('group-fbar').innerHTML =
-    ['all',...groups].map(g=>`
-      <button class="fbtn ${g===activeGroupFilter?'active':''}"
-              onclick="window._setGF('${g}')">${g==='all'?'All Groups':'Group '+g}</button>`
-    ).join('');
+    ['all',...groups].map(g=>`<button class="fbtn ${g===activeGroupFilter?'active':''}"
+      onclick="window._setGF('${g}')">${g==='all'?'All Groups':'Group '+g}</button>`).join('');
 
-  const toShow = activeGroupFilter === 'all' ? groups : [activeGroupFilter];
+  const toShow = activeGroupFilter==='all' ? groups : [activeGroupFilter];
   const byGroup = {};
-  rows.forEach(r => { byGroup[r.group_letter] = byGroup[r.group_letter]||[]; byGroup[r.group_letter].push(r); });
+  rows.forEach(r=>{ byGroup[r.group_letter]=byGroup[r.group_letter]||[]; byGroup[r.group_letter].push(r); });
 
-  document.getElementById('groups-grid').innerHTML = toShow.map(g => {
-    const teams = byGroup[g] || [];
+  document.getElementById('groups-grid').innerHTML = toShow.map(g=>{
+    const teams = byGroup[g]||[];
     return `<div class="group-card">
-      <div class="group-hdr">
-        <span class="group-letter">Group ${g}</span>
-        <span style="font-size:.67rem;color:var(--muted)">Monte Carlo</span>
-      </div>
+      <div class="group-hdr"><span class="group-letter">Group ${g}</span>
+        <span style="font-size:.67rem;color:var(--muted)">Monte Carlo</span></div>
       <div class="team-row" style="background:var(--surface2);padding-top:5px;padding-bottom:5px">
         <div></div><div></div>
-        <div class="col-h">ADV%</div>
-        <div class="col-h">1ST%</div>
-        <div class="col-h">AVG PTS</div>
+        <div class="col-h">ADV%</div><div class="col-h">1ST%</div><div class="col-h">AVG PTS</div>
       </div>
       ${teams.map((t,i)=>{
-        const p = t.advance_prob*100;
-        const cls = p>=65?'hi':p>=35?'md':'lo';
-        const bar = p>=65?'#10b981':p>=35?'#f59e0b':'#ef4444';
+        const p=t.advance_prob*100, cls=p>=65?'hi':p>=35?'md':'lo';
+        const bar=p>=65?'#10b981':p>=35?'#f59e0b':'#ef4444';
         return `<div class="team-row">
           <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
           <div><div class="t-name">${t.team_name} <span class="t-elo">${Math.round(t.elo||0)}</span></div>
                <div class="t-conf">${t.confederation||''}</div></div>
-          <div>
-            <div class="pval ${cls}">${p.toFixed(0)}%</div>
-            <div class="mbar"><div class="mbar-fill" style="width:${p}%;background:${bar}"></div></div>
-          </div>
+          <div><div class="pval ${cls}">${p.toFixed(0)}%</div>
+               <div class="mbar"><div class="mbar-fill" style="width:${p}%;background:${bar}"></div></div></div>
           <div class="pval ${cls}" style="font-size:.72rem">${(t.finish_1st*100).toFixed(0)}%</div>
           <div class="pval" style="color:var(--accent2);font-size:.75rem">${(t.avg_points||0).toFixed(1)}</div>
         </div>`;
@@ -438,38 +475,30 @@ async function renderGroups() {
     </div>`;
   }).join('');
 }
+window._setGF = g=>{ activeGroupFilter=g; renderGroups(); };
 
-window._setGF = (g) => { activeGroupFilter=g; renderGroups(); };
-
-// ── Matches ───────────────────────────────────────────────────────────────────
+// ── Matches ──────────────────────────────────────────────────────────────────
 async function renderMatches() {
   const rows = await q(`
     SELECT bp.fixture_id, bp.home_name, bp.away_name, bp.match_date,
            bp.group_letter, bp.round, bp.home_team, bp.away_team,
-           bp.home_win, bp.draw, bp.away_win,
-           bp.confidence, bp.n_observations,
+           bp.home_win, bp.draw, bp.away_win, bp.confidence, bp.n_observations,
            t1.seed_elo AS elo_home, t2.seed_elo AS elo_away
     FROM bayesian_probs bp
-    JOIN teams t1 ON bp.home_team = t1.team_id
-    JOIN teams t2 ON bp.away_team = t2.team_id
-    ORDER BY bp.match_date, bp.fixture_id
-  `);
+    JOIN teams t1 ON bp.home_team=t1.team_id
+    JOIN teams t2 ON bp.away_team=t2.team_id
+    ORDER BY bp.match_date, bp.fixture_id`);
 
   const groups = [...new Set(rows.map(r=>r.group_letter).filter(Boolean))].sort();
-
   document.getElementById('match-fbar').innerHTML =
-    ['all',...groups].map(g=>`
-      <button class="fbtn ${g===activeMatchFilter?'active':''}"
-              onclick="window._setMF('${g}')">${g==='all'?'All':'Group '+g}</button>`
-    ).join('');
+    ['all',...groups].map(g=>`<button class="fbtn ${g===activeMatchFilter?'active':''}"
+      onclick="window._setMF('${g}')">${g==='all'?'All':'Group '+g}</button>`).join('');
 
   const toShow = activeMatchFilter==='all' ? rows : rows.filter(r=>r.group_letter===activeMatchFilter);
-
   if (!toShow.length) {
-    document.getElementById('match-grid').innerHTML = '<div class="empty">No matches found — run the pipeline first.</div>';
+    document.getElementById('match-grid').innerHTML='<div class="empty">No matches — run the pipeline first.</div>';
     return;
   }
-
   document.getElementById('match-grid').innerHTML = toShow.map(m=>{
     const hw=(m.home_win||0)*100, dw=(m.draw||0)*100, aw=(m.away_win||0)*100;
     const conf=(m.confidence||0)*100;
@@ -491,32 +520,16 @@ async function renderMatches() {
       ${probRow(sn(m.home_name),hw,'pf-hw')}
       ${probRow('Draw',dw,'pf-dr')}
       ${probRow(sn(m.away_name),aw,'pf-aw')}
-      <div class="conf-chip">
-        Confidence: ${conf.toFixed(0)}%
+      <div class="conf-chip">Confidence: ${conf.toFixed(0)}%
         <span style="display:inline-block;width:${conf}px;max-width:80px;height:3px;
                background:var(--green);border-radius:2px;vertical-align:middle;margin-left:5px"></span>
       </div>
     </div>`;
   }).join('');
 }
+window._setMF = g=>{ activeMatchFilter=g; renderMatches(); };
 
-window._setMF = (g) => { activeMatchFilter=g; renderMatches(); };
-
-function probRow(label, pct_val, cls) {
-  return `<div class="prob-row">
-    <div class="prob-lbl">${label}</div>
-    <div class="prob-track"><div class="prob-fill ${cls}" style="width:${Math.min(100,pct_val).toFixed(1)}%"></div></div>
-    <div class="prob-pct">${pct_val.toFixed(1)}%</div>
-  </div>`;
-}
-
-function sn(n) {
-  if (!n) return '';
-  const p = n.split(' ');
-  return p.length > 1 ? p[p.length-1].substring(0,7) : n.substring(0,7);
-}
-
-// ── Knockout ──────────────────────────────────────────────────────────────────
+// ── Knockout ─────────────────────────────────────────────────────────────────
 async function renderKnockout() {
   const [r32, deep] = await Promise.all([
     q(`SELECT gs1.team_name AS team_a_name, gs2.team_name AS team_b_name,
@@ -524,46 +537,25 @@ async function renderKnockout() {
               gs1.advance_prob AS a_prob, gs2.advance_prob AS b_prob
        FROM group_sim_results gs1
        JOIN group_sim_results gs2
-         ON ASCII(gs2.group_letter) = ASCII(gs1.group_letter)+1
-        AND gs1.finish_1st = (SELECT MAX(finish_1st) FROM group_sim_results g WHERE g.group_letter=gs1.group_letter)
-        AND gs2.finish_2nd = (SELECT MAX(finish_2nd) FROM group_sim_results g WHERE g.group_letter=gs2.group_letter)
+         ON ASCII(gs2.group_letter)=ASCII(gs1.group_letter)+1
+        AND gs1.finish_1st=(SELECT MAX(finish_1st) FROM group_sim_results g WHERE g.group_letter=gs1.group_letter)
+        AND gs2.finish_2nd=(SELECT MAX(finish_2nd) FROM group_sim_results g WHERE g.group_letter=gs2.group_letter)
        ORDER BY gs1.group_letter`),
-    q(`SELECT team_name, round_of_32, round_of_16, quarter_final,
-              semi_final, final, champion
-       FROM ko_sim_results ORDER BY champion DESC LIMIT 24`)
+    q(`SELECT team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
+       FROM ko_sim_results ORDER BY champion DESC LIMIT 32`)
   ]);
 
-  // Bracket
   if (r32.length) {
+    const half = Math.ceil(r32.length/2);
     document.getElementById('bracket-wrap').innerHTML = `
     <div class="bracket">
       <div class="b-round">
-        <div class="b-round-title">Round of 32 — Left</div>
-        ${r32.slice(0,Math.ceil(r32.length/2)).map(m=>`
-        <div class="b-match">
-          <div style="font-size:.58rem;color:var(--muted);padding:3px 9px;background:var(--surface);
-                      border-bottom:1px solid var(--border)">
-            Group ${m.group_a} 1st vs Group ${m.group_b} 2nd
-          </div>
-          <div class="b-team"><span>${m.team_a_name||'TBD'}</span>
-            <span class="b-prob">${m.a_prob?(m.a_prob*100).toFixed(0)+'%':''}</span></div>
-          <div class="b-team"><span>${m.team_b_name||'TBD'}</span>
-            <span class="b-prob">${m.b_prob?(m.b_prob*100).toFixed(0)+'%':''}</span></div>
-        </div>`).join('')}
+        <div class="b-round-title">R32 — Left</div>
+        ${r32.slice(0,half).map(matchupHtml).join('')}
       </div>
       <div class="b-round">
-        <div class="b-round-title">Round of 32 — Right</div>
-        ${r32.slice(Math.ceil(r32.length/2)).map(m=>`
-        <div class="b-match">
-          <div style="font-size:.58rem;color:var(--muted);padding:3px 9px;background:var(--surface);
-                      border-bottom:1px solid var(--border)">
-            Group ${m.group_a} 1st vs Group ${m.group_b} 2nd
-          </div>
-          <div class="b-team"><span>${m.team_a_name||'TBD'}</span>
-            <span class="b-prob">${m.a_prob?(m.a_prob*100).toFixed(0)+'%':''}</span></div>
-          <div class="b-team"><span>${m.team_b_name||'TBD'}</span>
-            <span class="b-prob">${m.b_prob?(m.b_prob*100).toFixed(0)+'%':''}</span></div>
-        </div>`).join('')}
+        <div class="b-round-title">R32 — Right</div>
+        ${r32.slice(half).map(matchupHtml).join('')}
       </div>
       <div class="b-round">
         <div class="b-round-title">QF · SF · Final</div>
@@ -574,16 +566,14 @@ async function renderKnockout() {
       </div>
     </div>`;
   } else {
-    document.getElementById('bracket-wrap').innerHTML = '<div class="empty">Run pipeline to generate bracket.</div>';
+    document.getElementById('bracket-wrap').innerHTML='<div class="empty">Run pipeline to generate bracket.</div>';
   }
 
-  // Deep run table
   if (deep.length) {
     document.getElementById('ko-table').innerHTML = `
     <table class="tbl">
       <thead><tr>
-        <th>Team</th><th>R32</th><th>R16</th><th>QF</th><th>SF</th><th>Final</th>
-        <th>Champion</th>
+        <th>Team</th><th>R32</th><th>R16</th><th>QF</th><th>SF</th><th>Final</th><th>Champion</th>
       </tr></thead>
       <tbody>
         ${deep.map(t=>`<tr>
@@ -598,41 +588,346 @@ async function renderKnockout() {
   }
 }
 
-// ── Fallback: load predictions.json if parquet not available ──────────────────
+function matchupHtml(m) {
+  return `<div class="b-match">
+    <div style="font-size:.58rem;color:var(--muted);padding:3px 9px;background:var(--surface);
+                border-bottom:1px solid var(--border)">
+      Group ${m.group_a} 1st vs Group ${m.group_b} 2nd</div>
+    <div class="b-team"><span>${m.team_a_name||'TBD'}</span>
+      <span class="b-prob">${m.a_prob?(m.a_prob*100).toFixed(0)+'%':''}</span></div>
+    <div class="b-team"><span>${m.team_b_name||'TBD'}</span>
+      <span class="b-prob">${m.b_prob?(m.b_prob*100).toFixed(0)+'%':''}</span></div>
+  </div>`;
+}
+
+// ── Simulations ──────────────────────────────────────────────────────────────
+async function renderSimulations() {
+  const rows = await q(`
+    SELECT group_letter, team_id, team_name, elo,
+           finish_1st, finish_2nd, finish_3rd, finish_4th, avg_points
+    FROM group_sim_results ORDER BY group_letter, finish_1st DESC`);
+
+  const groups = [...new Set(rows.map(r=>r.group_letter))].sort();
+  document.getElementById('sim-fbar').innerHTML =
+    ['all',...groups].map(g=>`<button class="fbtn ${g===activeSimFilter?'active':''}"
+      onclick="window._setSF('${g}')">${g==='all'?'All Groups':'Group '+g}</button>`).join('');
+
+  const toShow = activeSimFilter==='all' ? groups : [activeSimFilter];
+  const byGroup = {};
+  rows.forEach(r=>{ byGroup[r.group_letter]=byGroup[r.group_letter]||[]; byGroup[r.group_letter].push(r); });
+
+  document.getElementById('sim-grid').innerHTML = toShow.map(g=>{
+    const teams = byGroup[g]||[];
+    return `<div class="sim-card">
+      <div class="group-hdr">
+        <span class="group-letter">Group ${g}</span>
+        <span style="font-size:.67rem;color:var(--muted)">Finishing position distribution · 10k sims</span>
+      </div>
+      <div style="padding:6px 14px 4px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+                  border-bottom:1px solid var(--border)">
+        <span style="font-size:.58rem;color:var(--green);font-weight:700;text-align:center">1st</span>
+        <span style="font-size:.58rem;color:var(--accent2);font-weight:700;text-align:center">2nd</span>
+        <span style="font-size:.58rem;color:var(--gold);font-weight:700;text-align:center">3rd</span>
+        <span style="font-size:.58rem;color:var(--red);font-weight:700;text-align:center">4th</span>
+      </div>
+      ${teams.map(t=>{
+        const p1=(t.finish_1st||0)*100, p2=(t.finish_2nd||0)*100;
+        const p3=(t.finish_3rd||0)*100, p4=(t.finish_4th||0)*100;
+        return `<div class="sim-team-row">
+          <div>
+            <div style="font-size:.84rem;font-weight:700">${t.team_name}</div>
+            <div style="font-size:.62rem;color:var(--muted)">Elo ${Math.round(t.elo||0)} · Avg ${(t.avg_points||0).toFixed(1)} pts</div>
+            <div class="sim-bars" style="margin-top:5px">
+              <div class="sim-bar-seg" style="width:${p1}%;background:var(--green)">${p1>=8?p1.toFixed(0)+'%':''}</div>
+              <div class="sim-bar-seg" style="width:${p2}%;background:var(--accent)">${p2>=8?p2.toFixed(0)+'%':''}</div>
+              <div class="sim-bar-seg" style="width:${p3}%;background:var(--gold)">${p3>=8?p3.toFixed(0)+'%':''}</div>
+              <div class="sim-bar-seg" style="width:${p4}%;background:var(--red)">${p4>=8?p4.toFixed(0)+'%':''}</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>`;
+  }).join('');
+}
+window._setSF = g=>{ activeSimFilter=g; renderSimulations(); };
+
+// ── Probability Trends ────────────────────────────────────────────────────────
+async function renderTrends() {
+  // Pull ALL ko_sim snapshots for every team (multiple rows if pipeline ran multiple times)
+  const [snapshots, latestGroups] = await Promise.all([
+    q(`SELECT team_id, team_name, champion, advance_prob_proxy, computed_at
+       FROM (
+         SELECT k.team_id, k.team_name, k.champion, k.computed_at,
+                g.advance_prob AS advance_prob_proxy
+         FROM ko_sim_results k
+         LEFT JOIN (
+           SELECT team_id, MAX(advance_prob) AS advance_prob FROM group_sim_results GROUP BY team_id
+         ) g ON k.team_id = g.team_id
+       ) ORDER BY team_id, computed_at`),
+    q(`SELECT team_id, group_letter FROM group_sim_results GROUP BY team_id, group_letter`)
+  ]);
+
+  const groupByTeam = {};
+  latestGroups.forEach(r=>{ groupByTeam[r.team_id]=r.group_letter; });
+
+  // Group snapshots by team
+  const byTeam = {};
+  snapshots.forEach(r=>{
+    if (!byTeam[r.team_id]) byTeam[r.team_id]={name:r.team_name, snaps:[]};
+    byTeam[r.team_id].snaps.push({champ:r.champion, t:r.computed_at});
+  });
+
+  const allGroups = [...new Set(Object.values(groupByTeam))].sort();
+  document.getElementById('trends-fbar').innerHTML =
+    ['all',...allGroups].map(g=>`<button class="fbtn ${g===activeTrendFilter?'active':''}"
+      onclick="window._setTF('${g}')">${g==='all'?'All Teams':'Group '+g}</button>`).join('');
+
+  const teams = Object.entries(byTeam)
+    .filter(([tid])=> activeTrendFilter==='all' || groupByTeam[tid]===activeTrendFilter)
+    .sort((a,b)=>{
+      const la=a[1].snaps[a[1].snaps.length-1].champ;
+      const lb=b[1].snaps[b[1].snaps.length-1].champ;
+      return lb-la;
+    });
+
+  if (!teams.length) {
+    document.getElementById('trends-grid').innerHTML='<div class="empty">No trend data yet — run pipeline first.</div>';
+    return;
+  }
+
+  document.getElementById('trends-grid').innerHTML = teams.map(([tid, data])=>{
+    const snaps = data.snaps;
+    const current = snaps[snaps.length-1].champ;
+    const prev = snaps.length>1 ? snaps[snaps.length-2].champ : null;
+    const delta = prev!==null ? current-prev : null;
+    const deltaHtml = delta!==null
+      ? `<div class="trend-delta ${delta>=0?'up':'dn'}">${delta>=0?'↑':'↓'} ${Math.abs(delta*100).toFixed(1)}pp</div>`
+      : '<div class="trend-delta" style="color:var(--muted)">First snapshot</div>';
+
+    return `<div class="trend-card">
+      <div class="trend-info">
+        <div class="trend-name">${data.name}</div>
+        <div class="trend-current">${pct(current)}</div>
+        <div class="trend-sub">Champion probability · Group ${groupByTeam[tid]||'?'}</div>
+        ${deltaHtml}
+      </div>
+      <div class="sparkline-wrap">
+        ${sparklineSVG(snaps.map(s=>s.champ))}
+      </div>
+    </div>`;
+  }).join('');
+}
+window._setTF = g=>{ activeTrendFilter=g; renderTrends(); };
+
+function sparklineSVG(vals) {
+  if (!vals||vals.length===0) return '';
+  const W=80, H=36, pad=3;
+  if (vals.length===1) {
+    const cy=H/2;
+    return `<svg class="spark" viewBox="0 0 ${W} ${H}">
+      <circle cx="${W/2}" cy="${cy}" r="3" fill="var(--gold)"/>
+    </svg>`;
+  }
+  const mn=Math.min(...vals), mx=Math.max(...vals);
+  const range=mx-mn||0.001;
+  const pts=vals.map((v,i)=>{
+    const x=pad + (i/(vals.length-1))*(W-2*pad);
+    const y=H-pad - ((v-mn)/range)*(H-2*pad);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const last=pts[pts.length-1].split(',');
+  const color = vals[vals.length-1]>=vals[0] ? 'var(--green)' : 'var(--red)';
+  // Area fill
+  const areaPath=`M${pts[0]} L${pts.join(' L')} L${pts[pts.length-1].split(',')[0]},${H-pad} L${pad},${H-pad} Z`;
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}">
+    <path d="${areaPath}" fill="${color}" opacity="0.12"/>
+    <polyline points="${pts.join(' ')}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linejoin="round"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="2.5" fill="${color}"/>
+  </svg>`;
+}
+
+// ── Data Sources ─────────────────────────────────────────────────────────────
+async function renderSources() {
+  const [eloStats, oddsStats, fixtureStats, simStats] = await Promise.all([
+    q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest, MIN(collected_at) AS earliest
+       FROM elo_snapshots WHERE source='eloratings'`),
+    q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest
+       FROM elo_snapshots WHERE source='odds_api'`),
+    q(`SELECT COUNT(*) AS n FROM fixtures`),
+    q(`SELECT COUNT(*) AS n, MAX(computed_at) AS latest, COUNT(DISTINCT computed_at) AS runs
+       FROM group_sim_results`)
+  ]);
+
+  const eloN    = eloStats[0]?.n||0;
+  const eloLast = eloStats[0]?.latest;
+  const oddsN   = oddsStats[0]?.n||0;
+  const fixN    = fixtureStats[0]?.n||0;
+  const simN    = simStats[0]?.n||0;
+  const simRuns = simStats[0]?.runs||0;
+  const simLast = simStats[0]?.latest;
+
+  const now = Date.now();
+  function recency(ts) {
+    if (!ts) return 0;
+    const age = (now - new Date(ts).getTime()) / 1000 / 3600; // hours
+    return Math.max(0, Math.min(100, 100 - age/24*10)); // 100% if fresh, 0% after 10 days
+  }
+  function fmtTime(ts) {
+    if (!ts) return 'Never';
+    return new Date(ts).toLocaleString();
+  }
+
+  const sources = [
+    {
+      name:'ClubElo Ratings',
+      tag:'live', tagLabel:'Live',
+      desc:'Historical club Elo ratings used as team strength priors. Fetched from clubelo.com API. ' +
+           'Provides a robust baseline that accounts for recent form and opponent quality.',
+      url:'http://clubelo.com',
+      cadence:'Every 6 hours via GitHub Actions',
+      snapshots: eloN,
+      lastUpdated: fmtTime(eloLast),
+      recencyScore: recency(eloLast),
+      fields:'team_id, elo_value, source, collected_at'
+    },
+    {
+      name:'The Odds API',
+      tag:'pending', tagLabel:'Pending Key',
+      desc:'Market-implied probabilities from 40+ bookmakers. Once an API key is configured, ' +
+           'match odds are collected every 6 hours and blended into the Bayesian model — ' +
+           'confidence score rises from 0% toward 100% as market data accumulates.',
+      url:'https://the-odds-api.com',
+      cadence:'Every 6 hours · requires ODDS_API_KEY secret in GitHub',
+      snapshots: oddsN,
+      lastUpdated: oddsN>0 ? fmtTime(oddsStats[0]?.latest) : 'Not configured',
+      recencyScore: oddsN>0 ? recency(oddsStats[0]?.latest) : 0,
+      fields:'fixture_id, outcome, decimal_odds, bookmaker, collected_at'
+    },
+    {
+      name:'FIFA Official Schedule',
+      tag:'static', tagLabel:'Static',
+      desc:'Official 2026 World Cup group stage fixtures — 72 matches across 12 groups, ' +
+           'sourced from FIFA.com. Includes venue, date, home/away teams. ' +
+           'Static for the group stage; knockout fixtures populated as results come in.',
+      url:'https://fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026',
+      cadence:'Seeded once at setup · knockout fixtures added as bracket fills',
+      snapshots: fixN,
+      lastUpdated:'Seeded at setup',
+      recencyScore:90,
+      fields:'fixture_id, stage, group, round, date, home, away, venue, status'
+    },
+    {
+      name:'Monte Carlo Simulations',
+      tag:'live', tagLabel:'Live',
+      desc:'10,000-iteration group stage and knockout bracket simulations run on each pipeline cycle. ' +
+           'Results stored as derived tables — rebuilt on every run, never stale. ' +
+           `${simRuns} pipeline run${simRuns!==1?'s':''} recorded so far.`,
+      url:null,
+      cadence:'Rebuilt every 6 hours, or on workflow_dispatch',
+      snapshots: simN,
+      lastUpdated: fmtTime(simLast),
+      recencyScore: recency(simLast),
+      fields:'group_letter, team_id, advance_prob, finish_1st/2nd/3rd/4th, avg_points, computed_at'
+    },
+    {
+      name:'Match Results Feed',
+      tag:'live', tagLabel:'Live',
+      desc:'Actual match scores recorded as results come in. Each result triggers an Elo recalculation ' +
+           '(K=32) for both teams, which feeds forward into all subsequent probability estimates. ' +
+           'The feedback loop is the core of the real-time prediction update cycle.',
+      url:null,
+      cadence:'Entered manually via record_result() · auto-ingested if odds API is active',
+      snapshots:'—',
+      lastUpdated:'Awaiting first match (Jun 12)',
+      recencyScore:95,
+      fields:'fixture_id, home_score, away_score, recorded_at, elo_delta_home, elo_delta_away'
+    },
+  ];
+
+  document.getElementById('source-grid').innerHTML = sources.map(s=>`
+    <div class="source-card">
+      <div class="source-hdr">
+        <div class="source-name">${s.name}</div>
+        <span class="source-tag tag-${s.tag}">${s.tagLabel}</span>
+      </div>
+      <div class="source-desc">${s.desc}</div>
+      <div class="source-meta">
+        <div style="margin-bottom:4px"><span>Update cadence: </span>${s.cadence}</div>
+        <div style="margin-bottom:4px"><span>Last collected: </span>${s.lastUpdated}</div>
+        <div style="margin-bottom:4px"><span>Snapshots in DB: </span>${s.snapshots}</div>
+        <div><span>DB fields: </span><code style="font-size:.68rem;color:var(--accent2)">${s.fields}</code></div>
+      </div>
+      <div class="recency-bar"><div class="recency-fill" style="width:${s.recencyScore}%"></div></div>
+      <div class="recency-label">Data freshness</div>
+    </div>`).join('');
+
+  // DB snapshot table
+  const [teamCnt, fixCnt, eloCnt, simCnt, koCnt] = await Promise.all([
+    q(`SELECT COUNT(*) AS n FROM teams`),
+    q(`SELECT COUNT(*) AS n FROM fixtures`),
+    q(`SELECT COUNT(*) AS n FROM elo_snapshots`),
+    q(`SELECT COUNT(*) AS n FROM group_sim_results`),
+    q(`SELECT COUNT(*) AS n FROM ko_sim_results`)
+  ]);
+
+  document.getElementById('db-snapshot').innerHTML = `
+  <table class="tbl">
+    <thead><tr><th>Table</th><th>Rows</th><th>Type</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td><code>teams</code></td><td>${teamCnt[0]?.n||0}</td><td>Static</td><td>48 teams, Elo seeds, group assignments</td></tr>
+      <tr><td><code>fixtures</code></td><td>${fixCnt[0]?.n||0}</td><td>Static</td><td>72 group stage matches + KO fixtures as drawn</td></tr>
+      <tr><td><code>elo_snapshots</code></td><td>${eloCnt[0]?.n||0}</td><td>Append-only</td><td>One row per team per collection run</td></tr>
+      <tr><td><code>odds_snapshots</code></td><td>—</td><td>Append-only</td><td>Requires ODDS_API_KEY · not yet populated</td></tr>
+      <tr><td><code>match_results</code></td><td>—</td><td>Append-only</td><td>Actual scores · triggers Elo recalc</td></tr>
+      <tr><td><code>bayesian_probs</code></td><td>${fixCnt[0]?.n||0}</td><td>Derived</td><td>Rebuilt each run · one row per fixture</td></tr>
+      <tr><td><code>group_sim_results</code></td><td>${simCnt[0]?.n||0}</td><td>Derived</td><td>Rebuilt each run · one row per team per run</td></tr>
+      <tr><td><code>ko_sim_results</code></td><td>${koCnt[0]?.n||0}</td><td>Derived</td><td>Rebuilt each run · 32 teams per run</td></tr>
+    </tbody>
+  </table>`;
+}
+
+// ── Fallback ──────────────────────────────────────────────────────────────────
 async function loadFallback() {
   try {
     const res = await fetch('data/predictions.json');
     const data = await res.json();
-    renderFallback(data);
+    const standings = data.group_standings||{};
+    const groups = Object.keys(standings).sort();
+    document.getElementById('groups-grid').innerHTML = groups.map(g=>{
+      const teams=standings[g]||[];
+      return `<div class="group-card">
+        <div class="group-hdr"><span class="group-letter">Group ${g}</span></div>
+        ${teams.map((t,i)=>`<div class="team-row">
+          <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
+          <div><div class="t-name">${t.team_name}</div></div>
+          <div class="pval ${t.advance_prob>.5?'hi':'lo'}">${(t.advance_prob*100).toFixed(0)}%</div>
+        </div>`).join('')}
+      </div>`;
+    }).join('');
     setStatus('⚠ Loaded from predictions.json (Parquet unavailable)', false, true);
   } catch(e) {
     setStatus('⚠ No data available — run setup_db.py first', false, true);
   }
 }
 
-function renderFallback(data) {
-  // Minimal fallback — just show group standings
-  const standings = data.group_standings || {};
-  const groups = Object.keys(standings).sort();
-  document.getElementById('groups-grid').innerHTML = groups.map(g => {
-    const teams = standings[g] || [];
-    return `<div class="group-card">
-      <div class="group-hdr"><span class="group-letter">Group ${g}</span></div>
-      ${teams.map((t,i)=>`<div class="team-row">
-        <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
-        <div><div class="t-name">${t.team_name}</div></div>
-        <div class="pval ${t.advance_prob>.5?'hi':'lo'}">${(t.advance_prob*100).toFixed(0)}%</div>
-      </div>`).join('')}
-    </div>`;
-  }).join('');
-}
-
 // ── Utils ─────────────────────────────────────────────────────────────────────
 function pct(v) { return v!=null ? (v*100).toFixed(1)+'%' : '—'; }
+function probRow(label, pct_val, cls) {
+  return `<div class="prob-row">
+    <div class="prob-lbl">${label}</div>
+    <div class="prob-track"><div class="prob-fill ${cls}" style="width:${Math.min(100,pct_val).toFixed(1)}%"></div></div>
+    <div class="prob-pct">${pct_val.toFixed(1)}%</div>
+  </div>`;
+}
+function sn(n) {
+  if (!n) return '';
+  const p=n.split(' ');
+  return p.length>1 ? p[p.length-1].substring(0,7) : n.substring(0,7);
+}
 
-// Tab navigation
-document.querySelectorAll('.tab').forEach(tab => {
-  tab.addEventListener('click', () => {
+// ── Tab nav ───────────────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
     document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
     document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
     tab.classList.add('active');
@@ -642,8 +937,7 @@ document.querySelectorAll('.tab').forEach(tab => {
 
 window.refreshData = refreshData;
 
-// ── Boot ──────────────────────────────────────────────────────────────────────
-initDB().catch(err => {
+initDB().catch(err=>{
   console.error('DuckDB init failed:', err);
   setStatus('⚠ DuckDB failed — loading fallback', false, true);
   loadFallback();
