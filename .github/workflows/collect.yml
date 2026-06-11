@@ -45,7 +45,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      # 4. Run data collection + pipeline
+      # 4. Pull latest DB before running so we build on current state.
+      #    This also prevents non-fast-forward push failures if a local commit
+      #    landed between checkout and push.
+      - name: Pull latest data
+        run: git pull origin main
+
+      # 5. Run data collection + pipeline
       #    ODDS_API_KEY is a GitHub secret — set it in:
       #    Settings → Secrets and variables → Actions → New repository secret
       - name: Run pipeline
@@ -55,12 +61,7 @@ jobs:
         run: |
           python run_pipeline.py --sims ${{ github.event.inputs.sims || '10000' }}
 
-      # 5. Commit updated DB + Parquet + predictions.json back to the repo
-      #    Pull first to avoid non-fast-forward rejection when local commits
-      #    land on main between checkout and push.
-      - name: Pull latest before committing
-        run: git pull --rebase --autostash origin main
-
+      # 6. Commit updated DB + Parquet + predictions.json back to the repo
       - name: Commit updated data
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
@@ -69,8 +70,9 @@ jobs:
             data/wc2026.db
             data/parquet/*.parquet
             data/predictions.json
+          push_options: '--force-with-lease'
 
-      # 6. Confirm what was written (visible in Actions logs)
+      # 7. Confirm what was written (visible in Actions logs)
       - name: Summary
         run: |
           echo "### Pipeline complete" >> $GITHUB_STEP_SUMMARY
