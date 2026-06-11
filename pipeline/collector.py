@@ -24,7 +24,8 @@ from pathlib import Path
 import duckdb
 
 from db.schema import get_conn, init_schema, seed_static_data
-from pipeline.config import ODDS_API_KEY, ODDS_API_URL, ODDS_MARKETS, ODDS_REGIONS, ROOT
+from pipeline.config import (ODDS_API_KEY, ODDS_API_URL, ODDS_MARKETS, ODDS_REGIONS, ROOT,
+                             FOOTBALL_DATA_API_KEY, FOOTBALL_DATA_BASE, FOOTBALL_DATA_WC_ID)
 
 log = logging.getLogger(__name__)
 
@@ -294,6 +295,74 @@ def _update_elo_from_result(conn: duckdb.DuckDBPyConnection,
              home_id, elo_h, new_elo_h, away_id, elo_a, new_elo_a)
 
 
+# ── Auto results ingestion ────────────────────────────────────────────────────
+
+def collect_results(conn: duckdb.DuckDBPyConnection) -> int:
+    """
+    Fetch completed WC 2026 match scores from football-data.org and record
+    any results not yet in the DB. Each new result triggers an Elo update.
+    No-op if FOOTBALL_DATA_API_KEY is not set.
+    """
+    if FOOTBALL_DATA_API_KEY == "YOUR_KEY_HERE":
+        log.info("Results: FOOTBALL_DATA_API_KEY not set — skipping")
+        return 0
+
+    url = f"{FOOTBALL_DATA_BASE}/competitions/{FOOTBALL_DATA_WC_ID}/matches?status=FINISHED"
+    req = urllib.request.Request(url, headers={
+        "X-Auth-Token": FOOTBALL_DATA_API_KEY,
+        "User-Agent": "WC2026Predictor/2.0"
+    })
+    try:
+        with urllib.request.urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except Exception as e:
+        log.warning("Results fetch failed: %s", e)
+        return 0
+
+    matches = data.get("matches", [])
+    log.info("Results: %d finished matches from API", len(matches))
+
+    # Load fixtures for name matching
+    fixtures = conn.execute("""
+        SELECT f.fixture_id, t1.name AS home_name, t2.name AS away_name
+        FROM fixtures f
+        JOIN teams t1 ON f.home_team = t1.team_id
+        JOIN teams t2 ON f.away_team = t2.team_id
+    """).fetchall()
+
+    # Already-recorded fixture IDs
+    recorded = {r[0] for r in conn.execute(
+        "SELECT DISTINCT fixture_id FROM match_results"
+    ).fetchall()}
+
+    new_results = 0
+    for m in matches:
+        score = m.get("score", {})
+        full  = score.get("fullTime", {})
+        hs, as_ = full.get("home"), full.get("away")
+        if hs is None or as_ is None:
+            continue
+
+        # Match by team names using same alias logic as odds
+        home_api = m.get("homeTeam", {}).get("name", "")
+        away_api = m.get("awayTeam", {}).get("name", "")
+        fake_event = {"home_team": home_api, "away_team": away_api}
+        fid = _match_fixture(fake_event, fixtures)
+        if not fid:
+            log.warning("Results: no fixture match for %s vs %s", home_api, away_api)
+            continue
+        if fid in recorded:
+            continue
+
+        record_result(conn, fid, int(hs), int(as_))
+        recorded.add(fid)
+        new_results += 1
+        log.info("Auto-recorded result: fixture %d  %s %d–%d %s",
+                 fid, home_api, hs, as_, away_api)
+
+    return new_results
+
+
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 def run_collection() -> dict:
@@ -302,11 +371,12 @@ def run_collection() -> dict:
     init_schema(conn)
     seed_static_data(conn)
 
-    elo_rows  = collect_elo(conn)
-    odds_rows = collect_odds(conn)
+    elo_rows    = collect_elo(conn)
+    odds_rows   = collect_odds(conn)
+    result_rows = collect_results(conn)
 
     conn.close()
-    return {"elo_snapshots": elo_rows, "odds_snapshots": odds_rows}
+    return {"elo_snapshots": elo_rows, "odds_snapshots": odds_rows, "results": result_rows}
 
 
 if __name__ == "__main__":
