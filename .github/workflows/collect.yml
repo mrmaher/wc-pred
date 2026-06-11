@@ -2,15 +2,14 @@ name: WC2026 — Collect & Predict
 
 # ── When this runs ────────────────────────────────────────────────────────────
 #
-#  Normal schedule: every 6 hours
-#  Match days: cron can't dynamically detect match days, but you can manually
-#              trigger a more frequent run via the GitHub UI "Run workflow" button.
-#
-#  GitHub Actions free tier: 2,000 min/month. Each run takes ~1 min → plenty.
+#  Hourly from 11am–midnight ET (15:00–04:00 UTC) — covers all match windows.
+#  GitHub Actions free tier: 2,000 min/month. 13 runs/day × ~1 min = ~390 min/month.
+#  Also triggerable manually via "Run workflow" in the GitHub Actions UI.
 
 on:
   schedule:
-    - cron: "0 */6 * * *"     # every 6 hours
+    - cron: "0 15-23 * * *"   # 11am–7pm ET (15:00–23:00 UTC)
+    - cron: "0 0-4 * * *"     # 8pm–midnight ET (00:00–04:00 UTC next day)
   workflow_dispatch:           # lets you click "Run workflow" from GitHub UI
     inputs:
       sims:
