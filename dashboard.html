@@ -378,7 +378,7 @@ function confRing(c, size=36) {
 
 async function renderConfBanner() {
   try {
-    const rows = await q(`SELECT AVG(confidence) AS avg_conf, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL`);
+    const rows = await q(`SELECT AVG(confidence) AS avg_conf, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs)`);
     const wrap = document.getElementById('conf-banner-wrap');
     if (!rows.length || rows[0].avg_conf == null) { wrap.style.display='none'; return; }
     const c = rows[0].avg_conf;
@@ -482,7 +482,7 @@ async function renderOverview() {
     q(`SELECT COUNT(DISTINCT team_id) AS n_teams, COUNT(DISTINCT group_letter) AS n_groups FROM group_sim_results`),
     q(`SELECT MAX(computed_at) AS t FROM group_sim_results`),
     q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`),
-    q(`SELECT AVG(confidence) AS c FROM bayesian_probs WHERE confidence IS NOT NULL`)
+    q(`SELECT AVG(confidence) AS c FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs)`)
   ]);
 
   document.getElementById('stats-strip').innerHTML = [
@@ -530,7 +530,7 @@ async function renderGroups() {
               advance_prob, finish_1st, finish_2nd, avg_points
        FROM group_sim_results ORDER BY group_letter, advance_prob DESC`),
     q(`SELECT group_letter, AVG(confidence) AS avg_conf
-       FROM bayesian_probs WHERE confidence IS NOT NULL GROUP BY group_letter`)
+       FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs) GROUP BY group_letter`)
   ]);
   const gConf = {};
   confByGroup.forEach(r=>{ gConf[r.group_letter] = r.avg_conf || 0; });
@@ -583,13 +583,21 @@ window._setGF = g=>{ activeGroupFilter=g; renderGroups(); };
 // ── Matches ──────────────────────────────────────────────────────────────────
 async function renderMatches() {
   const rows = await q(`
+    WITH latest AS (
+      SELECT fixture_id, MAX(computed_at) AS max_at
+      FROM bayesian_probs GROUP BY fixture_id
+    )
     SELECT bp.fixture_id, bp.home_name, bp.away_name, bp.match_date,
            bp.group_letter, bp.round, bp.home_team, bp.away_team,
            bp.home_win, bp.draw, bp.away_win, bp.confidence, bp.n_observations,
-           t1.seed_elo AS elo_home, t2.seed_elo AS elo_away
+           t1.seed_elo AS elo_home, t2.seed_elo AS elo_away,
+           f.status, mr.home_score, mr.away_score
     FROM bayesian_probs bp
+    JOIN latest ON bp.fixture_id=latest.fixture_id AND bp.computed_at=latest.max_at
     JOIN teams t1 ON bp.home_team=t1.team_id
     JOIN teams t2 ON bp.away_team=t2.team_id
+    JOIN fixtures f ON bp.fixture_id=f.fixture_id
+    LEFT JOIN match_results mr ON bp.fixture_id=mr.fixture_id
     ORDER BY bp.match_date, bp.fixture_id`);
 
   const groups = [...new Set(rows.map(r=>r.group_letter).filter(Boolean))].sort();
@@ -603,9 +611,42 @@ async function renderMatches() {
     return;
   }
   document.getElementById('match-grid').innerHTML = toShow.map(m=>{
+    const finished = m.status === 'finished';
     const hw=(m.home_win||0)*100, dw=(m.draw||0)*100, aw=(m.away_win||0)*100;
     const conf=m.confidence||0;
     const confCol = confColor(conf);
+
+    if (finished && m.home_score != null) {
+      const homeWon = m.home_score > m.away_score;
+      const awayWon = m.away_score > m.home_score;
+      return `<div class="match-card" style="opacity:.75;border-color:var(--border)">
+        <div class="match-meta">
+          <span class="m-badge">Group ${m.group_letter} · R${m.round||'?'}</span>
+          <span style="font-size:.65rem;background:rgba(16,185,129,.15);color:var(--green);
+                       border-radius:4px;padding:2px 7px;font-weight:700">FINAL</span>
+        </div>
+        <div class="m-teams" style="align-items:center">
+          <div class="m-team">
+            <div class="tn" style="${homeWon?'color:var(--green)':''}">${flag(m.home_team)} ${m.home_name}</div>
+            <div class="te">Elo ${Math.round(m.elo_home||0)}</div>
+          </div>
+          <div style="text-align:center;flex-shrink:0;padding:0 8px">
+            <div style="font-size:1.5rem;font-weight:900;letter-spacing:2px;color:var(--text)">
+              ${m.home_score} – ${m.away_score}
+            </div>
+            <div style="font-size:.6rem;color:var(--muted);margin-top:2px">${m.match_date}</div>
+          </div>
+          <div class="m-team">
+            <div class="tn" style="${awayWon?'color:var(--green)':''}"> ${m.away_name} ${flag(m.away_team)}</div>
+            <div class="te">Elo ${Math.round(m.elo_away||0)}</div>
+          </div>
+        </div>
+        <div style="font-size:.62rem;color:var(--muted);text-align:center;margin-top:6px">
+          Pre-match: ${sn(m.home_name)} ${hw.toFixed(0)}% · Draw ${dw.toFixed(0)}% · ${sn(m.away_name)} ${aw.toFixed(0)}%
+        </div>
+      </div>`;
+    }
+
     return `<div class="match-card">
       <div class="match-meta">
         <span class="m-badge">Group ${m.group_letter} · R${m.round||'?'}</span>
@@ -656,7 +697,7 @@ async function renderKnockout() {
        ORDER BY gs1.group_letter`),
     q(`SELECT team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
        FROM ko_sim_results ORDER BY champion DESC LIMIT 32`),
-    q(`SELECT AVG(confidence) AS c, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL`)
+    q(`SELECT AVG(confidence) AS c, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs)`)
   ]);
   const kc = koConf[0]?.c ?? 0;
 
@@ -730,7 +771,7 @@ async function renderSimulations() {
               finish_1st, finish_2nd, finish_3rd, finish_4th, avg_points
        FROM group_sim_results ORDER BY group_letter, finish_1st DESC`),
     q(`SELECT group_letter, AVG(confidence) AS avg_conf
-       FROM bayesian_probs WHERE confidence IS NOT NULL GROUP BY group_letter`)
+       FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs) GROUP BY group_letter`)
   ]);
   const sGConf = {};
   confByGroup.forEach(r=>{ sGConf[r.group_letter] = r.avg_conf || 0; });
