@@ -177,13 +177,44 @@ def collect_odds(conn: duckdb.DuckDBPyConnection) -> int:
     return rows_inserted
 
 
+# Map of common Odds-API / bookmaker spellings → canonical DB name fragment.
+# Keys are lowercased; values must match a substring of the DB team name (lowercased).
+_NAME_ALIASES: dict[str, str] = {
+    # The Odds API common-English name  →  FIFA/DB name fragment
+    "south korea":        "korea republic",
+    "korea":              "korea republic",
+    "turkey":             "türkiye",
+    "turkiye":            "türkiye",
+    "ivory coast":        "côte d'ivoire",
+    "cote d'ivoire":      "côte d'ivoire",
+    "cote divoire":       "côte d'ivoire",
+    "cape verde":         "cabo verde",
+    "cape verde islands": "cabo verde",
+    "dr congo":           "congo dr",
+    "democratic republic of congo": "congo dr",
+    "congo":              "congo dr",
+    "czech republic":     "czechia",
+    "curacao":            "curaçao",
+    "usa":                "usa",
+    "united states":      "usa",
+    "trinidad & tobago":  "trinidad and tobago",
+}
+
+
+def _normalise(name: str) -> str:
+    """Lower-case + apply alias map so bookmaker names match DB names."""
+    n = name.lower().strip()
+    return _NAME_ALIASES.get(n, n)
+
+
 def _match_fixture(event: dict, fixtures: list) -> int | None:
     """Fuzzy-match an API event to a fixture_id by team names."""
-    h = event.get("home_team", "").lower()
-    a = event.get("away_team", "").lower()
+    h = _normalise(event.get("home_team", ""))
+    a = _normalise(event.get("away_team", ""))
     for fid, hname, aname in fixtures:
-        if (hname.lower() in h or h in hname.lower()) and \
-           (aname.lower() in a or a in aname.lower()):
+        hn = hname.lower()
+        an = aname.lower()
+        if (hn in h or h in hn) and (an in a or a in an):
             return fid
     return None
 
