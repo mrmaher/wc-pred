@@ -936,13 +936,14 @@ function sparklineSVG(vals) {
 
 // ── Data Sources ─────────────────────────────────────────────────────────────
 async function renderSources() {
-  const [eloStats, oddsStats, fixtureStats, simStats] = await Promise.all([
+  const [eloStats, oddsStats, fixtureStats, simStats, mrStats] = await Promise.all([
     q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest, MIN(collected_at) AS earliest
        FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`),
     q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest FROM odds_snapshots`),
     q(`SELECT COUNT(*) AS n FROM fixtures`),
     q(`SELECT COUNT(*) AS n, MAX(computed_at) AS latest, COUNT(DISTINCT computed_at) AS runs
-       FROM group_sim_results`)
+       FROM group_sim_results`),
+    q(`SELECT COUNT(*) AS n, MAX(confirmed_at) AS latest FROM match_results`)
   ]);
 
   const eloN    = eloStats[0]?.n||0;
@@ -952,6 +953,8 @@ async function renderSources() {
   const simN    = simStats[0]?.n||0;
   const simRuns = simStats[0]?.runs||0;
   const simLast = simStats[0]?.latest;
+  const mrN     = mrStats[0]?.n||0;
+  const mrLast  = mrStats[0]?.latest;
 
   const now = Date.now();
   function recency(ts) {
@@ -1019,15 +1022,16 @@ async function renderSources() {
     {
       name:'Match Results Feed',
       tag:'live', tagLabel:'Live',
-      desc:'Actual match scores recorded as results come in. Each result triggers an Elo recalculation ' +
-           '(K=32) for both teams, which feeds forward into all subsequent probability estimates. ' +
+      desc:'Actual match scores auto-ingested from football-data.org after each match concludes. ' +
+           'Each result triggers an Elo recalculation (K=32) for both teams, which feeds forward ' +
+           'into all subsequent probability estimates. ' +
            'The feedback loop is the core of the real-time prediction update cycle.',
-      url:null,
-      cadence:'Entered manually via record_result() · auto-ingested if odds API is active',
-      snapshots:'—',
-      lastUpdated:'Awaiting first match (Jun 12)',
-      recencyScore:95,
-      fields:'fixture_id, home_score, away_score, recorded_at, elo_delta_home, elo_delta_away'
+      url:'https://football-data.org',
+      cadence:'Auto-ingested from football-data.org on every pipeline run · FOOTBALL_DATA_API_KEY secret required',
+      snapshots: mrN,
+      lastUpdated: mrN>0 ? fmtTime(mrLast) : 'No results recorded yet',
+      recencyScore: mrN>0 ? recency(mrLast) : 0,
+      fields:'fixture_id, home_score, away_score, result, confirmed_at'
     },
   ];
 
