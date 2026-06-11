@@ -611,56 +611,59 @@ async function renderMatches() {
     return;
   }
   document.getElementById('match-grid').innerHTML = toShow.map(m=>{
-    const finished = m.status === 'finished';
+    const finished = m.status === 'finished' && m.home_score != null;
     const hw=(m.home_win||0)*100, dw=(m.draw||0)*100, aw=(m.away_win||0)*100;
     const conf=m.confidence||0;
     const confCol = confColor(conf);
 
-    if (finished && m.home_score != null) {
-      const homeWon = m.home_score > m.away_score;
-      const awayWon = m.away_score > m.home_score;
-      return `<div class="match-card" style="opacity:.75;border-color:var(--border)">
-        <div class="match-meta">
-          <span class="m-badge">Group ${m.group_letter} · R${m.round||'?'}</span>
-          <span style="font-size:.65rem;background:rgba(16,185,129,.15);color:var(--green);
-                       border-radius:4px;padding:2px 7px;font-weight:700">FINAL</span>
-        </div>
-        <div class="m-teams" style="align-items:center">
-          <div class="m-team">
-            <div class="tn" style="${homeWon?'color:var(--green)':''}">${flag(m.home_team)} ${m.home_name}</div>
-            <div class="te">Elo ${Math.round(m.elo_home||0)}</div>
-          </div>
-          <div style="text-align:center;flex-shrink:0;padding:0 8px">
-            <div style="font-size:1.5rem;font-weight:900;letter-spacing:2px;color:var(--text)">
-              ${m.home_score} – ${m.away_score}
-            </div>
-            <div style="font-size:.6rem;color:var(--muted);margin-top:2px">${m.match_date}</div>
-          </div>
-          <div class="m-team">
-            <div class="tn" style="${awayWon?'color:var(--green)':''}"> ${m.away_name} ${flag(m.away_team)}</div>
-            <div class="te">Elo ${Math.round(m.elo_away||0)}</div>
-          </div>
-        </div>
-        <div style="font-size:.62rem;color:var(--muted);text-align:center;margin-top:6px">
-          Pre-match: ${sn(m.home_name)} ${hw.toFixed(0)}% · Draw ${dw.toFixed(0)}% · ${sn(m.away_name)} ${aw.toFixed(0)}%
-        </div>
-      </div>`;
-    }
+    const homeWon = finished && m.home_score > m.away_score;
+    const awayWon = finished && m.away_score > m.home_score;
+    const isDraw  = finished && m.home_score === m.away_score;
 
-    return `<div class="match-card">
+    // Result row — only rendered when match is finished
+    const resultRow = finished ? `
+      <div style="margin-top:10px;padding-top:10px;border-top:2px solid var(--border);
+                  display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+                    color:var(--green);white-space:nowrap">Final Score</div>
+        <div style="display:flex;align-items:center;gap:6px;flex:1;justify-content:center">
+          <span style="font-size:.82rem;font-weight:700;
+                       color:${homeWon?'var(--green)':isDraw?'var(--gold)':'var(--muted)'}">${m.home_name}</span>
+          <span style="font-size:1.25rem;font-weight:900;letter-spacing:3px;
+                       color:var(--text);padding:2px 8px;background:var(--surface2);
+                       border-radius:6px;border:1px solid var(--border)">${m.home_score}&thinsp;–&thinsp;${m.away_score}</span>
+          <span style="font-size:.82rem;font-weight:700;
+                       color:${awayWon?'var(--green)':isDraw?'var(--gold)':'var(--muted)'}">${m.away_name}</span>
+        </div>
+        <div style="font-size:.6rem;color:var(--muted);white-space:nowrap">
+          ${isDraw?'Draw':homeWon?m.home_name+' win':m.away_name+' win'}
+        </div>
+      </div>` : '';
+
+    const stageBadge = m.group_letter
+      ? `Group ${m.group_letter} · R${m.round||'?'}`
+      : `Knockout · R${m.round||'?'}`;
+
+    return `<div class="match-card" style="${finished?'border-color:rgba(16,185,129,.3)':''}">
       <div class="match-meta">
-        <span class="m-badge">Group ${m.group_letter} · R${m.round||'?'}</span>
-        <span class="m-date">${m.match_date||'TBD'}</span>
+        <span class="m-badge">${stageBadge}</span>
+        <span class="m-date" style="${finished?'color:var(--green);font-weight:600':''}">
+          ${finished?'✓ Final':''}${!finished?(m.match_date||'TBD'):''}
+        </span>
       </div>
       <div class="m-teams">
-        <div class="m-team"><div class="tn">${flag(m.home_team)} ${m.home_name}</div>
-          <div class="te">Elo ${Math.round(m.elo_home||0)}</div></div>
+        <div class="m-team">
+          <div class="tn" style="${homeWon?'color:var(--green)':''}">${flag(m.home_team)} ${m.home_name}</div>
+          <div class="te">Elo ${Math.round(m.elo_home||0)}</div>
+        </div>
         <div class="vs">VS</div>
-        <div class="m-team"><div class="tn">${flag(m.away_team)} ${m.away_name}</div>
-          <div class="te">Elo ${Math.round(m.elo_away||0)}</div></div>
+        <div class="m-team">
+          <div class="tn" style="${awayWon?'color:var(--green)':''}">${flag(m.away_team)} ${m.away_name}</div>
+          <div class="te">Elo ${Math.round(m.elo_away||0)}</div>
+        </div>
       </div>
       <div style="font-size:.62rem;color:var(--accent2);text-align:center;margin-bottom:6px">
-        ${m.n_observations>0?`Market-informed · ${m.n_observations} obs`:'Elo prior only'}
+        ${finished?'Pre-match model · ':''} ${m.n_observations>0?`${m.n_observations} obs market-informed`:'Elo prior only'}
       </div>
       ${probRow(sn(m.home_name),hw,'pf-hw',conf)}
       ${probRow('Draw',dw,'pf-dr',conf)}
@@ -677,6 +680,7 @@ async function renderMatches() {
           ${confLabel(conf)}
         </span>
       </div>
+      ${resultRow}
     </div>`;
   }).join('');
 }
