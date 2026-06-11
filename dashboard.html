@@ -320,6 +320,7 @@ const BUNDLES = duckdb.getJsDelivrBundles();
 const BASE = window.location.pathname.endsWith('/')
   ? window.location.href
   : window.location.href.replace(/\/[^\/]*$/, '/');
+const CACHE_BUST = '?v=' + Math.floor(Date.now() / 3600000); // changes every hour
 const PARQUET = BASE + 'data/parquet/';
 
 let db, conn;
@@ -355,7 +356,7 @@ async function loadData() {
                    'ko_sim_history','group_sim_history'];
     for (const f of files) {
       try {
-        await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet')`);
+        await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet${CACHE_BUST}')`);
       } catch(e) { console.warn(`Could not load ${f}.parquet:`, e.message); }
     }
     await renderAll();
