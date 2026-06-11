@@ -110,6 +110,17 @@
   .pf-aw{background:linear-gradient(90deg,var(--orange),#fb923c)}
   .pf-conf{background:linear-gradient(90deg,var(--green),#34d399)}
   .prob-pct{font-size:.7rem;font-weight:700;width:34px;flex-shrink:0}
+  /* Confidence gauge / ring / banner */
+  .conf-banner{background:linear-gradient(90deg,rgba(16,185,129,.08),rgba(59,130,246,.08));
+               border:1px solid rgba(16,185,129,.2);border-radius:8px;
+               padding:8px 14px;margin-bottom:16px;display:flex;align-items:center;gap:12px;
+               font-size:.76rem;color:var(--text)}
+  .conf-banner-label{color:var(--muted);font-size:.7rem;white-space:nowrap}
+  .conf-gauge-wrap{flex:1;height:6px;background:var(--border);border-radius:3px;overflow:hidden;min-width:60px}
+  .conf-gauge-fill{height:100%;border-radius:3px;transition:width .6s ease}
+  .conf-pct-lbl{font-weight:700;font-size:.78rem;white-space:nowrap;min-width:36px;text-align:right}
+  .conf-pill{font-size:.6rem;font-weight:700;border-radius:10px;padding:1px 7px;white-space:nowrap}
+  .conf-ring-wrap{display:flex;align-items:center;justify-content:center;margin:6px 0 2px}
   .conf-chip{font-size:.63rem;color:var(--muted);margin-top:8px;text-align:center}
   .value-flag{position:absolute;top:9px;right:9px;background:var(--gold);color:#0a0e1a;
               border-radius:4px;padding:2px 6px;font-size:.62rem;font-weight:800}
@@ -229,6 +240,8 @@
   <div class="tab" data-section="sources">Data Sources</div>
 </nav>
 
+<div id="conf-banner-wrap" style="padding:10px 28px 0;max-width:1400px;margin:0 auto;display:none"></div>
+
 <main>
   <!-- ── Overview ───────────────────────────────────────────────────── -->
   <section class="section active" id="section-overview">
@@ -333,6 +346,54 @@ const FLAGS = {
 };
 function flag(id) { return FLAGS[id] || '🏳️'; }
 
+// ── Confidence helpers ───────────────────────────────────────────────────────
+function confColor(c) {
+  // c is 0–1. Returns a CSS color string.
+  if (c >= 0.7) return 'var(--green)';
+  if (c >= 0.4) return 'var(--gold)';
+  return 'var(--red)';
+}
+function confLabel(c) {
+  if (c >= 0.7) return 'High';
+  if (c >= 0.4) return 'Med';
+  return 'Low';
+}
+function confRing(c, size=36) {
+  // SVG arc ring showing confidence pct
+  const pct = Math.min(1, Math.max(0, c));
+  const r = (size/2) - 4;
+  const circ = 2 * Math.PI * r;
+  const dash = pct * circ;
+  const col = confColor(pct);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex-shrink:0">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--border)" stroke-width="3.5"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${col}" stroke-width="3.5"
+      stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}"
+      stroke-linecap="round"
+      transform="rotate(-90 ${size/2} ${size/2})"/>
+    <text x="${size/2}" y="${size/2+4}" text-anchor="middle" font-size="${size<32?7:8}"
+      font-weight="700" fill="${col}">${(pct*100).toFixed(0)}%</text>
+  </svg>`;
+}
+
+async function renderConfBanner() {
+  try {
+    const rows = await q(`SELECT AVG(confidence) AS avg_conf, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL`);
+    const wrap = document.getElementById('conf-banner-wrap');
+    if (!rows.length || rows[0].avg_conf == null) { wrap.style.display='none'; return; }
+    const c = rows[0].avg_conf;
+    const col = confColor(c);
+    const lbl = confLabel(c);
+    wrap.style.display = 'block';
+    wrap.innerHTML = `<div class="conf-banner">
+      <span class="conf-banner-label">Model confidence</span>
+      <div class="conf-gauge-wrap"><div class="conf-gauge-fill" style="width:${(c*100).toFixed(1)}%;background:${col}"></div></div>
+      <span class="conf-pct-lbl" style="color:${col}">${(c*100).toFixed(0)}%</span>
+      <span class="conf-pill" style="background:${col}22;color:${col};border:1px solid ${col}44">${lbl} — ${rows[0].n} matches · Elo ${c<0.3?'dominant':'+ market blend'}</span>
+    </div>`;
+  } catch(_) {}
+}
+
 const BUNDLES = duckdb.getJsDelivrBundles();
 const BASE = window.location.pathname.endsWith('/')
   ? window.location.href
@@ -407,6 +468,7 @@ async function q(sql) {
 // ── Render all ──────────────────────────────────────────────────────────────
 async function renderAll() {
   await Promise.all([
+    renderConfBanner(),
     renderOverview(), renderGroups(), renderMatches(),
     renderKnockout(), renderSimulations(), renderTrends(), renderSources()
   ]);
@@ -414,12 +476,13 @@ async function renderAll() {
 
 // ── Overview ────────────────────────────────────────────────────────────────
 async function renderOverview() {
-  const [champs, gMeta, latestRun, hasOdds] = await Promise.all([
+  const [champs, gMeta, latestRun, hasOdds, globalConf] = await Promise.all([
     q(`SELECT ks.team_id, ks.team_name, ks.champion, ks.final, ks.semi_final
        FROM ko_sim_results ks ORDER BY ks.champion DESC LIMIT 20`),
     q(`SELECT COUNT(DISTINCT team_id) AS n_teams, COUNT(DISTINCT group_letter) AS n_groups FROM group_sim_results`),
     q(`SELECT MAX(computed_at) AS t FROM group_sim_results`),
-    q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`)
+    q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`),
+    q(`SELECT AVG(confidence) AS c FROM bayesian_probs WHERE confidence IS NOT NULL`)
   ]);
 
   document.getElementById('stats-strip').innerHTML = [
@@ -430,6 +493,7 @@ async function renderOverview() {
   ].map(s=>`<div class="stat-card"><div class="stat-val">${s.val}</div>
              <div class="stat-label">${s.label}</div></div>`).join('');
 
+  const gc = globalConf[0]?.c ?? 0;
   const medals = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣'];
   document.getElementById('champ-grid').innerHTML = champs.map((t,i)=>`
     <div class="champ-card ${i===0?'g1':i===1?'g2':i===2?'g3':''}">
@@ -439,11 +503,12 @@ async function renderOverview() {
       <div class="champ-prob">${pct(t.champion)}</div>
       <div class="champ-sub">Champion</div>
       <div class="champ-sub" style="color:var(--accent2)">Final: ${pct(t.final)}</div>
+      <div class="conf-ring-wrap">${confRing(gc, 32)}</div>
     </div>`).join('');
 
   document.getElementById('model-note').innerHTML = `
     <strong style="color:var(--text)">Bayesian blending:</strong>
-    Each match starts with an Elo-derived prior (weight = 10 observations).
+    Each match starts with an Elo-derived prior (weight = 5 observations).
     As odds data arrives, each snapshot is weighted by <em>exp(−ln2 × age / half-life)</em>.
     Half-life adapts: 48h when match is a week away · 12h within a week · 2h on match day.
     <br><br>
@@ -460,10 +525,15 @@ async function renderOverview() {
 
 // ── Groups ──────────────────────────────────────────────────────────────────
 async function renderGroups() {
-  const rows = await q(`
-    SELECT group_letter, team_id, team_name, elo, confederation,
-           advance_prob, finish_1st, finish_2nd, avg_points
-    FROM group_sim_results ORDER BY group_letter, advance_prob DESC`);
+  const [rows, confByGroup] = await Promise.all([
+    q(`SELECT group_letter, team_id, team_name, elo, confederation,
+              advance_prob, finish_1st, finish_2nd, avg_points
+       FROM group_sim_results ORDER BY group_letter, advance_prob DESC`),
+    q(`SELECT group_letter, AVG(confidence) AS avg_conf
+       FROM bayesian_probs WHERE confidence IS NOT NULL GROUP BY group_letter`)
+  ]);
+  const gConf = {};
+  confByGroup.forEach(r=>{ gConf[r.group_letter] = r.avg_conf || 0; });
 
   const groups = [...new Set(rows.map(r=>r.group_letter))].sort();
   document.getElementById('group-fbar').innerHTML =
@@ -476,16 +546,25 @@ async function renderGroups() {
 
   document.getElementById('groups-grid').innerHTML = toShow.map(g=>{
     const teams = byGroup[g]||[];
+    const gc = gConf[g] ?? 0;
+    const gcCol = confColor(gc);
     return `<div class="group-card">
       <div class="group-hdr"><span class="group-letter">Group ${g}</span>
-        <span style="font-size:.67rem;color:var(--muted)">Monte Carlo</span></div>
+        <span style="display:flex;align-items:center;gap:5px;font-size:.62rem;color:${gcCol}">
+          ${confRing(gc, 24)}
+          <span style="font-size:.6rem;font-weight:600">${confLabel(gc)} conf</span>
+        </span>
+      </div>
       <div class="team-row" style="background:var(--surface2);padding-top:5px;padding-bottom:5px">
         <div></div><div></div>
         <div class="col-h">ADV%</div><div class="col-h">1ST%</div><div class="col-h">AVG PTS</div>
       </div>
       ${teams.map((t,i)=>{
         const p=t.advance_prob*100, cls=p>=65?'hi':p>=35?'md':'lo';
-        const bar=p>=65?'#10b981':p>=35?'#f59e0b':'#ef4444';
+        // Tint bar by confidence: low-conf teams get muted amber instead of pure green
+        const baseCol=p>=65?[16,185,129]:p>=35?[245,158,11]:[239,68,68];
+        const confMix=Math.min(1,gc+0.2);
+        const bar=`rgba(${baseCol[0]},${baseCol[1]},${baseCol[2]},${(0.5+0.5*confMix).toFixed(2)})`;
         return `<div class="team-row">
           <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
           <div><div class="t-name">${flag(t.team_id)} ${t.team_name} <span class="t-elo">${Math.round(t.elo||0)}</span></div>
@@ -525,7 +604,8 @@ async function renderMatches() {
   }
   document.getElementById('match-grid').innerHTML = toShow.map(m=>{
     const hw=(m.home_win||0)*100, dw=(m.draw||0)*100, aw=(m.away_win||0)*100;
-    const conf=(m.confidence||0)*100;
+    const conf=m.confidence||0;
+    const confCol = confColor(conf);
     return `<div class="match-card">
       <div class="match-meta">
         <span class="m-badge">Group ${m.group_letter} · R${m.round||'?'}</span>
@@ -539,14 +619,22 @@ async function renderMatches() {
           <div class="te">Elo ${Math.round(m.elo_away||0)}</div></div>
       </div>
       <div style="font-size:.62rem;color:var(--accent2);text-align:center;margin-bottom:6px">
-        ${m.n_observations>0?`Market-informed (${m.n_observations} obs)`:'Elo prior only'}
+        ${m.n_observations>0?`Market-informed · ${m.n_observations} obs`:'Elo prior only'}
       </div>
-      ${probRow(sn(m.home_name),hw,'pf-hw')}
-      ${probRow('Draw',dw,'pf-dr')}
-      ${probRow(sn(m.away_name),aw,'pf-aw')}
-      <div class="conf-chip">Confidence: ${conf.toFixed(0)}%
-        <span style="display:inline-block;width:${conf}px;max-width:80px;height:3px;
-               background:var(--green);border-radius:2px;vertical-align:middle;margin-left:5px"></span>
+      ${probRow(sn(m.home_name),hw,'pf-hw',conf)}
+      ${probRow('Draw',dw,'pf-dr',conf)}
+      ${probRow(sn(m.away_name),aw,'pf-aw',conf)}
+      <div style="display:flex;align-items:center;gap:7px;margin-top:9px;padding-top:7px;
+                  border-top:1px solid var(--border)">
+        ${confRing(conf, 30)}
+        <div style="flex:1">
+          <div style="font-size:.6rem;color:var(--muted);margin-bottom:2px">Confidence</div>
+          <div class="conf-gauge-wrap"><div class="conf-gauge-fill"
+            style="width:${(conf*100).toFixed(1)}%;background:${confCol}"></div></div>
+        </div>
+        <span class="conf-pill" style="background:${confCol}22;color:${confCol};border:1px solid ${confCol}44">
+          ${confLabel(conf)}
+        </span>
       </div>
     </div>`;
   }).join('');
@@ -555,7 +643,7 @@ window._setMF = g=>{ activeMatchFilter=g; renderMatches(); };
 
 // ── Knockout ─────────────────────────────────────────────────────────────────
 async function renderKnockout() {
-  const [r32, deep] = await Promise.all([
+  const [r32, deep, koConf] = await Promise.all([
     q(`SELECT gs1.team_name AS team_a_name, gs2.team_name AS team_b_name,
               gs1.team_id AS team_a_id, gs2.team_id AS team_b_id,
               gs1.group_letter AS group_a, gs2.group_letter AS group_b,
@@ -567,12 +655,22 @@ async function renderKnockout() {
         AND gs2.finish_2nd=(SELECT MAX(finish_2nd) FROM group_sim_results g WHERE g.group_letter=gs2.group_letter)
        ORDER BY gs1.group_letter`),
     q(`SELECT team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
-       FROM ko_sim_results ORDER BY champion DESC LIMIT 32`)
+       FROM ko_sim_results ORDER BY champion DESC LIMIT 32`),
+    q(`SELECT AVG(confidence) AS c, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL`)
   ]);
+  const kc = koConf[0]?.c ?? 0;
 
   if (r32.length) {
     const half = Math.ceil(r32.length/2);
+    const kcCol = confColor(kc);
     document.getElementById('bracket-wrap').innerHTML = `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.72rem;color:var(--muted)">
+      ${confRing(kc, 28)}
+      <span>Data quality: <strong style="color:${kcCol}">${confLabel(kc)}</strong>
+        · ${(kc*100).toFixed(0)}% market-informed
+        · ${kc<0.3?'Projections based on Elo ratings — will sharpen as odds arrive':'Bayesian blend of Elo + market odds'}
+      </span>
+    </div>
     <div class="bracket">
       <div class="b-round">
         <div class="b-round-title">R32 — Left</div>
@@ -627,10 +725,15 @@ function matchupHtml(m) {
 
 // ── Simulations ──────────────────────────────────────────────────────────────
 async function renderSimulations() {
-  const rows = await q(`
-    SELECT group_letter, team_id, team_name, elo,
-           finish_1st, finish_2nd, finish_3rd, finish_4th, avg_points
-    FROM group_sim_results ORDER BY group_letter, finish_1st DESC`);
+  const [rows, confByGroup] = await Promise.all([
+    q(`SELECT group_letter, team_id, team_name, elo,
+              finish_1st, finish_2nd, finish_3rd, finish_4th, avg_points
+       FROM group_sim_results ORDER BY group_letter, finish_1st DESC`),
+    q(`SELECT group_letter, AVG(confidence) AS avg_conf
+       FROM bayesian_probs WHERE confidence IS NOT NULL GROUP BY group_letter`)
+  ]);
+  const sGConf = {};
+  confByGroup.forEach(r=>{ sGConf[r.group_letter] = r.avg_conf || 0; });
 
   const groups = [...new Set(rows.map(r=>r.group_letter))].sort();
   document.getElementById('sim-fbar').innerHTML =
@@ -643,10 +746,16 @@ async function renderSimulations() {
 
   document.getElementById('sim-grid').innerHTML = toShow.map(g=>{
     const teams = byGroup[g]||[];
+    const sgc = sGConf[g] ?? 0;
+    const sgcCol = confColor(sgc);
     return `<div class="sim-card">
       <div class="group-hdr">
         <span class="group-letter">Group ${g}</span>
-        <span style="font-size:.67rem;color:var(--muted)">Finishing position distribution · 10k sims</span>
+        <span style="display:flex;align-items:center;gap:5px">
+          ${confRing(sgc, 24)}
+          <span style="font-size:.6rem;color:${sgcCol};font-weight:600">${confLabel(sgc)}</span>
+          <span style="font-size:.6rem;color:var(--muted)">· 10k sims</span>
+        </span>
       </div>
       <div style="padding:6px 14px 4px;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
                   border-bottom:1px solid var(--border)">
@@ -931,8 +1040,9 @@ async function loadFallback() {
 
 // ── Utils ─────────────────────────────────────────────────────────────────────
 function pct(v) { return v!=null ? (v*100).toFixed(1)+'%' : '—'; }
-function probRow(label, pct_val, cls) {
-  return `<div class="prob-row">
+function probRow(label, pct_val, cls, conf=1) {
+  const opacity = 0.35 + 0.65 * Math.min(1, Math.max(0, conf));
+  return `<div class="prob-row" style="opacity:${opacity.toFixed(2)}">
     <div class="prob-lbl">${label}</div>
     <div class="prob-track"><div class="prob-fill ${cls}" style="width:${Math.min(100,pct_val).toFixed(1)}%"></div></div>
     <div class="prob-pct">${pct_val.toFixed(1)}%</div>

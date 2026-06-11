@@ -37,7 +37,7 @@ from pipeline.config import HOME_ADVANTAGE_ELO, DRAW_BASE
 log = logging.getLogger(__name__)
 
 # Fixed weight assigned to the Elo prior (equivalent to N market observations)
-PRIOR_WEIGHT = 10.0
+PRIOR_WEIGHT = 5.0
 
 
 class MatchProb(NamedTuple):
