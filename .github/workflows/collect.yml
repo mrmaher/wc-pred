@@ -1,0 +1,81 @@
+name: WC2026 — Collect & Predict
+
+# ── When this runs ────────────────────────────────────────────────────────────
+#
+#  Normal schedule: every 6 hours
+#  Match days: cron can't dynamically detect match days, but you can manually
+#              trigger a more frequent run via the GitHub UI "Run workflow" button.
+#
+#  GitHub Actions free tier: 2,000 min/month. Each run takes ~1 min → plenty.
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"     # every 6 hours
+  workflow_dispatch:           # lets you click "Run workflow" from GitHub UI
+    inputs:
+      sims:
+        description: "Monte Carlo iterations (default 10000)"
+        required: false
+        default: "10000"
+
+# ── Permissions ───────────────────────────────────────────────────────────────
+permissions:
+  contents: write              # needed to commit the updated DB back to the repo
+
+jobs:
+  collect-and-predict:
+    name: Collect data & regenerate predictions
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # 1. Check out the repo (including data/wc2026.db if it exists)
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # 2. Set up Python
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      # 3. Install dependencies
+      - name: Install dependencies
+        run: pip install duckdb requests
+
+      # 4. Run data collection + pipeline
+      #    ODDS_API_KEY is a GitHub secret — set it in:
+      #    Settings → Secrets and variables → Actions → New repository secret
+      - name: Run pipeline
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}   # empty string if not set → Elo-only mode
+        run: |
+          python run_pipeline.py --sims ${{ github.event.inputs.sims || '10000' }}
+
+      # 5. Commit updated DB + Parquet + predictions.json back to the repo
+      #    If nothing changed (no new data), this is a no-op.
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "data: auto-update [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          file_pattern: |
+            data/wc2026.db
+            data/parquet/*.parquet
+            data/predictions.json
+
+      # 6. Confirm what was written (visible in Actions logs)
+      - name: Summary
+        run: |
+          echo "### Pipeline complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| File | Size |" >> $GITHUB_STEP_SUMMARY
+          echo "|------|------|" >> $GITHUB_STEP_SUMMARY
+          for f in data/wc2026.db data/predictions.json data/parquet/*.parquet; do
+            if [ -f "$f" ]; then
+              size=$(du -sh "$f" | cut -f1)
+              echo "| \`$f\` | $size |" >> $GITHUB_STEP_SUMMARY
+            fi
+          done

@@ -1,0 +1,63 @@
+{
+  "teams": [
+    {"id": "MEX", "name": "Mexico",              "group": "A", "elo": 1800, "confederation": "CONCACAF"},
+    {"id": "RSA", "name": "South Africa",         "group": "A", "elo": 1648, "confederation": "CAF"},
+    {"id": "KOR", "name": "Korea Republic",       "group": "A", "elo": 1847, "confederation": "AFC"},
+    {"id": "CZE", "name": "Czechia",              "group": "A", "elo": 1849, "confederation": "UEFA"},
+
+    {"id": "CAN", "name": "Canada",               "group": "B", "elo": 1750, "confederation": "CONCACAF"},
+    {"id": "BIH", "name": "Bosnia & Herzegovina", "group": "B", "elo": 1748, "confederation": "UEFA"},
+    {"id": "QAT", "name": "Qatar",                "group": "B", "elo": 1601, "confederation": "AFC"},
+    {"id": "SUI", "name": "Switzerland",          "group": "B", "elo": 1952, "confederation": "UEFA"},
+
+    {"id": "HAI", "name": "Haiti",                "group": "C", "elo": 1531, "confederation": "CONCACAF"},
+    {"id": "SCO", "name": "Scotland",             "group": "C", "elo": 1862, "confederation": "UEFA"},
+    {"id": "BRA", "name": "Brazil",               "group": "C", "elo": 2052, "confederation": "CONMEBOL"},
+    {"id": "MAR", "name": "Morocco",              "group": "C", "elo": 1869, "confederation": "CAF"},
+
+    {"id": "USA", "name": "USA",                  "group": "D", "elo": 1805, "confederation": "CONCACAF"},
+    {"id": "PAR", "name": "Paraguay",             "group": "D", "elo": 1700, "confederation": "CONMEBOL"},
+    {"id": "AUS", "name": "Australia",            "group": "D", "elo": 1756, "confederation": "AFC"},
+    {"id": "TUR", "name": "Türkiye",              "group": "D", "elo": 1821, "confederation": "UEFA"},
+
+    {"id": "CIV", "name": "Côte d'Ivoire",        "group": "E", "elo": 1751, "confederation": "CAF"},
+    {"id": "ECU", "name": "Ecuador",              "group": "E", "elo": 1819, "confederation": "CONMEBOL"},
+    {"id": "GER", "name": "Germany",              "group": "E", "elo": 1988, "confederation": "UEFA"},
+    {"id": "CUW", "name": "Curaçao",              "group": "E", "elo": 1503, "confederation": "CONCACAF"},
+
+    {"id": "NED", "name": "Netherlands",          "group": "F", "elo": 1992, "confederation": "UEFA"},
+    {"id": "JPN", "name": "Japan",                "group": "F", "elo": 1862, "confederation": "AFC"},
+    {"id": "SWE", "name": "Sweden",               "group": "F", "elo": 1889, "confederation": "UEFA"},
+    {"id": "TUN", "name": "Tunisia",              "group": "F", "elo": 1758, "confederation": "CAF"},
+
+    {"id": "IRN", "name": "IR Iran",              "group": "G", "elo": 1808, "confederation": "AFC"},
+    {"id": "NZL", "name": "New Zealand",          "group": "G", "elo": 1579, "confederation": "OFC"},
+    {"id": "BEL", "name": "Belgium",              "group": "G", "elo": 1954, "confederation": "UEFA"},
+    {"id": "EGY", "name": "Egypt",                "group": "G", "elo": 1712, "confederation": "CAF"},
+
+    {"id": "SAU", "name": "Saudi Arabia",         "group": "H", "elo": 1721, "confederation": "AFC"},
+    {"id": "URU", "name": "Uruguay",              "group": "H", "elo": 1902, "confederation": "CONMEBOL"},
+    {"id": "ESP", "name": "Spain",                "group": "H", "elo": 2048, "confederation": "UEFA"},
+    {"id": "CPV", "name": "Cabo Verde",           "group": "H", "elo": 1651, "confederation": "CAF"},
+
+    {"id": "FRA", "name": "France",               "group": "I", "elo": 2005, "confederation": "UEFA"},
+    {"id": "SEN", "name": "Senegal",              "group": "I", "elo": 1871, "confederation": "CAF"},
+    {"id": "IRQ", "name": "Iraq",                 "group": "I", "elo": 1649, "confederation": "AFC"},
+    {"id": "NOR", "name": "Norway",               "group": "I", "elo": 1921, "confederation": "UEFA"},
+
+    {"id": "ARG", "name": "Argentina",            "group": "J", "elo": 2141, "confederation": "CONMEBOL"},
+    {"id": "ALG", "name": "Algeria",              "group": "J", "elo": 1779, "confederation": "CAF"},
+    {"id": "AUT", "name": "Austria",              "group": "J", "elo": 1871, "confederation": "UEFA"},
+    {"id": "JOR", "name": "Jordan",               "group": "J", "elo": 1651, "confederation": "AFC"},
+
+    {"id": "POR", "name": "Portugal",             "group": "K", "elo": 2012, "confederation": "UEFA"},
+    {"id": "COD", "name": "Congo DR",             "group": "K", "elo": 1680, "confederation": "CAF"},
+    {"id": "UZB", "name": "Uzbekistan",           "group": "K", "elo": 1602, "confederation": "AFC"},
+    {"id": "COL", "name": "Colombia",             "group": "K", "elo": 1912, "confederation": "CONMEBOL"},
+
+    {"id": "GHA", "name": "Ghana",                "group": "L", "elo": 1685, "confederation": "CAF"},
+    {"id": "PAN", "name": "Panama",               "group": "L", "elo": 1698, "confederation": "CONCACAF"},
+    {"id": "ENG", "name": "England",              "group": "L", "elo": 1990, "confederation": "UEFA"},
+    {"id": "CRO", "name": "Croatia",              "group": "L", "elo": 1940, "confederation": "UEFA"}
+  ]
+}
