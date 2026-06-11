@@ -204,6 +204,22 @@ def export_parquet(conn: duckdb.DuckDBPyConnection) -> None:
             JOIN teams t ON ks.team_id = t.team_id
             WHERE ks.computed_at = (SELECT MAX(computed_at) FROM ko_sim_results)
         """,
+        "ko_sim_history": """
+            SELECT ks.team_id, ks.computed_at, ks.champion, ks.final,
+                   ks.semi_final, ks.quarter_final, ks.round_of_16, ks.round_of_32,
+                   t.name AS team_name, t.group_letter
+            FROM ko_sim_results ks
+            JOIN teams t ON ks.team_id = t.team_id
+            ORDER BY ks.team_id, ks.computed_at ASC
+        """,
+        "group_sim_history": """
+            SELECT gs.team_id, gs.computed_at, gs.advance_prob,
+                   gs.finish_1st, gs.finish_2nd, gs.avg_points,
+                   gs.group_letter, t.name AS team_name
+            FROM group_sim_results gs
+            JOIN teams t ON gs.team_id = t.team_id
+            ORDER BY gs.team_id, gs.computed_at ASC
+        """,
         "elo_snapshots": """
             SELECT es.*, t.name AS team_name
             FROM elo_snapshots es
@@ -217,6 +233,15 @@ def export_parquet(conn: duckdb.DuckDBPyConnection) -> None:
             JOIN fixtures f ON mr.fixture_id = f.fixture_id
             JOIN teams t1 ON f.home_team = t1.team_id
             JOIN teams t2 ON f.away_team = t2.team_id
+        """,
+        "odds_snapshots": """
+            SELECT os.fixture_id, os.bookmaker, os.collected_at,
+                   os.home_odds, os.draw_odds, os.away_odds,
+                   os.home_implied, os.draw_implied, os.away_implied,
+                   f.home_team, f.away_team
+            FROM odds_snapshots os
+            JOIN fixtures f ON os.fixture_id = f.fixture_id
+            ORDER BY os.collected_at DESC
         """
     }
 

@@ -51,7 +51,8 @@ jobs:
       #    Settings → Secrets and variables → Actions → New repository secret
       - name: Run pipeline
         env:
-          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}   # empty string if not set → Elo-only mode
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          FOOTBALL_DATA_API_KEY: ${{ secrets.FOOTBALL_DATA_API_KEY }}
         run: |
           python run_pipeline.py --sims ${{ github.event.inputs.sims || '10000' }}
 

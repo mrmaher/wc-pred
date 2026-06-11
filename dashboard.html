@@ -350,7 +350,9 @@ async function initDB() {
 async function loadData() {
   try {
     const files = ['fixtures','teams','bayesian_probs',
-                   'group_sim_results','ko_sim_results','elo_snapshots'];
+                   'group_sim_results','ko_sim_results','elo_snapshots',
+                   'odds_snapshots','match_results',
+                   'ko_sim_history','group_sim_history'];
     for (const f of files) {
       try {
         await conn.query(`CREATE OR REPLACE VIEW ${f} AS SELECT * FROM read_parquet('${PARQUET}${f}.parquet')`);
@@ -396,7 +398,7 @@ async function renderOverview() {
        FROM ko_sim_results ks ORDER BY ks.champion DESC LIMIT 20`),
     q(`SELECT COUNT(DISTINCT team_id) AS n_teams, COUNT(DISTINCT group_letter) AS n_groups FROM group_sim_results`),
     q(`SELECT MAX(computed_at) AS t FROM group_sim_results`),
-    q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source='eloratings'`)
+    q(`SELECT COUNT(*) AS n FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`)
   ]);
 
   document.getElementById('stats-strip').innerHTML = [
@@ -653,21 +655,16 @@ window._setSF = g=>{ activeSimFilter=g; renderSimulations(); };
 
 // ── Probability Trends ────────────────────────────────────────────────────────
 async function renderTrends() {
-  // Pull ALL ko_sim snapshots for every team (multiple rows if pipeline ran multiple times)
+  // Pull ALL historical ko_sim snapshots for trend lines
   const [snapshots, latestGroups] = await Promise.all([
-    q(`SELECT team_id, team_name, champion, advance_prob_proxy, computed_at
-       FROM (
-         SELECT k.team_id, k.team_name, k.champion, k.computed_at,
-                g.advance_prob AS advance_prob_proxy
-         FROM ko_sim_results k
-         LEFT JOIN (
-           SELECT team_id, MAX(advance_prob) AS advance_prob FROM group_sim_results GROUP BY team_id
-         ) g ON k.team_id = g.team_id
-       ) ORDER BY team_id, computed_at`),
-    q(`SELECT team_id, group_letter FROM group_sim_results GROUP BY team_id, group_letter`)
+    q(`SELECT team_id, team_name, champion, computed_at, group_letter
+       FROM ko_sim_history
+       ORDER BY team_id, computed_at`),
+    q(`SELECT team_id, group_letter FROM group_sim_history GROUP BY team_id, group_letter`)
   ]);
 
   const groupByTeam = {};
+  snapshots.forEach(r=>{ if(r.group_letter) groupByTeam[r.team_id]=r.group_letter; });
   latestGroups.forEach(r=>{ groupByTeam[r.team_id]=r.group_letter; });
 
   // Group snapshots by team
@@ -750,9 +747,8 @@ function sparklineSVG(vals) {
 async function renderSources() {
   const [eloStats, oddsStats, fixtureStats, simStats] = await Promise.all([
     q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest, MIN(collected_at) AS earliest
-       FROM elo_snapshots WHERE source='eloratings'`),
-    q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest
-       FROM elo_snapshots WHERE source='odds_api'`),
+       FROM elo_snapshots WHERE source IN ('eloratings','seed','calculated')`),
+    q(`SELECT COUNT(*) AS n, MAX(collected_at) AS latest FROM odds_snapshots`),
     q(`SELECT COUNT(*) AS n FROM fixtures`),
     q(`SELECT COUNT(*) AS n, MAX(computed_at) AS latest, COUNT(DISTINCT computed_at) AS runs
        FROM group_sim_results`)
@@ -792,7 +788,7 @@ async function renderSources() {
     },
     {
       name:'The Odds API',
-      tag:'pending', tagLabel:'Pending Key',
+      tag: oddsN>0 ? 'live' : 'pending', tagLabel: oddsN>0 ? 'Live' : 'Pending Key',
       desc:'Market-implied probabilities from 40+ bookmakers. Once an API key is configured, ' +
            'match odds are collected every 6 hours and blended into the Bayesian model — ' +
            'confidence score rises from 0% toward 100% as market data accumulates.',
@@ -877,7 +873,7 @@ async function renderSources() {
       <tr><td><code>teams</code></td><td>${teamCnt[0]?.n||0}</td><td>Static</td><td>48 teams, Elo seeds, group assignments</td></tr>
       <tr><td><code>fixtures</code></td><td>${fixCnt[0]?.n||0}</td><td>Static</td><td>72 group stage matches + KO fixtures as drawn</td></tr>
       <tr><td><code>elo_snapshots</code></td><td>${eloCnt[0]?.n||0}</td><td>Append-only</td><td>One row per team per collection run</td></tr>
-      <tr><td><code>odds_snapshots</code></td><td>—</td><td>Append-only</td><td>Requires ODDS_API_KEY · not yet populated</td></tr>
+      <tr><td><code>odds_snapshots</code></td><td>${oddsN}</td><td>Append-only</td><td>Bookmaker odds · ${oddsN>0?'active':'requires ODDS_API_KEY'}</td></tr>
       <tr><td><code>match_results</code></td><td>—</td><td>Append-only</td><td>Actual scores · triggers Elo recalc</td></tr>
       <tr><td><code>bayesian_probs</code></td><td>${fixCnt[0]?.n||0}</td><td>Derived</td><td>Rebuilt each run · one row per fixture</td></tr>
       <tr><td><code>group_sim_results</code></td><td>${simCnt[0]?.n||0}</td><td>Derived</td><td>Rebuilt each run · one row per team per run</td></tr>

@@ -63,25 +63,40 @@ def collect_elo(conn: duckdb.DuckDBPyConnection) -> int:
 
 
 def _fetch_live_elo() -> dict:
-    """Try to fetch current national Elo ratings. Returns {} on failure."""
-    url = "http://api.clubelo.com/Nationals"
-    try:
-        req = urllib.request.Request(url, headers={"User-Agent": "WC2026Predictor/2.0"})
-        with urllib.request.urlopen(req, timeout=10) as resp:
-            lines = resp.read().decode("utf-8").splitlines()
-        ratings = {}
-        for line in lines[1:]:
-            parts = line.strip().split(",")
-            if len(parts) >= 3:
-                try:
-                    ratings[parts[1].strip()] = float(parts[2].strip())
-                except ValueError:
-                    pass
-        log.info("Live Elo: fetched %d ratings", len(ratings))
-        return ratings
-    except Exception as e:
-        log.debug("Live Elo fetch failed: %s", e)
-        return {}
+    """
+    Fetch current national team Elo ratings from clubelo.com.
+    Uses the date endpoint which is more reliable than /Nationals.
+    Returns dict of {club_name: elo_value}.
+    """
+    from datetime import date
+    today = date.today().strftime("%Y-%m-%d")
+    urls = [
+        f"http://api.clubelo.com/{today}",
+        "http://api.clubelo.com/Nationals",
+    ]
+    for url in urls:
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "WC2026Predictor/2.0"})
+            with urllib.request.urlopen(req, timeout=12) as resp:
+                lines = resp.read().decode("utf-8").splitlines()
+            ratings = {}
+            for line in lines[1:]:
+                parts = line.strip().split(",")
+                if len(parts) >= 4:
+                    try:
+                        # Format: Rank,Club,Country,Level,Elo,...
+                        club = parts[1].strip()
+                        elo  = float(parts[4].strip())
+                        ratings[club] = elo
+                    except (ValueError, IndexError):
+                        pass
+            if ratings:
+                log.info("Live Elo: fetched %d ratings from %s", len(ratings), url)
+                return ratings
+        except Exception as e:
+            log.debug("Live Elo fetch failed (%s): %s", url, e)
+    log.warning("Live Elo: all endpoints failed — falling back to seed values")
+    return {}
 
 
 def _resolve_elo(team_id: str, name: str, elo_map: dict, seed_elo: float) -> float:

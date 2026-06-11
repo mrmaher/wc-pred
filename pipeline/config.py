@@ -20,6 +20,13 @@ ELO_CACHE = DATA_DIR / "elo_cache.json"
 ODDS_API_KEY = os.getenv("ODDS_API_KEY", "YOUR_KEY_HERE")
 ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/soccer_fifa_world_cup/odds"
 
+# football-data.org free tier — live scores, fixtures, results for FIFA WC
+# Register at https://www.football-data.org/client/register
+# Set env var FOOTBALL_DATA_API_KEY or add your token below
+FOOTBALL_DATA_API_KEY = os.getenv("FOOTBALL_DATA_API_KEY", "YOUR_KEY_HERE")
+FOOTBALL_DATA_BASE    = "https://api.football-data.org/v4"
+FOOTBALL_DATA_WC_ID   = 2000  # FIFA World Cup competition ID
+
 # ── Elo source ─────────────────────────────────────────────────────────────────
 # eloratings.net provides CSV of national team Elo scores
 ELO_URL = "http://api.clubelo.com/Nationals"

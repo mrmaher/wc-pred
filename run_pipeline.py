@@ -29,6 +29,7 @@ import duckdb
 
 from db.schema import get_conn, init_schema, seed_static_data, export_parquet
 from pipeline.collector import run_collection
+from pipeline.results import sync_results
 from pipeline.bayes import compute_all_bayesian_probs, write_bayesian_probs
 from pipeline.model import (
     elo_probabilities, simulate_group, simulate_tournament
@@ -144,6 +145,13 @@ def run(skip_collect: bool = False, n_sims: int = 10000) -> dict:
         conn = get_conn()
         log.info("  Elo snapshots: %d  Odds snapshots: %d",
                  result["elo_snapshots"], result["odds_snapshots"])
+
+        log.info("Step 1b: Syncing match results from football-data.org...")
+        new_results = sync_results(conn)
+        if new_results:
+            log.info("  %d new result(s) recorded — Elo ratings updated", new_results)
+        else:
+            log.info("  No new results to record")
     else:
         log.info("Step 1: Skipping collection (--no-collect)")
 

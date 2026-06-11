@@ -1,2 +1,2 @@
 duckdb>=1.0.0
-# requests  # optional — for faster HTTP; stdlib urllib is used by default
+pytz
