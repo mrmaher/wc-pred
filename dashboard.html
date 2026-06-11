@@ -316,6 +316,23 @@
 <script type="module">
 import * as duckdb from 'https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@1.29.0/+esm';
 
+// ── Country flags (emoji) ────────────────────────────────────────────────────
+const FLAGS = {
+  MEX:'🇲🇽', RSA:'🇿🇦', KOR:'🇰🇷', CZE:'🇨🇿',
+  CAN:'🇨🇦', BIH:'🇧🇦', QAT:'🇶🇦', SUI:'🇨🇭',
+  HAI:'🇭🇹', SCO:'🏴󠁧󠁢󠁳󠁣󠁴󠁿', BRA:'🇧🇷', MAR:'🇲🇦',
+  USA:'🇺🇸', PAR:'🇵🇾', AUS:'🇦🇺', TUR:'🇹🇷',
+  CIV:'🇨🇮', ECU:'🇪🇨', GER:'🇩🇪', CUW:'🇨🇼',
+  NED:'🇳🇱', JPN:'🇯🇵', SWE:'🇸🇪', TUN:'🇹🇳',
+  IRN:'🇮🇷', NZL:'🇳🇿', BEL:'🇧🇪', EGY:'🇪🇬',
+  SAU:'🇸🇦', URU:'🇺🇾', ESP:'🇪🇸', CPV:'🇨🇻',
+  FRA:'🇫🇷', SEN:'🇸🇳', IRQ:'🇮🇶', NOR:'🇳🇴',
+  ARG:'🇦🇷', ALG:'🇩🇿', AUT:'🇦🇹', JOR:'🇯🇴',
+  POR:'🇵🇹', COD:'🇨🇩', UZB:'🇺🇿', COL:'🇨🇴',
+  GHA:'🇬🇭', PAN:'🇵🇦', ENG:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', CRO:'🇭🇷',
+};
+function flag(id) { return FLAGS[id] || '🏳️'; }
+
 const BUNDLES = duckdb.getJsDelivrBundles();
 const BASE = window.location.pathname.endsWith('/')
   ? window.location.href
@@ -414,6 +431,7 @@ async function renderOverview() {
   document.getElementById('champ-grid').innerHTML = champs.map((t,i)=>`
     <div class="champ-card ${i===0?'g1':i===1?'g2':i===2?'g3':''}">
       <div class="champ-rank">${medals[i]||(i+1)}</div>
+      <div style="font-size:1.6rem;line-height:1;margin-bottom:4px">${flag(t.team_id)}</div>
       <div class="champ-name">${t.team_name}</div>
       <div class="champ-prob">${pct(t.champion)}</div>
       <div class="champ-sub">Champion</div>
@@ -467,7 +485,7 @@ async function renderGroups() {
         const bar=p>=65?'#10b981':p>=35?'#f59e0b':'#ef4444';
         return `<div class="team-row">
           <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
-          <div><div class="t-name">${t.team_name} <span class="t-elo">${Math.round(t.elo||0)}</span></div>
+          <div><div class="t-name">${flag(t.team_id)} ${t.team_name} <span class="t-elo">${Math.round(t.elo||0)}</span></div>
                <div class="t-conf">${t.confederation||''}</div></div>
           <div><div class="pval ${cls}">${p.toFixed(0)}%</div>
                <div class="mbar"><div class="mbar-fill" style="width:${p}%;background:${bar}"></div></div></div>
@@ -511,10 +529,10 @@ async function renderMatches() {
         <span class="m-date">${m.match_date||'TBD'}</span>
       </div>
       <div class="m-teams">
-        <div class="m-team"><div class="tn">${m.home_name}</div>
+        <div class="m-team"><div class="tn">${flag(m.home_team)} ${m.home_name}</div>
           <div class="te">Elo ${Math.round(m.elo_home||0)}</div></div>
         <div class="vs">VS</div>
-        <div class="m-team"><div class="tn">${m.away_name}</div>
+        <div class="m-team"><div class="tn">${flag(m.away_team)} ${m.away_name}</div>
           <div class="te">Elo ${Math.round(m.elo_away||0)}</div></div>
       </div>
       <div style="font-size:.62rem;color:var(--accent2);text-align:center;margin-bottom:6px">
@@ -536,6 +554,7 @@ window._setMF = g=>{ activeMatchFilter=g; renderMatches(); };
 async function renderKnockout() {
   const [r32, deep] = await Promise.all([
     q(`SELECT gs1.team_name AS team_a_name, gs2.team_name AS team_b_name,
+              gs1.team_id AS team_a_id, gs2.team_id AS team_b_id,
               gs1.group_letter AS group_a, gs2.group_letter AS group_b,
               gs1.advance_prob AS a_prob, gs2.advance_prob AS b_prob
        FROM group_sim_results gs1
@@ -580,7 +599,7 @@ async function renderKnockout() {
       </tr></thead>
       <tbody>
         ${deep.map(t=>`<tr>
-          <td><strong>${t.team_name}</strong></td>
+          <td><strong>${flag(t.team_id)} ${t.team_name}</strong></td>
           <td>${pct(t.round_of_32)}</td><td>${pct(t.round_of_16)}</td>
           <td>${pct(t.quarter_final)}</td><td>${pct(t.semi_final)}</td>
           <td>${pct(t.final)}</td>
@@ -596,9 +615,9 @@ function matchupHtml(m) {
     <div style="font-size:.58rem;color:var(--muted);padding:3px 9px;background:var(--surface);
                 border-bottom:1px solid var(--border)">
       Group ${m.group_a} 1st vs Group ${m.group_b} 2nd</div>
-    <div class="b-team"><span>${m.team_a_name||'TBD'}</span>
+    <div class="b-team"><span>${flag(m.team_a_id)} ${m.team_a_name||'TBD'}</span>
       <span class="b-prob">${m.a_prob?(m.a_prob*100).toFixed(0)+'%':''}</span></div>
-    <div class="b-team"><span>${m.team_b_name||'TBD'}</span>
+    <div class="b-team"><span>${flag(m.team_b_id)} ${m.team_b_name||'TBD'}</span>
       <span class="b-prob">${m.b_prob?(m.b_prob*100).toFixed(0)+'%':''}</span></div>
   </div>`;
 }
@@ -638,7 +657,7 @@ async function renderSimulations() {
         const p3=(t.finish_3rd||0)*100, p4=(t.finish_4th||0)*100;
         return `<div class="sim-team-row">
           <div>
-            <div style="font-size:.84rem;font-weight:700">${t.team_name}</div>
+            <div style="font-size:.84rem;font-weight:700">${flag(t.team_id)} ${t.team_name}</div>
             <div style="font-size:.62rem;color:var(--muted)">Elo ${Math.round(t.elo||0)} · Avg ${(t.avg_points||0).toFixed(1)} pts</div>
             <div class="sim-bars" style="margin-top:5px">
               <div class="sim-bar-seg" style="width:${p1}%;background:var(--green)">${p1>=8?p1.toFixed(0)+'%':''}</div>
@@ -704,7 +723,7 @@ async function renderTrends() {
 
     return `<div class="trend-card">
       <div class="trend-info">
-        <div class="trend-name">${data.name}</div>
+        <div class="trend-name">${flag(tid)} ${data.name}</div>
         <div class="trend-current">${pct(current)}</div>
         <div class="trend-sub">Champion probability · Group ${groupByTeam[tid]||'?'}</div>
         ${deltaHtml}
