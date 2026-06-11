@@ -583,21 +583,14 @@ window._setGF = g=>{ activeGroupFilter=g; renderGroups(); };
 // ── Matches ──────────────────────────────────────────────────────────────────
 async function renderMatches() {
   const rows = await q(`
-    WITH latest AS (
-      SELECT fixture_id, MAX(computed_at) AS max_at
-      FROM bayesian_probs GROUP BY fixture_id
-    )
     SELECT bp.fixture_id, bp.home_name, bp.away_name, bp.match_date,
-           bp.group_letter, bp.round, bp.home_team, bp.away_team,
+           bp.kickoff_utc, bp.group_letter, bp.round, bp.home_team, bp.away_team,
            bp.home_win, bp.draw, bp.away_win, bp.confidence, bp.n_observations,
-           t1.seed_elo AS elo_home, t2.seed_elo AS elo_away,
-           f.status, mr.home_score, mr.away_score
+           bp.status, bp.home_score, bp.away_score,
+           t1.seed_elo AS elo_home, t2.seed_elo AS elo_away
     FROM bayesian_probs bp
-    JOIN latest ON bp.fixture_id=latest.fixture_id AND bp.computed_at=latest.max_at
     JOIN teams t1 ON bp.home_team=t1.team_id
     JOIN teams t2 ON bp.away_team=t2.team_id
-    JOIN fixtures f ON bp.fixture_id=f.fixture_id
-    LEFT JOIN match_results mr ON bp.fixture_id=mr.fixture_id
     ORDER BY bp.match_date, bp.fixture_id`);
 
   const groups = [...new Set(rows.map(r=>r.group_letter).filter(Boolean))].sort();
@@ -611,55 +604,62 @@ async function renderMatches() {
     return;
   }
   document.getElementById('match-grid').innerHTML = toShow.map(m=>{
-    const finished = m.status === 'finished' && m.home_score != null;
+    const hs = typeof m.home_score === 'number' ? m.home_score : -1;
+    const as_ = typeof m.away_score === 'number' ? m.away_score : -1;
+    const finished = m.status === 'finished' && hs >= 0;
     const hw=(m.home_win||0)*100, dw=(m.draw||0)*100, aw=(m.away_win||0)*100;
     const conf=m.confidence||0;
     const confCol = confColor(conf);
+    const homeWon = finished && hs > as_;
+    const awayWon = finished && as_ > hs;
+    const isDraw  = finished && hs === as_;
 
-    const homeWon = finished && m.home_score > m.away_score;
-    const awayWon = finished && m.away_score > m.home_score;
-    const isDraw  = finished && m.home_score === m.away_score;
-
-    // Result row — only rendered when match is finished
-    const resultRow = finished ? `
-      <div style="margin-top:10px;padding-top:10px;border-top:2px solid var(--border);
-                  display:flex;align-items:center;justify-content:space-between;gap:8px">
-        <div style="font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-                    color:var(--green);white-space:nowrap">Final Score</div>
-        <div style="display:flex;align-items:center;gap:6px;flex:1;justify-content:center">
-          <span style="font-size:.82rem;font-weight:700;
-                       color:${homeWon?'var(--green)':isDraw?'var(--gold)':'var(--muted)'}">${m.home_name}</span>
-          <span style="font-size:1.25rem;font-weight:900;letter-spacing:3px;
-                       color:var(--text);padding:2px 8px;background:var(--surface2);
-                       border-radius:6px;border:1px solid var(--border)">${m.home_score}&thinsp;–&thinsp;${m.away_score}</span>
-          <span style="font-size:.82rem;font-weight:700;
-                       color:${awayWon?'var(--green)':isDraw?'var(--gold)':'var(--muted)'}">${m.away_name}</span>
-        </div>
-        <div style="font-size:.6rem;color:var(--muted);white-space:nowrap">
-          ${isDraw?'Draw':homeWon?m.home_name+' win':m.away_name+' win'}
-        </div>
-      </div>` : '';
-
-    const stageBadge = m.group_letter
-      ? `Group ${m.group_letter} · R${m.round||'?'}`
-      : `Knockout · R${m.round||'?'}`;
-
-    // Format kickoff as "Jun 11 · 3:00 PM ET"
-    let kickoffStr = m.match_date || 'TBD';
-    if (m.kickoff_utc) {
+    // Format kickoff as "06/11 · 3:00 PM ET"
+    let kickoffStr = m.match_date ? (() => {
+      try {
+        const d = new Date(m.match_date + 'T12:00:00Z');
+        return (d.getMonth()+1).toString().padStart(2,'0') + '/' + d.getDate().toString().padStart(2,'0');
+      } catch(_) { return m.match_date; }
+    })() : 'TBD';
+    if (m.kickoff_utc && m.kickoff_utc !== '') {
       try {
         const ko = new Date(m.kickoff_utc);
-        const datePart = ko.toLocaleDateString('en-US', {timeZone:'America/New_York', month:'short', day:'numeric'});
+        const mm = (ko.getMonth()+1).toString().padStart(2,'0');
+        const dd = ko.getDate().toString().padStart(2,'0'); // will be wrong timezone — use ET
         const timePart = ko.toLocaleTimeString('en-US', {timeZone:'America/New_York', hour:'numeric', minute:'2-digit'});
+        const datePart = ko.toLocaleDateString('en-US', {timeZone:'America/New_York', month:'2-digit', day:'2-digit'});
         kickoffStr = `${datePart} · ${timePart} ET`;
       } catch(_) {}
     }
 
+    // Result row shown beneath confidence when match is finished
+    const resultRow = finished ? `
+      <div style="margin-top:9px;padding-top:9px;border-top:2px solid rgba(16,185,129,.3);
+                  display:flex;align-items:center;gap:6px">
+        <span style="font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+                     color:var(--green);white-space:nowrap;flex-shrink:0">Final Score</span>
+        <div style="display:flex;align-items:center;gap:5px;flex:1;justify-content:center">
+          <span style="font-size:.6rem;font-weight:700;color:${homeWon?'var(--green)':'var(--muted)'}">
+            ${homeWon ? flag(m.home_team) : isDraw ? '' : ''}</span>
+          <span style="font-size:.6rem;font-weight:900;letter-spacing:2px;
+                       color:var(--text);padding:1px 6px;background:var(--surface2);
+                       border-radius:4px;border:1px solid var(--border)">${hs}&thinsp;–&thinsp;${as_}</span>
+          <span style="font-size:.6rem;font-weight:700;color:${awayWon?'var(--green)':'var(--muted)'}">
+            ${awayWon ? flag(m.away_team) : ''}</span>
+          ${isDraw ? `<span style="font-size:.6rem;font-weight:700;color:var(--gold)">DRAW</span>` : ''}
+        </div>
+      </div>` : '';
+
+    const roundNum = parseInt(m.round, 10);
+    const stageBadge = m.group_letter
+      ? `Group ${m.group_letter}${!isNaN(roundNum) && roundNum < 10 ? ' · R'+roundNum : ''}`
+      : `Knockout · R${!isNaN(roundNum) && roundNum < 10 ? roundNum : '?'}`;
+
     return `<div class="match-card" style="${finished?'border-color:rgba(16,185,129,.3)':''}">
       <div class="match-meta">
         <span class="m-badge">${stageBadge}</span>
-        <span class="m-date" style="${finished?'color:var(--green);font-weight:600':'font-size:.6rem;color:var(--muted)'}">
-          ${finished?'✓ Final · '+kickoffStr:kickoffStr}
+        <span style="font-size:.6rem;color:${finished?'var(--green)':'var(--muted)'};font-weight:${finished?'600':'400'}">
+          ${finished?'✓ ':''} ${kickoffStr}
         </span>
       </div>
       <div class="m-teams">
@@ -710,7 +710,7 @@ async function renderKnockout() {
         AND gs1.finish_1st=(SELECT MAX(finish_1st) FROM group_sim_results g WHERE g.group_letter=gs1.group_letter)
         AND gs2.finish_2nd=(SELECT MAX(finish_2nd) FROM group_sim_results g WHERE g.group_letter=gs2.group_letter)
        ORDER BY gs1.group_letter`),
-    q(`SELECT team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
+    q(`SELECT team_id, team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
        FROM ko_sim_results ORDER BY champion DESC LIMIT 32`),
     q(`SELECT AVG(confidence) AS c, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs)`)
   ]);

@@ -188,10 +188,17 @@ def export_parquet(conn: duckdb.DuckDBPyConnection) -> None:
         """,
         "teams": "SELECT * FROM teams",
         "bayesian_probs": """
-            SELECT bp.*, t1.name AS home_name, t2.name AS away_name,
-                   f.match_date, f.kickoff_utc, f.group_letter, f.round,
-                   f.home_team, f.away_team, f.status,
-                   mr.home_score, mr.away_score
+            SELECT bp.fixture_id, bp.home_win, bp.draw, bp.away_win,
+                   bp.confidence, bp.n_observations,
+                   t1.name AS home_name, t2.name AS away_name,
+                   f.home_team, f.away_team,
+                   f.group_letter,
+                   CAST(f.round AS INTEGER) AS round,
+                   CAST(f.match_date AS VARCHAR) AS match_date,
+                   COALESCE(strftime(f.kickoff_utc, '%Y-%m-%dT%H:%M:%SZ'), '') AS kickoff_utc,
+                   f.status,
+                   COALESCE(mr.home_score, -1) AS home_score,
+                   COALESCE(mr.away_score, -1) AS away_score
             FROM bayesian_probs bp
             JOIN fixtures f ON bp.fixture_id = f.fixture_id
             JOIN teams t1 ON f.home_team = t1.team_id
