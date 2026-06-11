@@ -48,8 +48,10 @@ jobs:
       # 4. Pull latest DB before running so we build on current state.
       #    This also prevents non-fast-forward push failures if a local commit
       #    landed between checkout and push.
-      - name: Pull latest data
-        run: git pull origin main
+      - name: Sync to latest main
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
 
       # 5. Run data collection + pipeline
       #    ODDS_API_KEY is a GitHub secret — set it in:
@@ -73,7 +75,7 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "data: auto-update $(date -u '+%Y-%m-%d %H:%M UTC')"
-            git push --force-with-lease
+            git push --force
             echo "Pushed successfully"
           fi
 
