@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-06-15T21:45:13.381148+00:00",
+    "generated_at": "2026-06-15T23:28:22.497674+00:00",
     "n_simulations": 10000,
-    "pipeline_sec": 16.58,
+    "pipeline_sec": 16.79,
     "odds_available": true,
     "value_threshold": 0.05
   },
@@ -13,12 +13,12 @@
         "team_name": "Mexico",
         "elo": 1800.0,
         "confederation": "CONCACAF",
-        "advance_prob": 0.688,
-        "avg_points": 5.44,
-        "finish_1st": 0.353,
+        "advance_prob": 0.684,
+        "avg_points": 5.43,
+        "finish_1st": 0.35,
         "finish_2nd": 0.334,
-        "finish_3rd": 0.277,
-        "finish_4th": 0.036
+        "finish_3rd": 0.276,
+        "finish_4th": 0.04
       },
       {
         "team_id": "CZE",
@@ -26,35 +26,35 @@
         "elo": 1849.0,
         "confederation": "UEFA",
         "advance_prob": 0.617,
-        "avg_points": 4.94,
-        "finish_1st": 0.314,
-        "finish_2nd": 0.303,
-        "finish_3rd": 0.258,
-        "finish_4th": 0.125
+        "avg_points": 4.98,
+        "finish_1st": 0.318,
+        "finish_2nd": 0.298,
+        "finish_3rd": 0.257,
+        "finish_4th": 0.127
       },
       {
         "team_id": "KOR",
         "team_name": "Korea Republic",
         "elo": 1847.0,
         "confederation": "AFC",
-        "advance_prob": 0.613,
-        "avg_points": 4.95,
-        "finish_1st": 0.313,
-        "finish_2nd": 0.3,
-        "finish_3rd": 0.263,
-        "finish_4th": 0.124
+        "advance_prob": 0.617,
+        "avg_points": 4.96,
+        "finish_1st": 0.315,
+        "finish_2nd": 0.303,
+        "finish_3rd": 0.26,
+        "finish_4th": 0.123
       },
       {
         "team_id": "RSA",
         "team_name": "South Africa",
         "elo": 1648.0,
         "confederation": "CAF",
-        "advance_prob": 0.083,
-        "avg_points": 1.55,
-        "finish_1st": 0.02,
-        "finish_2nd": 0.063,
-        "finish_3rd": 0.203,
-        "finish_4th": 0.715
+        "advance_prob": 0.082,
+        "avg_points": 1.53,
+        "finish_1st": 0.017,
+        "finish_2nd": 0.065,
+        "finish_3rd": 0.207,
+        "finish_4th": 0.711
       }
     ],
     "B": [
@@ -63,11 +63,11 @@
         "team_name": "Switzerland",
         "elo": 1952.0,
         "confederation": "UEFA",
-        "advance_prob": 0.85,
+        "advance_prob": 0.851,
         "avg_points": 6.51,
-        "finish_1st": 0.603,
+        "finish_1st": 0.604,
         "finish_2nd": 0.247,
-        "finish_3rd": 0.111,
+        "finish_3rd": 0.11,
         "finish_4th": 0.039
       },
       {
@@ -75,35 +75,35 @@
         "team_name": "Canada",
         "elo": 1750.0,
         "confederation": "CONCACAF",
-        "advance_prob": 0.48,
-        "avg_points": 4.01,
+        "advance_prob": 0.486,
+        "avg_points": 4.04,
         "finish_1st": 0.175,
-        "finish_2nd": 0.305,
-        "finish_3rd": 0.304,
-        "finish_4th": 0.215
+        "finish_2nd": 0.311,
+        "finish_3rd": 0.295,
+        "finish_4th": 0.218
       },
       {
         "team_id": "BIH",
         "team_name": "Bosnia & Herzegovina",
         "elo": 1748.0,
         "confederation": "UEFA",
-        "advance_prob": 0.473,
-        "avg_points": 4.0,
+        "advance_prob": 0.471,
+        "avg_points": 4.01,
         "finish_1st": 0.17,
-        "finish_2nd": 0.303,
-        "finish_3rd": 0.314,
-        "finish_4th": 0.213
+        "finish_2nd": 0.301,
+        "finish_3rd": 0.318,
+        "finish_4th": 0.21
       },
       {
         "team_id": "QAT",
         "team_name": "Qatar",
         "elo": 1601.0,
         "confederation": "AFC",
-        "advance_prob": 0.197,
-        "avg_points": 2.29,
-        "finish_1st": 0.052,
-        "finish_2nd": 0.145,
-        "finish_3rd": 0.27,
+        "advance_prob": 0.192,
+        "avg_points": 2.28,
+        "finish_1st": 0.051,
+        "finish_2nd": 0.141,
+        "finish_3rd": 0.276,
         "finish_4th": 0.533
       }
     ],
@@ -113,48 +113,48 @@
         "team_name": "Brazil",
         "elo": 2052.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.824,
-        "avg_points": 5.71,
-        "finish_1st": 0.507,
-        "finish_2nd": 0.317,
-        "finish_3rd": 0.155,
-        "finish_4th": 0.02
+        "advance_prob": 0.81,
+        "avg_points": 5.67,
+        "finish_1st": 0.498,
+        "finish_2nd": 0.312,
+        "finish_3rd": 0.167,
+        "finish_4th": 0.023
       },
       {
         "team_id": "MAR",
         "team_name": "Morocco",
         "elo": 1869.0,
         "confederation": "CAF",
-        "advance_prob": 0.626,
-        "avg_points": 4.81,
-        "finish_1st": 0.256,
-        "finish_2nd": 0.37,
-        "finish_3rd": 0.297,
-        "finish_4th": 0.077
+        "advance_prob": 0.619,
+        "avg_points": 4.75,
+        "finish_1st": 0.253,
+        "finish_2nd": 0.366,
+        "finish_3rd": 0.3,
+        "finish_4th": 0.081
       },
       {
         "team_id": "SCO",
         "team_name": "Scotland",
         "elo": 1862.0,
         "confederation": "UEFA",
-        "advance_prob": 0.501,
-        "avg_points": 4.51,
-        "finish_1st": 0.225,
-        "finish_2nd": 0.276,
-        "finish_3rd": 0.384,
-        "finish_4th": 0.115
+        "advance_prob": 0.514,
+        "avg_points": 4.56,
+        "finish_1st": 0.232,
+        "finish_2nd": 0.281,
+        "finish_3rd": 0.378,
+        "finish_4th": 0.108
       },
       {
         "team_id": "HAI",
         "team_name": "Haiti",
         "elo": 1531.0,
         "confederation": "CONCACAF",
-        "advance_prob": 0.049,
-        "avg_points": 1.14,
-        "finish_1st": 0.012,
-        "finish_2nd": 0.037,
-        "finish_3rd": 0.164,
-        "finish_4th": 0.787
+        "advance_prob": 0.057,
+        "avg_points": 1.18,
+        "finish_1st": 0.016,
+        "finish_2nd": 0.041,
+        "finish_3rd": 0.155,
+        "finish_4th": 0.788
       }
     ],
     "D": [
@@ -163,48 +163,48 @@
         "team_name": "USA",
         "elo": 1805.0,
         "confederation": "CONCACAF",
-        "advance_prob": 0.773,
-        "avg_points": 5.87,
-        "finish_1st": 0.458,
-        "finish_2nd": 0.315,
-        "finish_3rd": 0.192,
-        "finish_4th": 0.035
+        "advance_prob": 0.778,
+        "avg_points": 5.86,
+        "finish_1st": 0.462,
+        "finish_2nd": 0.316,
+        "finish_3rd": 0.184,
+        "finish_4th": 0.038
       },
       {
         "team_id": "TUR",
         "team_name": "T\u00fcrkiye",
         "elo": 1821.0,
         "confederation": "UEFA",
-        "advance_prob": 0.612,
-        "avg_points": 4.8,
-        "finish_1st": 0.309,
-        "finish_2nd": 0.302,
-        "finish_3rd": 0.231,
-        "finish_4th": 0.157
+        "advance_prob": 0.608,
+        "avg_points": 4.79,
+        "finish_1st": 0.307,
+        "finish_2nd": 0.301,
+        "finish_3rd": 0.233,
+        "finish_4th": 0.158
       },
       {
         "team_id": "AUS",
         "team_name": "Australia",
         "elo": 1756.0,
         "confederation": "AFC",
-        "advance_prob": 0.459,
-        "avg_points": 3.97,
-        "finish_1st": 0.196,
-        "finish_2nd": 0.263,
-        "finish_3rd": 0.298,
-        "finish_4th": 0.243
+        "advance_prob": 0.452,
+        "avg_points": 3.95,
+        "finish_1st": 0.194,
+        "finish_2nd": 0.258,
+        "finish_3rd": 0.3,
+        "finish_4th": 0.248
       },
       {
         "team_id": "PAR",
         "team_name": "Paraguay",
         "elo": 1700.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.156,
-        "avg_points": 2.19,
+        "advance_prob": 0.162,
+        "avg_points": 2.21,
         "finish_1st": 0.036,
-        "finish_2nd": 0.12,
-        "finish_3rd": 0.278,
-        "finish_4th": 0.565
+        "finish_2nd": 0.125,
+        "finish_3rd": 0.283,
+        "finish_4th": 0.555
       }
     ],
     "E": [
@@ -213,23 +213,23 @@
         "team_name": "Germany",
         "elo": 1988.0,
         "confederation": "UEFA",
-        "advance_prob": 0.905,
-        "avg_points": 7.09,
-        "finish_1st": 0.658,
-        "finish_2nd": 0.247,
-        "finish_3rd": 0.09,
-        "finish_4th": 0.005
+        "advance_prob": 0.901,
+        "avg_points": 7.07,
+        "finish_1st": 0.651,
+        "finish_2nd": 0.25,
+        "finish_3rd": 0.092,
+        "finish_4th": 0.006
       },
       {
         "team_id": "ECU",
         "team_name": "Ecuador",
         "elo": 1819.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.601,
-        "avg_points": 4.79,
-        "finish_1st": 0.209,
-        "finish_2nd": 0.393,
-        "finish_3rd": 0.304,
+        "advance_prob": 0.61,
+        "avg_points": 4.83,
+        "finish_1st": 0.216,
+        "finish_2nd": 0.394,
+        "finish_3rd": 0.295,
         "finish_4th": 0.095
       },
       {
@@ -237,11 +237,11 @@
         "team_name": "C\u00f4te d'Ivoire",
         "elo": 1751.0,
         "confederation": "CAF",
-        "advance_prob": 0.436,
-        "avg_points": 4.03,
-        "finish_1st": 0.129,
-        "finish_2nd": 0.307,
-        "finish_3rd": 0.406,
+        "advance_prob": 0.431,
+        "avg_points": 4.01,
+        "finish_1st": 0.127,
+        "finish_2nd": 0.304,
+        "finish_3rd": 0.411,
         "finish_4th": 0.158
       },
       {
@@ -251,10 +251,10 @@
         "confederation": "CONCACAF",
         "advance_prob": 0.058,
         "avg_points": 1.17,
-        "finish_1st": 0.004,
-        "finish_2nd": 0.053,
-        "finish_3rd": 0.2,
-        "finish_4th": 0.742
+        "finish_1st": 0.005,
+        "finish_2nd": 0.052,
+        "finish_3rd": 0.202,
+        "finish_4th": 0.741
       }
     ],
     "F": [
@@ -264,97 +264,97 @@
         "elo": 1889.0,
         "confederation": "UEFA",
         "advance_prob": 0.702,
-        "avg_points": 5.51,
-        "finish_1st": 0.405,
-        "finish_2nd": 0.297,
-        "finish_3rd": 0.25,
-        "finish_4th": 0.048
+        "avg_points": 5.49,
+        "finish_1st": 0.404,
+        "finish_2nd": 0.298,
+        "finish_3rd": 0.249,
+        "finish_4th": 0.049
       },
       {
         "team_id": "NED",
         "team_name": "Netherlands",
         "elo": 1992.0,
         "confederation": "UEFA",
-        "advance_prob": 0.689,
+        "advance_prob": 0.698,
         "avg_points": 4.88,
-        "finish_1st": 0.367,
-        "finish_2nd": 0.322,
-        "finish_3rd": 0.223,
-        "finish_4th": 0.088
+        "finish_1st": 0.369,
+        "finish_2nd": 0.328,
+        "finish_3rd": 0.212,
+        "finish_4th": 0.09
       },
       {
         "team_id": "JPN",
         "team_name": "Japan",
         "elo": 1862.0,
         "confederation": "AFC",
-        "advance_prob": 0.505,
-        "avg_points": 4.03,
-        "finish_1st": 0.197,
-        "finish_2nd": 0.308,
-        "finish_3rd": 0.301,
-        "finish_4th": 0.194
+        "advance_prob": 0.502,
+        "avg_points": 4.04,
+        "finish_1st": 0.196,
+        "finish_2nd": 0.307,
+        "finish_3rd": 0.306,
+        "finish_4th": 0.191
       },
       {
         "team_id": "TUN",
         "team_name": "Tunisia",
         "elo": 1758.0,
         "confederation": "CAF",
-        "advance_prob": 0.103,
+        "advance_prob": 0.098,
         "avg_points": 1.73,
-        "finish_1st": 0.03,
-        "finish_2nd": 0.073,
-        "finish_3rd": 0.226,
-        "finish_4th": 0.67
+        "finish_1st": 0.031,
+        "finish_2nd": 0.067,
+        "finish_3rd": 0.233,
+        "finish_4th": 0.669
       }
     ],
     "G": [
       {
         "team_id": "BEL",
         "team_name": "Belgium",
-        "elo": 1944.3653564453125,
+        "elo": 1954.0,
         "confederation": "UEFA",
-        "advance_prob": 0.769,
-        "avg_points": 5.25,
-        "finish_1st": 0.451,
-        "finish_2nd": 0.318,
-        "finish_3rd": 0.176,
-        "finish_4th": 0.055
+        "advance_prob": 0.778,
+        "avg_points": 5.33,
+        "finish_1st": 0.47,
+        "finish_2nd": 0.308,
+        "finish_3rd": 0.173,
+        "finish_4th": 0.049
       },
       {
         "team_id": "IRN",
         "team_name": "IR Iran",
         "elo": 1808.0,
         "confederation": "AFC",
-        "advance_prob": 0.59,
-        "avg_points": 4.76,
-        "finish_1st": 0.314,
-        "finish_2nd": 0.275,
-        "finish_3rd": 0.27,
-        "finish_4th": 0.141
+        "advance_prob": 0.588,
+        "avg_points": 4.75,
+        "finish_1st": 0.305,
+        "finish_2nd": 0.283,
+        "finish_3rd": 0.267,
+        "finish_4th": 0.146
       },
       {
         "team_id": "EGY",
         "team_name": "Egypt",
-        "elo": 1721.6346435546875,
+        "elo": 1712.0,
         "confederation": "CAF",
-        "advance_prob": 0.484,
-        "avg_points": 3.95,
-        "finish_1st": 0.176,
-        "finish_2nd": 0.307,
+        "advance_prob": 0.479,
+        "avg_points": 3.93,
+        "finish_1st": 0.17,
+        "finish_2nd": 0.31,
         "finish_3rd": 0.317,
-        "finish_4th": 0.199
+        "finish_4th": 0.204
       },
       {
         "team_id": "NZL",
         "team_name": "New Zealand",
         "elo": 1579.0,
         "confederation": "OFC",
-        "advance_prob": 0.157,
-        "avg_points": 2.08,
-        "finish_1st": 0.058,
-        "finish_2nd": 0.099,
-        "finish_3rd": 0.238,
-        "finish_4th": 0.605
+        "advance_prob": 0.155,
+        "avg_points": 2.07,
+        "finish_1st": 0.055,
+        "finish_2nd": 0.1,
+        "finish_3rd": 0.244,
+        "finish_4th": 0.601
       }
     ],
     "H": [
@@ -363,23 +363,23 @@
         "team_name": "Spain",
         "elo": 2048.0,
         "confederation": "UEFA",
-        "advance_prob": 0.793,
-        "avg_points": 5.26,
-        "finish_1st": 0.486,
-        "finish_2nd": 0.307,
-        "finish_3rd": 0.16,
-        "finish_4th": 0.047
+        "advance_prob": 0.782,
+        "avg_points": 5.21,
+        "finish_1st": 0.466,
+        "finish_2nd": 0.317,
+        "finish_3rd": 0.167,
+        "finish_4th": 0.051
       },
       {
         "team_id": "URU",
         "team_name": "Uruguay",
         "elo": 1902.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.672,
-        "avg_points": 5.07,
-        "finish_1st": 0.352,
-        "finish_2nd": 0.32,
-        "finish_3rd": 0.212,
+        "advance_prob": 0.679,
+        "avg_points": 5.14,
+        "finish_1st": 0.365,
+        "finish_2nd": 0.314,
+        "finish_3rd": 0.205,
         "finish_4th": 0.116
       },
       {
@@ -387,24 +387,24 @@
         "team_name": "Saudi Arabia",
         "elo": 1721.0,
         "confederation": "AFC",
-        "advance_prob": 0.276,
-        "avg_points": 2.91,
-        "finish_1st": 0.099,
-        "finish_2nd": 0.177,
-        "finish_3rd": 0.314,
-        "finish_4th": 0.41
+        "advance_prob": 0.273,
+        "avg_points": 2.89,
+        "finish_1st": 0.102,
+        "finish_2nd": 0.171,
+        "finish_3rd": 0.322,
+        "finish_4th": 0.405
       },
       {
         "team_id": "CPV",
         "team_name": "Cabo Verde",
         "elo": 1651.0,
         "confederation": "CAF",
-        "advance_prob": 0.258,
-        "avg_points": 2.8,
-        "finish_1st": 0.062,
-        "finish_2nd": 0.196,
-        "finish_3rd": 0.315,
-        "finish_4th": 0.427
+        "advance_prob": 0.266,
+        "avg_points": 2.81,
+        "finish_1st": 0.068,
+        "finish_2nd": 0.198,
+        "finish_3rd": 0.306,
+        "finish_4th": 0.429
       }
     ],
     "I": [
@@ -413,48 +413,48 @@
         "team_name": "France",
         "elo": 2005.0,
         "confederation": "UEFA",
-        "advance_prob": 0.767,
-        "avg_points": 5.92,
-        "finish_1st": 0.475,
-        "finish_2nd": 0.292,
-        "finish_3rd": 0.177,
-        "finish_4th": 0.056
+        "advance_prob": 0.772,
+        "avg_points": 5.91,
+        "finish_1st": 0.474,
+        "finish_2nd": 0.298,
+        "finish_3rd": 0.171,
+        "finish_4th": 0.057
       },
       {
         "team_id": "NOR",
         "team_name": "Norway",
         "elo": 1921.0,
         "confederation": "UEFA",
-        "advance_prob": 0.614,
-        "avg_points": 4.9,
-        "finish_1st": 0.286,
-        "finish_2nd": 0.328,
-        "finish_3rd": 0.271,
-        "finish_4th": 0.115
+        "advance_prob": 0.618,
+        "avg_points": 4.91,
+        "finish_1st": 0.287,
+        "finish_2nd": 0.331,
+        "finish_3rd": 0.269,
+        "finish_4th": 0.113
       },
       {
         "team_id": "SEN",
         "team_name": "Senegal",
         "elo": 1871.0,
         "confederation": "CAF",
-        "advance_prob": 0.498,
-        "avg_points": 4.3,
-        "finish_1st": 0.207,
-        "finish_2nd": 0.291,
-        "finish_3rd": 0.332,
-        "finish_4th": 0.171
+        "advance_prob": 0.492,
+        "avg_points": 4.28,
+        "finish_1st": 0.208,
+        "finish_2nd": 0.284,
+        "finish_3rd": 0.333,
+        "finish_4th": 0.175
       },
       {
         "team_id": "IRQ",
         "team_name": "Iraq",
         "elo": 1649.0,
         "confederation": "AFC",
-        "advance_prob": 0.121,
-        "avg_points": 1.73,
-        "finish_1st": 0.032,
-        "finish_2nd": 0.089,
-        "finish_3rd": 0.22,
-        "finish_4th": 0.658
+        "advance_prob": 0.119,
+        "avg_points": 1.76,
+        "finish_1st": 0.031,
+        "finish_2nd": 0.087,
+        "finish_3rd": 0.227,
+        "finish_4th": 0.655
       }
     ],
     "J": [
@@ -463,11 +463,11 @@
         "team_name": "Argentina",
         "elo": 2141.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.93,
-        "avg_points": 7.27,
-        "finish_1st": 0.736,
-        "finish_2nd": 0.194,
-        "finish_3rd": 0.057,
+        "advance_prob": 0.927,
+        "avg_points": 7.29,
+        "finish_1st": 0.731,
+        "finish_2nd": 0.196,
+        "finish_3rd": 0.059,
         "finish_4th": 0.014
       },
       {
@@ -475,36 +475,36 @@
         "team_name": "Austria",
         "elo": 1871.0,
         "confederation": "UEFA",
-        "advance_prob": 0.57,
+        "advance_prob": 0.572,
         "avg_points": 4.4,
-        "finish_1st": 0.16,
-        "finish_2nd": 0.41,
-        "finish_3rd": 0.281,
-        "finish_4th": 0.148
+        "finish_1st": 0.161,
+        "finish_2nd": 0.411,
+        "finish_3rd": 0.282,
+        "finish_4th": 0.146
       },
       {
         "team_id": "ALG",
         "team_name": "Algeria",
         "elo": 1779.0,
         "confederation": "CAF",
-        "advance_prob": 0.351,
-        "avg_points": 3.34,
-        "finish_1st": 0.079,
-        "finish_2nd": 0.272,
-        "finish_3rd": 0.372,
-        "finish_4th": 0.277
+        "advance_prob": 0.35,
+        "avg_points": 3.35,
+        "finish_1st": 0.083,
+        "finish_2nd": 0.267,
+        "finish_3rd": 0.381,
+        "finish_4th": 0.269
       },
       {
         "team_id": "JOR",
         "team_name": "Jordan",
         "elo": 1651.0,
         "confederation": "AFC",
-        "advance_prob": 0.149,
-        "avg_points": 1.96,
+        "advance_prob": 0.151,
+        "avg_points": 1.95,
         "finish_1st": 0.025,
-        "finish_2nd": 0.124,
-        "finish_3rd": 0.29,
-        "finish_4th": 0.561
+        "finish_2nd": 0.126,
+        "finish_3rd": 0.278,
+        "finish_4th": 0.571
       }
     ],
     "K": [
@@ -513,48 +513,48 @@
         "team_name": "Portugal",
         "elo": 2012.0,
         "confederation": "UEFA",
-        "advance_prob": 0.876,
-        "avg_points": 6.62,
-        "finish_1st": 0.572,
-        "finish_2nd": 0.304,
-        "finish_3rd": 0.094,
-        "finish_4th": 0.031
+        "advance_prob": 0.877,
+        "avg_points": 6.61,
+        "finish_1st": 0.578,
+        "finish_2nd": 0.3,
+        "finish_3rd": 0.095,
+        "finish_4th": 0.028
       },
       {
         "team_id": "COL",
         "team_name": "Colombia",
         "elo": 1912.0,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.751,
-        "avg_points": 5.52,
-        "finish_1st": 0.334,
-        "finish_2nd": 0.417,
-        "finish_3rd": 0.184,
-        "finish_4th": 0.065
+        "advance_prob": 0.758,
+        "avg_points": 5.54,
+        "finish_1st": 0.335,
+        "finish_2nd": 0.422,
+        "finish_3rd": 0.176,
+        "finish_4th": 0.066
       },
       {
         "team_id": "COD",
         "team_name": "Congo DR",
         "elo": 1680.0,
         "confederation": "CAF",
-        "advance_prob": 0.237,
-        "avg_points": 2.84,
-        "finish_1st": 0.063,
+        "advance_prob": 0.23,
+        "avg_points": 2.79,
+        "finish_1st": 0.056,
         "finish_2nd": 0.174,
-        "finish_3rd": 0.41,
-        "finish_4th": 0.353
+        "finish_3rd": 0.409,
+        "finish_4th": 0.361
       },
       {
         "team_id": "UZB",
         "team_name": "Uzbekistan",
         "elo": 1602.0,
         "confederation": "AFC",
-        "advance_prob": 0.136,
-        "avg_points": 2.0,
-        "finish_1st": 0.032,
-        "finish_2nd": 0.105,
-        "finish_3rd": 0.313,
-        "finish_4th": 0.551
+        "advance_prob": 0.135,
+        "avg_points": 1.99,
+        "finish_1st": 0.031,
+        "finish_2nd": 0.104,
+        "finish_3rd": 0.32,
+        "finish_4th": 0.545
       }
     ],
     "L": [
@@ -563,12 +563,12 @@
         "team_name": "England",
         "elo": 1990.0,
         "confederation": "UEFA",
-        "advance_prob": 0.819,
-        "avg_points": 6.13,
-        "finish_1st": 0.499,
-        "finish_2nd": 0.32,
-        "finish_3rd": 0.135,
-        "finish_4th": 0.046
+        "advance_prob": 0.828,
+        "avg_points": 6.18,
+        "finish_1st": 0.506,
+        "finish_2nd": 0.322,
+        "finish_3rd": 0.127,
+        "finish_4th": 0.045
       },
       {
         "team_id": "CRO",
@@ -576,35 +576,35 @@
         "elo": 1940.0,
         "confederation": "UEFA",
         "advance_prob": 0.751,
-        "avg_points": 5.58,
-        "finish_1st": 0.381,
-        "finish_2nd": 0.37,
+        "avg_points": 5.54,
+        "finish_1st": 0.377,
+        "finish_2nd": 0.374,
         "finish_3rd": 0.174,
-        "finish_4th": 0.075
+        "finish_4th": 0.074
       },
       {
         "team_id": "PAN",
         "team_name": "Panama",
         "elo": 1698.0,
         "confederation": "CONCACAF",
-        "advance_prob": 0.228,
-        "avg_points": 2.65,
-        "finish_1st": 0.065,
-        "finish_2nd": 0.163,
-        "finish_3rd": 0.355,
-        "finish_4th": 0.417
+        "advance_prob": 0.224,
+        "avg_points": 2.66,
+        "finish_1st": 0.062,
+        "finish_2nd": 0.161,
+        "finish_3rd": 0.363,
+        "finish_4th": 0.413
       },
       {
         "team_id": "GHA",
         "team_name": "Ghana",
         "elo": 1685.0,
         "confederation": "CAF",
-        "advance_prob": 0.202,
-        "avg_points": 2.49,
-        "finish_1st": 0.055,
-        "finish_2nd": 0.147,
+        "advance_prob": 0.197,
+        "avg_points": 2.45,
+        "finish_1st": 0.054,
+        "finish_2nd": 0.143,
         "finish_3rd": 0.336,
-        "finish_4th": 0.462
+        "finish_4th": 0.468
       }
     ]
   },
@@ -661,12 +661,12 @@
         "elo_home": 1849.0,
         "elo_away": 1648.0,
         "model": {
-          "home_win": 0.5427,
-          "draw": 0.2529,
-          "away_win": 0.2044
+          "home_win": 0.5425,
+          "draw": 0.2532,
+          "away_win": 0.2043
         },
-        "confidence": 0.9779,
-        "n_observations": 1528
+        "confidence": 0.9802,
+        "n_observations": 1575
       },
       {
         "id": 28,
@@ -683,12 +683,12 @@
         "elo_home": 1800.0,
         "elo_away": 1847.0,
         "model": {
-          "home_win": 0.4775,
-          "draw": 0.2851,
-          "away_win": 0.2373
+          "home_win": 0.4776,
+          "draw": 0.2854,
+          "away_win": 0.2371
         },
-        "confidence": 0.9777,
-        "n_observations": 1563
+        "confidence": 0.9801,
+        "n_observations": 1610
       },
       {
         "id": 53,
@@ -705,12 +705,12 @@
         "elo_home": 1849.0,
         "elo_away": 1800.0,
         "model": {
-          "home_win": 0.2088,
+          "home_win": 0.2087,
           "draw": 0.2698,
-          "away_win": 0.5214
+          "away_win": 0.5215
         },
-        "confidence": 0.9918,
-        "n_observations": 1267
+        "confidence": 0.9921,
+        "n_observations": 1305
       },
       {
         "id": 54,
@@ -727,12 +727,12 @@
         "elo_home": 1648.0,
         "elo_away": 1847.0,
         "model": {
-          "home_win": 0.1719,
-          "draw": 0.2431,
-          "away_win": 0.5849
+          "home_win": 0.1716,
+          "draw": 0.2428,
+          "away_win": 0.5856
         },
-        "confidence": 0.9917,
-        "n_observations": 1237
+        "confidence": 0.992,
+        "n_observations": 1275
       }
     ],
     "B": [
@@ -791,12 +791,12 @@
         "elo_home": 1952.0,
         "elo_away": 1748.0,
         "model": {
-          "home_win": 0.6084,
-          "draw": 0.2339,
-          "away_win": 0.1577
+          "home_win": 0.6091,
+          "draw": 0.2338,
+          "away_win": 0.1571
         },
-        "confidence": 0.9778,
-        "n_observations": 1770
+        "confidence": 0.9801,
+        "n_observations": 1817
       },
       {
         "id": 27,
@@ -813,12 +813,12 @@
         "elo_home": 1750.0,
         "elo_away": 1601.0,
         "model": {
-          "home_win": 0.7441,
-          "draw": 0.1697,
-          "away_win": 0.0862
+          "home_win": 0.7447,
+          "draw": 0.1694,
+          "away_win": 0.0859
         },
-        "confidence": 0.9778,
-        "n_observations": 1770
+        "confidence": 0.9801,
+        "n_observations": 1817
       },
       {
         "id": 51,
@@ -836,11 +836,11 @@
         "elo_away": 1750.0,
         "model": {
           "home_win": 0.4465,
-          "draw": 0.2837,
+          "draw": 0.2836,
           "away_win": 0.2699
         },
-        "confidence": 0.9925,
-        "n_observations": 1487
+        "confidence": 0.9927,
+        "n_observations": 1525
       },
       {
         "id": 52,
@@ -857,12 +857,12 @@
         "elo_home": 1748.0,
         "elo_away": 1601.0,
         "model": {
-          "home_win": 0.6008,
-          "draw": 0.2412,
-          "away_win": 0.158
+          "home_win": 0.6013,
+          "draw": 0.241,
+          "away_win": 0.1577
         },
-        "confidence": 0.9925,
-        "n_observations": 1487
+        "confidence": 0.9927,
+        "n_observations": 1525
       }
     ],
     "D": [
@@ -917,12 +917,12 @@
         "elo_home": 1821.0,
         "elo_away": 1700.0,
         "model": {
-          "home_win": 0.4693,
-          "draw": 0.2841,
+          "home_win": 0.4697,
+          "draw": 0.2838,
           "away_win": 0.2465
         },
-        "confidence": 0.977,
-        "n_observations": 1554
+        "confidence": 0.9795,
+        "n_observations": 1600
       },
       {
         "id": 32,
@@ -939,12 +939,12 @@
         "elo_home": 1805.0,
         "elo_away": 1756.0,
         "model": {
-          "home_win": 0.5937,
+          "home_win": 0.5941,
           "draw": 0.2287,
-          "away_win": 0.1776
+          "away_win": 0.1772
         },
-        "confidence": 0.9776,
-        "n_observations": 1769
+        "confidence": 0.98,
+        "n_observations": 1816
       },
       {
         "id": 59,
@@ -961,12 +961,12 @@
         "elo_home": 1821.0,
         "elo_away": 1805.0,
         "model": {
-          "home_win": 0.3502,
-          "draw": 0.268,
-          "away_win": 0.3818
+          "home_win": 0.3498,
+          "draw": 0.2678,
+          "away_win": 0.3824
         },
-        "confidence": 0.9913,
-        "n_observations": 1201
+        "confidence": 0.9916,
+        "n_observations": 1239
       },
       {
         "id": 60,
@@ -984,11 +984,11 @@
         "elo_away": 1756.0,
         "model": {
           "home_win": 0.4369,
-          "draw": 0.2906,
-          "away_win": 0.2725
+          "draw": 0.2905,
+          "away_win": 0.2726
         },
-        "confidence": 0.9918,
-        "n_observations": 1338
+        "confidence": 0.9921,
+        "n_observations": 1376
       }
     ],
     "C": [
@@ -1043,12 +1043,12 @@
         "elo_home": 2052.0,
         "elo_away": 1531.0,
         "model": {
-          "home_win": 0.8654,
-          "draw": 0.0915,
-          "away_win": 0.0431
+          "home_win": 0.8653,
+          "draw": 0.0914,
+          "away_win": 0.0432
         },
-        "confidence": 0.9768,
-        "n_observations": 1600
+        "confidence": 0.9793,
+        "n_observations": 1646
       },
       {
         "id": 30,
@@ -1065,12 +1065,12 @@
         "elo_home": 1862.0,
         "elo_away": 1869.0,
         "model": {
-          "home_win": 0.1955,
-          "draw": 0.2682,
-          "away_win": 0.5364
+          "home_win": 0.1934,
+          "draw": 0.2675,
+          "away_win": 0.5391
         },
-        "confidence": 0.9775,
-        "n_observations": 1754
+        "confidence": 0.9799,
+        "n_observations": 1801
       },
       {
         "id": 49,
@@ -1088,11 +1088,11 @@
         "elo_away": 2052.0,
         "model": {
           "home_win": 0.1407,
-          "draw": 0.203,
-          "away_win": 0.6563
+          "draw": 0.2027,
+          "away_win": 0.6566
         },
-        "confidence": 0.9923,
-        "n_observations": 1438
+        "confidence": 0.9925,
+        "n_observations": 1476
       },
       {
         "id": 50,
@@ -1109,12 +1109,12 @@
         "elo_home": 1869.0,
         "elo_away": 1531.0,
         "model": {
-          "home_win": 0.7192,
-          "draw": 0.1814,
-          "away_win": 0.0994
+          "home_win": 0.72,
+          "draw": 0.1808,
+          "away_win": 0.0992
         },
-        "confidence": 0.9923,
-        "n_observations": 1457
+        "confidence": 0.9926,
+        "n_observations": 1495
       }
     ],
     "E": [
@@ -1169,12 +1169,12 @@
         "elo_home": 1988.0,
         "elo_away": 1751.0,
         "model": {
-          "home_win": 0.6163,
-          "draw": 0.2176,
-          "away_win": 0.1661
+          "home_win": 0.6168,
+          "draw": 0.2173,
+          "away_win": 0.1659
         },
-        "confidence": 0.976,
-        "n_observations": 1544
+        "confidence": 0.9788,
+        "n_observations": 1590
       },
       {
         "id": 34,
@@ -1191,12 +1191,12 @@
         "elo_home": 1819.0,
         "elo_away": 1503.0,
         "model": {
-          "home_win": 0.84,
-          "draw": 0.1085,
-          "away_win": 0.0514
+          "home_win": 0.8454,
+          "draw": 0.1052,
+          "away_win": 0.0494
         },
-        "confidence": 0.9759,
-        "n_observations": 1710
+        "confidence": 0.9785,
+        "n_observations": 1754
       },
       {
         "id": 55,
@@ -1213,12 +1213,12 @@
         "elo_home": 1503.0,
         "elo_away": 1751.0,
         "model": {
-          "home_win": 0.0693,
-          "draw": 0.1432,
-          "away_win": 0.7876
+          "home_win": 0.0684,
+          "draw": 0.1414,
+          "away_win": 0.7902
         },
-        "confidence": 0.9915,
-        "n_observations": 1228
+        "confidence": 0.9918,
+        "n_observations": 1266
       },
       {
         "id": 56,
@@ -1236,11 +1236,11 @@
         "elo_away": 1988.0,
         "model": {
           "home_win": 0.2002,
-          "draw": 0.2516,
-          "away_win": 0.5482
+          "draw": 0.2517,
+          "away_win": 0.5481
         },
-        "confidence": 0.9919,
-        "n_observations": 1363
+        "confidence": 0.9922,
+        "n_observations": 1401
       }
     ],
     "F": [
@@ -1295,12 +1295,12 @@
         "elo_home": 1992.0,
         "elo_away": 1889.0,
         "model": {
-          "home_win": 0.57,
-          "draw": 0.24,
-          "away_win": 0.19
+          "home_win": 0.5691,
+          "draw": 0.2403,
+          "away_win": 0.1907
         },
-        "confidence": 0.9759,
-        "n_observations": 1683
+        "confidence": 0.9786,
+        "n_observations": 1728
       },
       {
         "id": 36,
@@ -1317,12 +1317,12 @@
         "elo_home": 1758.0,
         "elo_away": 1862.0,
         "model": {
-          "home_win": 0.1574,
-          "draw": 0.2454,
-          "away_win": 0.5972
+          "home_win": 0.1543,
+          "draw": 0.2434,
+          "away_win": 0.6024
         },
-        "confidence": 0.976,
-        "n_observations": 1713
+        "confidence": 0.9785,
+        "n_observations": 1757
       },
       {
         "id": 57,
@@ -1339,12 +1339,12 @@
         "elo_home": 1862.0,
         "elo_away": 1889.0,
         "model": {
-          "home_win": 0.4522,
-          "draw": 0.2791,
-          "away_win": 0.2686
+          "home_win": 0.452,
+          "draw": 0.2792,
+          "away_win": 0.2688
         },
-        "confidence": 0.9919,
-        "n_observations": 1348
+        "confidence": 0.9921,
+        "n_observations": 1386
       },
       {
         "id": 58,
@@ -1361,12 +1361,12 @@
         "elo_home": 1758.0,
         "elo_away": 1992.0,
         "model": {
-          "home_win": 0.1393,
-          "draw": 0.2143,
-          "away_win": 0.6463
+          "home_win": 0.1375,
+          "draw": 0.2125,
+          "away_win": 0.65
         },
-        "confidence": 0.9918,
-        "n_observations": 1343
+        "confidence": 0.9921,
+        "n_observations": 1381
       }
     ],
     "H": [
@@ -1385,12 +1385,12 @@
         "elo_home": 1721.0,
         "elo_away": 1902.0,
         "model": {
-          "home_win": 0.125,
-          "draw": 0.2228,
-          "away_win": 0.6523
+          "home_win": 0.272,
+          "draw": 0.2762,
+          "away_win": 0.4518
         },
-        "confidence": 0.9324,
-        "n_observations": 1895
+        "confidence": 0.9367,
+        "n_observations": 1931
       },
       {
         "id": 14,
@@ -1425,12 +1425,12 @@
         "elo_home": 1902.0,
         "elo_away": 1651.0,
         "model": {
-          "home_win": 0.6569,
-          "draw": 0.2132,
-          "away_win": 0.1299
+          "home_win": 0.653,
+          "draw": 0.2158,
+          "away_win": 0.1312
         },
-        "confidence": 0.9759,
-        "n_observations": 1552
+        "confidence": 0.9776,
+        "n_observations": 1587
       },
       {
         "id": 38,
@@ -1447,12 +1447,12 @@
         "elo_home": 2048.0,
         "elo_away": 1721.0,
         "model": {
-          "home_win": 0.8609,
-          "draw": 0.0973,
-          "away_win": 0.0418
+          "home_win": 0.8619,
+          "draw": 0.0965,
+          "away_win": 0.0416
         },
-        "confidence": 0.9763,
-        "n_observations": 1725
+        "confidence": 0.9779,
+        "n_observations": 1760
       },
       {
         "id": 65,
@@ -1469,12 +1469,12 @@
         "elo_home": 1651.0,
         "elo_away": 1721.0,
         "model": {
-          "home_win": 0.3823,
-          "draw": 0.2729,
-          "away_win": 0.3448
+          "home_win": 0.3811,
+          "draw": 0.2722,
+          "away_win": 0.3467
         },
-        "confidence": 0.9911,
-        "n_observations": 1187
+        "confidence": 0.9914,
+        "n_observations": 1218
       },
       {
         "id": 66,
@@ -1491,12 +1491,12 @@
         "elo_home": 1902.0,
         "elo_away": 2048.0,
         "model": {
-          "home_win": 0.1771,
-          "draw": 0.2413,
-          "away_win": 0.5816
+          "home_win": 0.176,
+          "draw": 0.2406,
+          "away_win": 0.5834
         },
-        "confidence": 0.9915,
-        "n_observations": 1313
+        "confidence": 0.9917,
+        "n_observations": 1344
       }
     ],
     "G": [
@@ -1515,12 +1515,12 @@
         "elo_home": 1808.0,
         "elo_away": 1579.0,
         "model": {
-          "home_win": 0.5434,
-          "draw": 0.2668,
-          "away_win": 0.1898
+          "home_win": 0.5421,
+          "draw": 0.2675,
+          "away_win": 0.1904
         },
-        "confidence": 0.9324,
-        "n_observations": 1889
+        "confidence": 0.9445,
+        "n_observations": 1936
       },
       {
         "id": 16,
@@ -1534,8 +1534,8 @@
         "status": "finished",
         "home_score": 1,
         "away_score": 1,
-        "elo_home": 1944.3653564453125,
-        "elo_away": 1721.6346435546875,
+        "elo_home": 1954.0,
+        "elo_away": 1712.0,
         "model": null,
         "confidence": 0,
         "n_observations": 0
@@ -1552,15 +1552,15 @@
         "status": "scheduled",
         "home_score": null,
         "away_score": null,
-        "elo_home": 1944.3653564453125,
+        "elo_home": 1954.0,
         "elo_away": 1808.0,
         "model": {
-          "home_win": 0.6792,
-          "draw": 0.2003,
-          "away_win": 0.1205
+          "home_win": 0.6802,
+          "draw": 0.1999,
+          "away_win": 0.1199
         },
-        "confidence": 0.9754,
-        "n_observations": 1702
+        "confidence": 0.978,
+        "n_observations": 1744
       },
       {
         "id": 40,
@@ -1575,14 +1575,14 @@
         "home_score": null,
         "away_score": null,
         "elo_home": 1579.0,
-        "elo_away": 1721.6346435546875,
+        "elo_away": 1712.0,
         "model": {
-          "home_win": 0.1955,
-          "draw": 0.2539,
-          "away_win": 0.5506
+          "home_win": 0.1936,
+          "draw": 0.2523,
+          "away_win": 0.554
         },
-        "confidence": 0.9754,
-        "n_observations": 1715
+        "confidence": 0.9779,
+        "n_observations": 1757
       },
       {
         "id": 63,
@@ -1596,15 +1596,15 @@
         "status": "scheduled",
         "home_score": null,
         "away_score": null,
-        "elo_home": 1721.6346435546875,
+        "elo_home": 1712.0,
         "elo_away": 1808.0,
         "model": {
-          "home_win": 0.4219,
-          "draw": 0.3093,
-          "away_win": 0.2688
+          "home_win": 0.4221,
+          "draw": 0.3092,
+          "away_win": 0.2687
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1343
       },
       {
         "id": 64,
@@ -1619,14 +1619,14 @@
         "home_score": null,
         "away_score": null,
         "elo_home": 1579.0,
-        "elo_away": 1944.3653564453125,
+        "elo_away": 1954.0,
         "model": {
-          "home_win": 0.0968,
-          "draw": 0.1709,
-          "away_win": 0.7323
+          "home_win": 0.096,
+          "draw": 0.1702,
+          "away_win": 0.7338
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1343
       }
     ],
     "I": [
@@ -1645,12 +1645,12 @@
         "elo_home": 2005.0,
         "elo_away": 1871.0,
         "model": {
-          "home_win": 0.6426,
-          "draw": 0.217,
-          "away_win": 0.1404
+          "home_win": 0.6442,
+          "draw": 0.2163,
+          "away_win": 0.1395
         },
-        "confidence": 0.9324,
-        "n_observations": 1888
+        "confidence": 0.9445,
+        "n_observations": 1935
       },
       {
         "id": 18,
@@ -1667,12 +1667,12 @@
         "elo_home": 1649.0,
         "elo_away": 1921.0,
         "model": {
-          "home_win": 0.0691,
-          "draw": 0.135,
-          "away_win": 0.7959
+          "home_win": 0.0677,
+          "draw": 0.1347,
+          "away_win": 0.7976
         },
-        "confidence": 0.9324,
-        "n_observations": 1885
+        "confidence": 0.9445,
+        "n_observations": 1932
       },
       {
         "id": 41,
@@ -1689,12 +1689,12 @@
         "elo_home": 1921.0,
         "elo_away": 1871.0,
         "model": {
-          "home_win": 0.4452,
+          "home_win": 0.4455,
           "draw": 0.2724,
-          "away_win": 0.2824
+          "away_win": 0.2821
         },
-        "confidence": 0.9761,
-        "n_observations": 1716
+        "confidence": 0.9785,
+        "n_observations": 1759
       },
       {
         "id": 42,
@@ -1711,12 +1711,12 @@
         "elo_home": 2005.0,
         "elo_away": 1649.0,
         "model": {
-          "home_win": 0.853,
-          "draw": 0.1055,
-          "away_win": 0.0415
+          "home_win": 0.8534,
+          "draw": 0.1053,
+          "away_win": 0.0413
         },
-        "confidence": 0.9762,
-        "n_observations": 1697
+        "confidence": 0.9787,
+        "n_observations": 1741
       },
       {
         "id": 61,
@@ -1734,11 +1734,11 @@
         "elo_away": 2005.0,
         "model": {
           "home_win": 0.2214,
-          "draw": 0.2616,
+          "draw": 0.2615,
           "away_win": 0.5171
         },
-        "confidence": 0.9917,
-        "n_observations": 1326
+        "confidence": 0.992,
+        "n_observations": 1363
       },
       {
         "id": 62,
@@ -1755,12 +1755,12 @@
         "elo_home": 1871.0,
         "elo_away": 1649.0,
         "model": {
-          "home_win": 0.6674,
-          "draw": 0.2105,
-          "away_win": 0.1221
+          "home_win": 0.6677,
+          "draw": 0.2103,
+          "away_win": 0.122
         },
-        "confidence": 0.9916,
-        "n_observations": 1325
+        "confidence": 0.9919,
+        "n_observations": 1362
       }
     ],
     "J": [
@@ -1779,12 +1779,12 @@
         "elo_home": 2141.0,
         "elo_away": 1779.0,
         "model": {
-          "home_win": 0.6928,
-          "draw": 0.2016,
-          "away_win": 0.1056
+          "home_win": 0.692,
+          "draw": 0.2022,
+          "away_win": 0.1058
         },
-        "confidence": 0.9324,
-        "n_observations": 1871
+        "confidence": 0.9445,
+        "n_observations": 1918
       },
       {
         "id": 20,
@@ -1801,12 +1801,12 @@
         "elo_home": 1871.0,
         "elo_away": 1651.0,
         "model": {
-          "home_win": 0.7086,
-          "draw": 0.179,
-          "away_win": 0.1124
+          "home_win": 0.7097,
+          "draw": 0.1787,
+          "away_win": 0.1116
         },
-        "confidence": 0.9324,
-        "n_observations": 1870
+        "confidence": 0.9445,
+        "n_observations": 1917
       },
       {
         "id": 43,
@@ -1823,12 +1823,12 @@
         "elo_home": 2141.0,
         "elo_away": 1871.0,
         "model": {
-          "home_win": 0.5877,
-          "draw": 0.2426,
+          "home_win": 0.5876,
+          "draw": 0.2427,
           "away_win": 0.1697
         },
-        "confidence": 0.9763,
-        "n_observations": 1722
+        "confidence": 0.9788,
+        "n_observations": 1766
       },
       {
         "id": 44,
@@ -1845,12 +1845,12 @@
         "elo_home": 1651.0,
         "elo_away": 1779.0,
         "model": {
-          "home_win": 0.1455,
+          "home_win": 0.1451,
           "draw": 0.2242,
-          "away_win": 0.6304
+          "away_win": 0.6308
         },
-        "confidence": 0.9761,
-        "n_observations": 1706
+        "confidence": 0.9785,
+        "n_observations": 1749
       },
       {
         "id": 69,
@@ -1868,11 +1868,11 @@
         "elo_away": 1871.0,
         "model": {
           "home_win": 0.2671,
-          "draw": 0.2958,
-          "away_win": 0.4371
+          "draw": 0.2959,
+          "away_win": 0.437
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1342
       },
       {
         "id": 70,
@@ -1890,11 +1890,11 @@
         "elo_away": 2141.0,
         "model": {
           "home_win": 0.068,
-          "draw": 0.1398,
+          "draw": 0.1397,
           "away_win": 0.7922
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1342
       }
     ],
     "L": [
@@ -1913,12 +1913,12 @@
         "elo_home": 1685.0,
         "elo_away": 1698.0,
         "model": {
-          "home_win": 0.4381,
-          "draw": 0.2832,
+          "home_win": 0.438,
+          "draw": 0.2833,
           "away_win": 0.2787
         },
-        "confidence": 0.9781,
-        "n_observations": 1819
+        "confidence": 0.9803,
+        "n_observations": 1866
       },
       {
         "id": 22,
@@ -1935,12 +1935,12 @@
         "elo_home": 1990.0,
         "elo_away": 1940.0,
         "model": {
-          "home_win": 0.5527,
-          "draw": 0.2546,
-          "away_win": 0.1927
+          "home_win": 0.5531,
+          "draw": 0.2547,
+          "away_win": 0.1922
         },
-        "confidence": 0.9782,
-        "n_observations": 1838
+        "confidence": 0.9804,
+        "n_observations": 1885
       },
       {
         "id": 45,
@@ -1957,12 +1957,12 @@
         "elo_home": 1990.0,
         "elo_away": 1685.0,
         "model": {
-          "home_win": 0.7177,
-          "draw": 0.1807,
-          "away_win": 0.1015
+          "home_win": 0.718,
+          "draw": 0.1805,
+          "away_win": 0.1014
         },
-        "confidence": 0.9934,
-        "n_observations": 1701
+        "confidence": 0.9936,
+        "n_observations": 1744
       },
       {
         "id": 46,
@@ -1980,11 +1980,11 @@
         "elo_away": 1940.0,
         "model": {
           "home_win": 0.1469,
-          "draw": 0.2423,
-          "away_win": 0.6108
+          "draw": 0.2424,
+          "away_win": 0.6107
         },
-        "confidence": 0.9934,
-        "n_observations": 1699
+        "confidence": 0.9936,
+        "n_observations": 1742
       },
       {
         "id": 67,
@@ -2001,12 +2001,12 @@
         "elo_home": 1698.0,
         "elo_away": 1990.0,
         "model": {
-          "home_win": 0.0984,
-          "draw": 0.1639,
-          "away_win": 0.7377
+          "home_win": 0.0983,
+          "draw": 0.1638,
+          "away_win": 0.738
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1342
       },
       {
         "id": 68,
@@ -2024,11 +2024,11 @@
         "elo_away": 1685.0,
         "model": {
           "home_win": 0.576,
-          "draw": 0.2513,
-          "away_win": 0.1728
+          "draw": 0.2512,
+          "away_win": 0.1727
         },
-        "confidence": 0.9914,
-        "n_observations": 1309
+        "confidence": 0.9917,
+        "n_observations": 1342
       }
     ],
     "K": [
@@ -2047,12 +2047,12 @@
         "elo_home": 2012.0,
         "elo_away": 1680.0,
         "model": {
-          "home_win": 0.743,
+          "home_win": 0.7433,
           "draw": 0.1688,
-          "away_win": 0.0882
+          "away_win": 0.0879
         },
-        "confidence": 0.9773,
-        "n_observations": 1612
+        "confidence": 0.9796,
+        "n_observations": 1657
       },
       {
         "id": 24,
@@ -2069,12 +2069,12 @@
         "elo_home": 1602.0,
         "elo_away": 1912.0,
         "model": {
-          "home_win": 0.1077,
+          "home_win": 0.1076,
           "draw": 0.2026,
-          "away_win": 0.6897
+          "away_win": 0.6898
         },
-        "confidence": 0.978,
-        "n_observations": 1814
+        "confidence": 0.9802,
+        "n_observations": 1861
       },
       {
         "id": 47,
@@ -2093,10 +2093,10 @@
         "model": {
           "home_win": 0.7615,
           "draw": 0.1548,
-          "away_win": 0.0838
+          "away_win": 0.0837
         },
-        "confidence": 0.9934,
-        "n_observations": 1703
+        "confidence": 0.9936,
+        "n_observations": 1746
       },
       {
         "id": 48,
@@ -2113,12 +2113,12 @@
         "elo_home": 1912.0,
         "elo_away": 1680.0,
         "model": {
-          "home_win": 0.6459,
-          "draw": 0.2261,
-          "away_win": 0.128
+          "home_win": 0.6461,
+          "draw": 0.226,
+          "away_win": 0.1279
         },
-        "confidence": 0.993,
-        "n_observations": 1530
+        "confidence": 0.9933,
+        "n_observations": 1573
       },
       {
         "id": 71,
@@ -2139,8 +2139,8 @@
           "draw": 0.2853,
           "away_win": 0.4443
         },
-        "confidence": 0.9915,
-        "n_observations": 1325
+        "confidence": 0.9918,
+        "n_observations": 1358
       },
       {
         "id": 72,
@@ -2161,267 +2161,267 @@
           "draw": 0.2911,
           "away_win": 0.3026
         },
-        "confidence": 0.991,
-        "n_observations": 1191
+        "confidence": 0.9913,
+        "n_observations": 1224
       }
     ]
   },
   "knockout_sims": {
     "MEX": {
-      "champion": 0.0041,
-      "final": 0.0154,
-      "semi_final": 0.0154,
-      "quarter_final": 0.055,
-      "round_of_16": 0.1975,
-      "round_of_32": 0.5601
+      "champion": 0.0049,
+      "final": 0.0152,
+      "semi_final": 0.0152,
+      "quarter_final": 0.0587,
+      "round_of_16": 0.1985,
+      "round_of_32": 0.5685
     },
     "CAN": {
-      "champion": 0.0017,
-      "final": 0.0076,
-      "semi_final": 0.0076,
-      "quarter_final": 0.0278,
-      "round_of_16": 0.1251,
-      "round_of_32": 0.4399
+      "champion": 0.0015,
+      "final": 0.0051,
+      "semi_final": 0.0051,
+      "quarter_final": 0.0273,
+      "round_of_16": 0.1147,
+      "round_of_32": 0.4315
     },
     "SUI": {
-      "champion": 0.0458,
-      "final": 0.1004,
-      "semi_final": 0.1004,
-      "quarter_final": 0.2215,
-      "round_of_16": 0.4635,
-      "round_of_32": 0.638
+      "champion": 0.0421,
+      "final": 0.0994,
+      "semi_final": 0.0994,
+      "quarter_final": 0.2263,
+      "round_of_16": 0.4737,
+      "round_of_32": 0.6458
     },
     "CZE": {
-      "champion": 0.0066,
-      "final": 0.0249,
-      "semi_final": 0.0249,
-      "quarter_final": 0.0749,
-      "round_of_16": 0.2139,
-      "round_of_32": 0.362
+      "champion": 0.0055,
+      "final": 0.0231,
+      "semi_final": 0.0231,
+      "quarter_final": 0.0788,
+      "round_of_16": 0.2131,
+      "round_of_32": 0.3542
     },
     "BRA": {
-      "champion": 0.1499,
-      "final": 0.2665,
-      "semi_final": 0.2665,
-      "quarter_final": 0.447,
-      "round_of_16": 0.6124,
-      "round_of_32": 0.7881
+      "champion": 0.1446,
+      "final": 0.2561,
+      "semi_final": 0.2561,
+      "quarter_final": 0.4353,
+      "round_of_16": 0.6023,
+      "round_of_32": 0.7867
     },
     "TUR": {
-      "champion": 0.0029,
-      "final": 0.0111,
-      "semi_final": 0.0111,
-      "quarter_final": 0.0406,
-      "round_of_16": 0.0986,
-      "round_of_32": 0.2119
+      "champion": 0.0038,
+      "final": 0.0132,
+      "semi_final": 0.0132,
+      "quarter_final": 0.0448,
+      "round_of_16": 0.101,
+      "round_of_32": 0.2133
     },
     "USA": {
-      "champion": 0.004,
-      "final": 0.0116,
-      "semi_final": 0.0116,
-      "quarter_final": 0.0412,
-      "round_of_16": 0.1023,
-      "round_of_32": 0.4067
+      "champion": 0.0031,
+      "final": 0.0115,
+      "semi_final": 0.0115,
+      "quarter_final": 0.0392,
+      "round_of_16": 0.1033,
+      "round_of_32": 0.4046
     },
     "MAR": {
       "champion": 0.0103,
-      "final": 0.0331,
-      "semi_final": 0.0331,
-      "quarter_final": 0.092,
-      "round_of_16": 0.1867,
-      "round_of_32": 0.5933
+      "final": 0.0322,
+      "semi_final": 0.0322,
+      "quarter_final": 0.0896,
+      "round_of_16": 0.1934,
+      "round_of_32": 0.5954
     },
     "GER": {
-      "champion": 0.0421,
-      "final": 0.0896,
-      "semi_final": 0.0896,
-      "quarter_final": 0.1688,
-      "round_of_16": 0.3351,
-      "round_of_32": 0.4954
+      "champion": 0.0411,
+      "final": 0.0881,
+      "semi_final": 0.0881,
+      "quarter_final": 0.1601,
+      "round_of_16": 0.3304,
+      "round_of_32": 0.495
     },
     "NED": {
-      "champion": 0.0429,
-      "final": 0.0924,
-      "semi_final": 0.0924,
-      "quarter_final": 0.1727,
-      "round_of_16": 0.3499,
-      "round_of_32": 0.5046
+      "champion": 0.047,
+      "final": 0.0977,
+      "semi_final": 0.0977,
+      "quarter_final": 0.1747,
+      "round_of_16": 0.3434,
+      "round_of_32": 0.505
     },
     "SWE": {
-      "champion": 0.0132,
-      "final": 0.0334,
-      "semi_final": 0.0334,
-      "quarter_final": 0.0797,
-      "round_of_16": 0.2121,
-      "round_of_32": 0.6048
+      "champion": 0.0108,
+      "final": 0.0314,
+      "semi_final": 0.0314,
+      "quarter_final": 0.08,
+      "round_of_16": 0.217,
+      "round_of_32": 0.5966
     },
     "ECU": {
-      "champion": 0.0032,
-      "final": 0.0092,
-      "semi_final": 0.0092,
-      "quarter_final": 0.0295,
-      "round_of_16": 0.1029,
-      "round_of_32": 0.3952
+      "champion": 0.0033,
+      "final": 0.0102,
+      "semi_final": 0.0102,
+      "quarter_final": 0.0276,
+      "round_of_16": 0.1092,
+      "round_of_32": 0.4034
     },
     "BEL": {
-      "champion": 0.0225,
-      "final": 0.0564,
-      "semi_final": 0.0564,
-      "quarter_final": 0.1156,
-      "round_of_16": 0.2363,
-      "round_of_32": 0.5626
+      "champion": 0.0268,
+      "final": 0.0652,
+      "semi_final": 0.0652,
+      "quarter_final": 0.125,
+      "round_of_16": 0.2405,
+      "round_of_32": 0.5637
     },
     "URU": {
-      "champion": 0.0105,
-      "final": 0.0329,
-      "semi_final": 0.0329,
-      "quarter_final": 0.0747,
-      "round_of_16": 0.1652,
-      "round_of_32": 0.4374
+      "champion": 0.0103,
+      "final": 0.0326,
+      "semi_final": 0.0326,
+      "quarter_final": 0.0727,
+      "round_of_16": 0.1649,
+      "round_of_32": 0.4363
     },
     "ESP": {
-      "champion": 0.1159,
-      "final": 0.2095,
-      "semi_final": 0.2095,
-      "quarter_final": 0.3393,
-      "round_of_16": 0.5306,
-      "round_of_32": 0.7941
+      "champion": 0.1179,
+      "final": 0.2132,
+      "semi_final": 0.2132,
+      "quarter_final": 0.339,
+      "round_of_16": 0.5287,
+      "round_of_32": 0.8031
     },
     "IRN": {
-      "champion": 0.0013,
-      "final": 0.006,
-      "semi_final": 0.006,
-      "quarter_final": 0.0197,
-      "round_of_16": 0.0679,
-      "round_of_32": 0.2059
+      "champion": 0.0015,
+      "final": 0.0058,
+      "semi_final": 0.0058,
+      "quarter_final": 0.0209,
+      "round_of_16": 0.0659,
+      "round_of_32": 0.1969
     },
     "FRA": {
-      "champion": 0.0551,
-      "final": 0.1043,
-      "semi_final": 0.1043,
-      "quarter_final": 0.141,
-      "round_of_16": 0.2583,
-      "round_of_32": 0.6941
+      "champion": 0.0543,
+      "final": 0.1005,
+      "semi_final": 0.1005,
+      "quarter_final": 0.1387,
+      "round_of_16": 0.2574,
+      "round_of_32": 0.6848
     },
     "AUT": {
-      "champion": 0.0053,
-      "final": 0.0139,
-      "semi_final": 0.0139,
-      "quarter_final": 0.024,
-      "round_of_16": 0.0691,
-      "round_of_32": 0.3059
+      "champion": 0.0057,
+      "final": 0.0165,
+      "semi_final": 0.0165,
+      "quarter_final": 0.0264,
+      "round_of_16": 0.0742,
+      "round_of_32": 0.3152
     },
     "ARG": {
-      "champion": 0.2521,
-      "final": 0.363,
-      "semi_final": 0.363,
-      "quarter_final": 0.4202,
-      "round_of_16": 0.58,
-      "round_of_32": 0.7874
+      "champion": 0.2455,
+      "final": 0.3498,
+      "semi_final": 0.3498,
+      "quarter_final": 0.4107,
+      "round_of_16": 0.5704,
+      "round_of_32": 0.7895
     },
     "NOR": {
-      "champion": 0.009,
-      "final": 0.0236,
-      "semi_final": 0.0236,
-      "quarter_final": 0.0373,
-      "round_of_16": 0.0926,
-      "round_of_32": 0.2126
+      "champion": 0.0121,
+      "final": 0.0282,
+      "semi_final": 0.0282,
+      "quarter_final": 0.0451,
+      "round_of_16": 0.098,
+      "round_of_32": 0.2105
     },
     "POR": {
-      "champion": 0.0552,
-      "final": 0.1073,
-      "semi_final": 0.1073,
-      "quarter_final": 0.1449,
-      "round_of_16": 0.3393,
-      "round_of_32": 0.5947
+      "champion": 0.0556,
+      "final": 0.1065,
+      "semi_final": 0.1065,
+      "quarter_final": 0.1459,
+      "round_of_16": 0.355,
+      "round_of_32": 0.6064
     },
     "CRO": {
-      "champion": 0.0198,
-      "final": 0.0423,
-      "semi_final": 0.0423,
-      "quarter_final": 0.064,
-      "round_of_16": 0.1874,
-      "round_of_32": 0.4053
+      "champion": 0.0177,
+      "final": 0.0407,
+      "semi_final": 0.0407,
+      "quarter_final": 0.063,
+      "round_of_16": 0.1851,
+      "round_of_32": 0.3936
     },
     "ENG": {
-      "champion": 0.044,
-      "final": 0.0863,
-      "semi_final": 0.0863,
-      "quarter_final": 0.1214,
-      "round_of_16": 0.3144,
-      "round_of_32": 0.6138
+      "champion": 0.046,
+      "final": 0.0871,
+      "semi_final": 0.0871,
+      "quarter_final": 0.121,
+      "round_of_16": 0.3027,
+      "round_of_32": 0.6075
     },
     "COL": {
-      "champion": 0.01,
-      "final": 0.0288,
-      "semi_final": 0.0288,
-      "quarter_final": 0.0472,
-      "round_of_16": 0.1589,
-      "round_of_32": 0.3862
+      "champion": 0.0122,
+      "final": 0.0307,
+      "semi_final": 0.0307,
+      "quarter_final": 0.0492,
+      "round_of_16": 0.1572,
+      "round_of_32": 0.3925
     },
     "KOR": {
-      "champion": 0.0136,
-      "final": 0.039,
-      "semi_final": 0.039,
-      "quarter_final": 0.1507,
-      "round_of_16": 0.2279,
-      "round_of_32": 0.4775
+      "champion": 0.0134,
+      "final": 0.0374,
+      "semi_final": 0.0374,
+      "quarter_final": 0.1452,
+      "round_of_16": 0.2238,
+      "round_of_32": 0.4774
     },
     "SCO": {
-      "champion": 0.0143,
-      "final": 0.0488,
-      "semi_final": 0.0488,
-      "quarter_final": 0.1785,
-      "round_of_16": 0.2668,
-      "round_of_32": 0.5225
+      "champion": 0.0168,
+      "final": 0.0463,
+      "semi_final": 0.0463,
+      "quarter_final": 0.1731,
+      "round_of_16": 0.2611,
+      "round_of_32": 0.5226
     },
     "SEN": {
-      "champion": 0.0183,
-      "final": 0.0478,
-      "semi_final": 0.0478,
-      "quarter_final": 0.1771,
-      "round_of_16": 0.2658,
-      "round_of_32": 0.513
+      "champion": 0.0205,
+      "final": 0.0558,
+      "semi_final": 0.0558,
+      "quarter_final": 0.182,
+      "round_of_16": 0.2718,
+      "round_of_32": 0.5206
     },
     "JPN": {
-      "champion": 0.0156,
-      "final": 0.0439,
-      "semi_final": 0.0439,
-      "quarter_final": 0.1574,
-      "round_of_16": 0.2395,
-      "round_of_32": 0.487
-    },
-    "CIV": {
-      "champion": 0.0034,
-      "final": 0.0152,
-      "semi_final": 0.0152,
-      "quarter_final": 0.0917,
-      "round_of_16": 0.2636,
-      "round_of_32": 0.507
+      "champion": 0.0132,
+      "final": 0.0441,
+      "semi_final": 0.0441,
+      "quarter_final": 0.1612,
+      "round_of_16": 0.2433,
+      "round_of_32": 0.4794
     },
     "BIH": {
-      "champion": 0.0028,
-      "final": 0.0126,
-      "semi_final": 0.0126,
-      "quarter_final": 0.0831,
-      "round_of_16": 0.2487,
-      "round_of_32": 0.493
+      "champion": 0.0034,
+      "final": 0.0141,
+      "semi_final": 0.0141,
+      "quarter_final": 0.0883,
+      "round_of_16": 0.2599,
+      "round_of_32": 0.4963
+    },
+    "CIV": {
+      "champion": 0.0037,
+      "final": 0.0159,
+      "semi_final": 0.0159,
+      "quarter_final": 0.0923,
+      "round_of_16": 0.2663,
+      "round_of_32": 0.5037
     },
     "AUS": {
-      "champion": 0.0032,
-      "final": 0.0163,
-      "semi_final": 0.0163,
-      "quarter_final": 0.099,
-      "round_of_16": 0.2788,
-      "round_of_32": 0.5417
+      "champion": 0.0037,
+      "final": 0.0167,
+      "semi_final": 0.0167,
+      "quarter_final": 0.0989,
+      "round_of_16": 0.2826,
+      "round_of_32": 0.569
     },
     "EGY": {
-      "champion": 0.0014,
-      "final": 0.0069,
-      "semi_final": 0.0069,
-      "quarter_final": 0.0625,
-      "round_of_16": 0.2089,
-      "round_of_32": 0.4583
+      "champion": 0.0017,
+      "final": 0.0097,
+      "semi_final": 0.0097,
+      "quarter_final": 0.059,
+      "round_of_16": 0.1912,
+      "round_of_32": 0.431
     }
   },
   "value_board": []
