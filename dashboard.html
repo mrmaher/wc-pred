@@ -71,7 +71,7 @@
   .group-hdr{background:linear-gradient(90deg,var(--surface2),var(--surface));padding:10px 14px;
              display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
   .group-letter{font-size:1.05rem;font-weight:800;color:var(--accent2)}
-  .team-row{display:grid;grid-template-columns:22px 1fr 62px 58px 54px;align-items:center;
+  .team-row{display:grid;grid-template-columns:22px 1fr 62px 58px 54px 38px;align-items:center;
             gap:8px;padding:9px 14px;border-bottom:1px solid rgba(30,45,69,.45);transition:background .15s}
   .team-row:hover{background:var(--surface2)}
   .team-row:last-child{border-bottom:none}
@@ -525,15 +525,32 @@ async function renderOverview() {
 
 // ── Groups ──────────────────────────────────────────────────────────────────
 async function renderGroups() {
-  const [rows, confByGroup] = await Promise.all([
+  const [rows, confByGroup, updatedAt, actualPtsRows] = await Promise.all([
     q(`SELECT group_letter, team_id, team_name, elo, confederation,
               advance_prob, finish_1st, finish_2nd, avg_points
        FROM group_sim_results ORDER BY group_letter, advance_prob DESC`),
     q(`SELECT group_letter, AVG(confidence) AS avg_conf
-       FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs) GROUP BY group_letter`)
+       FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs) GROUP BY group_letter`),
+    q(`SELECT group_letter, MAX(computed_at) AS last_updated
+       FROM group_sim_results GROUP BY group_letter`),
+    q(`SELECT f.group_letter, f.home_team, f.away_team, mr.home_score, mr.away_score, mr.result
+       FROM match_results mr JOIN fixtures f ON mr.fixture_id=f.fixture_id
+       WHERE f.stage='group'`)
   ]);
+
+  // Actual points per team from confirmed results
+  const actualPts = {};
+  for (const r of actualPtsRows) {
+    const g = r.group_letter;
+    actualPts[g] = actualPts[g] || {};
+    actualPts[g][r.home_team] = (actualPts[g][r.home_team] || 0) + (r.result==='home_win'?3:r.result==='draw'?1:0);
+    actualPts[g][r.away_team] = (actualPts[g][r.away_team] || 0) + (r.result==='away_win'?3:r.result==='draw'?1:0);
+  }
+
   const gConf = {};
   confByGroup.forEach(r=>{ gConf[r.group_letter] = r.avg_conf || 0; });
+  const gUpdated = {};
+  updatedAt.forEach(r=>{ gUpdated[r.group_letter] = r.last_updated; });
 
   const groups = [...new Set(rows.map(r=>r.group_letter))].sort();
   document.getElementById('group-fbar').innerHTML =
@@ -548,6 +565,26 @@ async function renderGroups() {
     const teams = byGroup[g]||[];
     const gc = gConf[g] ?? 0;
     const gcCol = confColor(gc);
+    const gPts = actualPts[g] || {};
+    const hasResults = Object.keys(gPts).length > 0;
+
+    // Sort by actual pts desc (if results exist), else by advance_prob
+    if (hasResults) {
+      teams.sort((a,b)=> (gPts[b.team_id]||0) - (gPts[a.team_id]||0) || b.advance_prob - a.advance_prob);
+    }
+
+    // Last updated timestamp
+    const lu = gUpdated[g];
+    let luStr = '';
+    if (lu) {
+      try {
+        const d = new Date(typeof lu === 'bigint' ? Number(lu)/1000 : lu);
+        luStr = isNaN(d.getTime()) ? '' :
+          d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'America/New_York'}) + ' ' +
+          d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit',timeZone:'America/New_York'}) + ' ET';
+      } catch(_){}
+    }
+
     return `<div class="group-card">
       <div class="group-hdr"><span class="group-letter">Group ${g}</span>
         <span style="display:flex;align-items:center;gap:5px;font-size:.62rem;color:${gcCol}">
@@ -557,14 +594,18 @@ async function renderGroups() {
       </div>
       <div class="team-row" style="background:var(--surface2);padding-top:5px;padding-bottom:5px">
         <div></div><div></div>
-        <div class="col-h">ADV%</div><div class="col-h">1ST%</div><div class="col-h">AVG PTS</div>
+        <div class="col-h">ADV%</div><div class="col-h">1ST%</div>
+        <div class="col-h" style="color:var(--accent2)">AVG PTS</div>
+        <div class="col-h" style="color:var(--green)">PTS</div>
       </div>
       ${teams.map((t,i)=>{
         const p=t.advance_prob*100, cls=p>=65?'hi':p>=35?'md':'lo';
-        // Tint bar by confidence: low-conf teams get muted amber instead of pure green
         const baseCol=p>=65?[16,185,129]:p>=35?[245,158,11]:[239,68,68];
         const confMix=Math.min(1,gc+0.2);
         const bar=`rgba(${baseCol[0]},${baseCol[1]},${baseCol[2]},${(0.5+0.5*confMix).toFixed(2)})`;
+        const pts = gPts[t.team_id];
+        const ptsStr = pts !== undefined ? pts : '—';
+        const ptsCol = pts >= 6 ? 'var(--green)' : pts >= 3 ? 'var(--gold)' : pts === 0 ? 'var(--red)' : 'var(--text)';
         return `<div class="team-row">
           <div class="t-rank ${i<2?'top':''}">${i<2?'●':'○'}</div>
           <div><div class="t-name">${flag(t.team_id)} ${t.team_name} <span class="t-elo">${Math.round(t.elo||0)}</span></div>
@@ -573,8 +614,11 @@ async function renderGroups() {
                <div class="mbar"><div class="mbar-fill" style="width:${p}%;background:${bar}"></div></div></div>
           <div class="pval ${cls}" style="font-size:.72rem">${(t.finish_1st*100).toFixed(0)}%</div>
           <div class="pval" style="color:var(--accent2);font-size:.75rem">${(t.avg_points||0).toFixed(1)}</div>
+          <div class="pval" style="color:${ptsCol};font-size:.85rem;font-weight:700">${ptsStr}</div>
         </div>`;
       }).join('')}
+      ${luStr ? `<div style="padding:6px 10px 4px;font-size:.55rem;color:var(--muted);border-top:1px solid var(--border);text-align:right">
+        Probs updated ${luStr}</div>` : ''}
     </div>`;
   }).join('');
 }
@@ -635,6 +679,33 @@ async function renderMatches() {
       } catch(_) {}
     }
 
+    // Model accuracy: compare pre-match top-predicted outcome vs actual
+    let accuracyBadge = '';
+    if (finished) {
+      const actualOutcome = homeWon ? 'home_win' : awayWon ? 'away_win' : 'draw';
+      const modelTop = hw >= dw && hw >= aw ? 'home_win' : aw >= dw ? 'away_win' : 'draw';
+      const modelTopProb = modelTop==='home_win' ? hw : modelTop==='away_win' ? aw : dw;
+      const called = modelTop === actualOutcome;
+      const outcomeLabel = actualOutcome==='home_win' ? `${sn(m.home_name)} Win`
+                         : actualOutcome==='away_win' ? `${sn(m.away_name)} Win` : 'Draw';
+      const modelLabel   = modelTop==='home_win' ? `${sn(m.home_name)} Win`
+                         : modelTop==='away_win' ? `${sn(m.away_name)} Win` : 'Draw';
+      accuracyBadge = `
+        <div style="margin-top:6px;display:flex;align-items:center;justify-content:space-between;
+                    padding:4px 7px;border-radius:5px;
+                    background:${called?'rgba(16,185,129,.08)':'rgba(239,68,68,.08)'};
+                    border:1px solid ${called?'rgba(16,185,129,.25)':'rgba(239,68,68,.25)'}">
+          <span style="font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;
+                       color:${called?'var(--green)':'var(--red)'}">
+            ${called ? '✓ Model called it' : '✗ Model missed'}
+          </span>
+          <span style="font-size:.56rem;color:var(--muted)">
+            ${called ? `${modelLabel} @ ${modelTopProb.toFixed(0)}%`
+                     : `Predicted ${modelLabel} (${modelTopProb.toFixed(0)}%) · Actual: ${outcomeLabel}`}
+          </span>
+        </div>`;
+    }
+
     // Result row shown beneath confidence when match is finished
     const resultRow = finished ? `
       <div style="margin-top:9px;padding-top:9px;border-top:2px solid rgba(16,185,129,.3);
@@ -643,7 +714,7 @@ async function renderMatches() {
                      color:var(--green);white-space:nowrap;flex-shrink:0">Final Score</span>
         <div style="display:flex;align-items:center;gap:5px;flex:1;justify-content:center">
           <span style="font-size:.6rem;font-weight:700;color:${homeWon?'var(--green)':'var(--muted)'}">
-            ${homeWon ? flag(m.home_team) : isDraw ? '' : ''}</span>
+            ${homeWon ? flag(m.home_team) : ''}</span>
           <span style="font-size:.6rem;font-weight:900;letter-spacing:2px;
                        color:var(--text);padding:1px 6px;background:var(--surface2);
                        border-radius:4px;border:1px solid var(--border)">${hs}&thinsp;–&thinsp;${as_}</span>
@@ -651,7 +722,8 @@ async function renderMatches() {
             ${awayWon ? flag(m.away_team) : ''}</span>
           ${isDraw ? `<span style="font-size:.6rem;font-weight:700;color:var(--gold)">DRAW</span>` : ''}
         </div>
-      </div>` : '';
+      </div>
+      ${accuracyBadge}` : '';
 
     const roundNum = parseInt(m.round, 10);
     const stageBadge = m.group_letter

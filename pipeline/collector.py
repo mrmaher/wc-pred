@@ -181,7 +181,7 @@ def collect_odds(conn: duckdb.DuckDBPyConnection) -> int:
 # Map of common Odds-API / bookmaker spellings → canonical DB name fragment.
 # Keys are lowercased; values must match a substring of the DB team name (lowercased).
 _NAME_ALIASES: dict[str, str] = {
-    # The Odds API common-English name  →  FIFA/DB name fragment
+    # The Odds API / football-data.org name  →  FIFA/DB name fragment
     "south korea":        "korea republic",
     "korea":              "korea republic",
     "turkey":             "türkiye",
@@ -199,6 +199,10 @@ _NAME_ALIASES: dict[str, str] = {
     "usa":                "usa",
     "united states":      "usa",
     "trinidad & tobago":  "trinidad and tobago",
+    # football-data.org spells these with "and" where DB uses "&"
+    "bosnia and herzegovina":  "bosnia & herzegovina",
+    "saint kitts and nevis":   "st. kitts and nevis",
+    "trinidad and tobago":     "trinidad and tobago",
 }
 
 
