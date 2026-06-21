@@ -42,11 +42,25 @@ log = logging.getLogger(__name__)
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 def latest_elo(conn: duckdb.DuckDBPyConnection) -> dict[str, float]:
-    """Return most recent Elo value per team."""
+    """
+    Return best available Elo per team, prioritising source quality:
+      1. 'calculated'  — updated after actual match results (most accurate)
+      2. 'eloratings'  — live national-team ratings from eloratings.net
+      3. 'seed'        — static seed values (fallback only)
+    Within each tier, take the most recent snapshot.
+    Seed rows inserted by a failed network call must never beat valid
+    eloratings data, which is why we rank source before collected_at.
+    """
     rows = conn.execute("""
         SELECT DISTINCT ON (team_id) team_id, elo_value
         FROM elo_snapshots
-        ORDER BY team_id, collected_at DESC
+        ORDER BY team_id,
+                 CASE source
+                     WHEN 'calculated'  THEN 1
+                     WHEN 'eloratings'  THEN 2
+                     ELSE 3
+                 END ASC,
+                 collected_at DESC
     """).fetchall()
     if not rows:
         rows = conn.execute("SELECT team_id, seed_elo FROM teams").fetchall()

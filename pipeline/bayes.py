@@ -201,11 +201,17 @@ def compute_all_bayesian_probs(
     if now is None:
         now = datetime.now(timezone.utc)
 
+    # Only recompute fixtures that are genuinely upcoming or live.
+    # Past-date fixtures still marked 'scheduled' (result not yet ingested)
+    # must NOT be recomputed — their odds are too old to decay correctly and
+    # confidence collapses to 0. Their last pre-match probs remain valid.
+    today = now.date()
     fixtures = conn.execute("""
         SELECT fixture_id FROM fixtures
         WHERE status IN ('scheduled', 'live')
+          AND (match_date >= ? OR status = 'live')
         ORDER BY match_date ASC
-    """).fetchall()
+    """, (today,)).fetchall()
 
     results = []
     for (fid,) in fixtures:

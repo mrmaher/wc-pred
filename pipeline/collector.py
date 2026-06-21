@@ -35,7 +35,9 @@ log = logging.getLogger(__name__)
 def collect_elo(conn: duckdb.DuckDBPyConnection) -> int:
     """
     Fetch current Elo ratings and append a snapshot row for each team.
-    Falls back to seed values if network is unavailable.
+    If network is unavailable, does NOT insert seed fallback rows — existing
+    stored Elo data remains authoritative. Seed rows in elo_snapshots would
+    overwrite valid eloratings data via collected_at ordering.
     Returns number of rows inserted.
     """
     now = datetime.now(timezone.utc)
@@ -44,14 +46,16 @@ def collect_elo(conn: duckdb.DuckDBPyConnection) -> int:
         log.warning("No teams in DB — run setup_db.py first")
         return 0
 
-    # Try live fetch
     elo_map = _fetch_live_elo()
-    source = "eloratings" if elo_map else "seed"
+    if not elo_map:
+        # Don't pollute elo_snapshots with seed timestamps — leave existing data in place
+        log.info("Elo: live fetch failed, keeping existing stored ratings")
+        return 0
 
     rows = []
     for team_id, name, seed_elo in teams:
         elo = _resolve_elo(team_id, name, elo_map, seed_elo)
-        rows.append((team_id, now, elo, source))
+        rows.append((team_id, now, elo, "eloratings"))
 
     conn.executemany("""
         INSERT INTO elo_snapshots (team_id, collected_at, elo_value, source)
@@ -59,7 +63,7 @@ def collect_elo(conn: duckdb.DuckDBPyConnection) -> int:
     """, rows)
     conn.commit()
 
-    log.info("Elo: inserted %d snapshots (source=%s)", len(rows), source)
+    log.info("Elo: inserted %d snapshots (source=eloratings)", len(rows))
     return len(rows)
 
 
