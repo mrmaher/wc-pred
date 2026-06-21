@@ -40,8 +40,15 @@ TEAM_NAME_MAP = {
     "Czechia":                 "CZE",
     "Czech Republic":          "CZE",
     "Canada":                  "CAN",
+    # Bosnia — every variant seen or plausible from football-data.org
     "Bosnia and Herzegovina":  "BIH",
     "Bosnia & Herzegovina":    "BIH",
+    "Bosnia-Herzegovina":      "BIH",
+    "Bosnia":                  "BIH",
+    "Bosnia Herzegowina":      "BIH",
+    "Bosnia i Hercegovina":    "BIH",
+    "Bosna i Hercegovina":     "BIH",
+    "BIH":                     "BIH",
     "Qatar":                   "QAT",
     "Switzerland":             "SUI",
     "Haiti":                   "HAI",
@@ -127,7 +134,7 @@ def _resolve_team_id(api_name: str) -> str | None:
     for k, v in TEAM_NAME_MAP.items():
         if k.lower() == lower:
             return v
-    log.debug("No team ID mapping for '%s'", api_name)
+    log.warning("No team ID mapping for API name: '%s'", api_name)
     return None
 
 
@@ -141,6 +148,14 @@ def fetch_finished_matches() -> list[dict]:
         return []
 
     matches = data.get("matches", [])
+    log.info("football-data.org: raw API returned %d finished match(es)", len(matches))
+    for m in matches:
+        h = m.get("homeTeam", {}).get("name", "?")
+        a = m.get("awayTeam", {}).get("name", "?")
+        sc = m.get("score", {}).get("fullTime", {})
+        log.info("  API match: '%s' %s–%s '%s'  [id=%s]",
+                 h, sc.get("home", "?"), sc.get("away", "?"), a, m.get("id"))
+
     results = []
     for m in matches:
         home_name = m.get("homeTeam", {}).get("name", "")
@@ -156,7 +171,8 @@ def fetch_finished_matches() -> list[dict]:
         home_id = _resolve_team_id(home_name)
         away_id = _resolve_team_id(away_name)
         if not home_id or not away_id:
-            log.debug("Skipping unrecognised teams: %s vs %s", home_name, away_name)
+            log.warning("Unrecognised team name(s): home='%s' (→%s)  away='%s' (→%s)",
+                        home_name, home_id, away_name, away_id)
             continue
 
         results.append({
@@ -198,8 +214,18 @@ def sync_results(conn: duckdb.DuckDBPyConnection, dry_run: bool = False) -> int:
     new_count = 0
     for m in finished:
         fid = fixture_index.get((m["home_id"], m["away_id"]))
+        reversed_lookup = False
         if not fid:
-            log.debug("No fixture match for %s vs %s", m["home_id"], m["away_id"])
+            # Try reversed home/away — API may assign neutral-site matches differently
+            fid = fixture_index.get((m["away_id"], m["home_id"]))
+            if fid:
+                reversed_lookup = True
+                log.warning("Fixture found with reversed home/away: API has %s(home) vs %s(away) "
+                            "but our DB has them swapped — using fixture %d",
+                            m["home_id"], m["away_id"], fid)
+        if not fid:
+            log.warning("No fixture found for %s vs %s (checked both orderings)",
+                        m["home_id"], m["away_id"])
             continue
         if fid in already_done:
             log.debug("Result already recorded for fixture %d", fid)
