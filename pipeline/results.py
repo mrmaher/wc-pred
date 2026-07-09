@@ -175,13 +175,28 @@ def fetch_finished_matches() -> list[dict]:
                         home_name, home_id, away_name, away_id)
             continue
 
+        # Determine the result — for KO matches that went to penalties,
+        # the fullTime score may be a draw; use the penalties score to find the winner.
+        pen = score.get("penalties", {})
+        pen_home = pen.get("home")
+        pen_away = pen.get("away")
+        result_override = None
+        if (pen_home is not None and pen_away is not None
+                and pen_home != pen_away
+                and int(home_score) == int(away_score)):
+            result_override = "home_win" if pen_home > pen_away else "away_win"
+            log.info("  Penalty shootout: %s %d–%d %s (PKs: %d–%d) → %s advances",
+                     home_id, home_score, away_score, away_id,
+                     pen_home, pen_away, "home" if result_override == "home_win" else "away")
+
         results.append({
-            "api_id":     m.get("id"),
-            "home_id":    home_id,
-            "away_id":    away_id,
-            "home_score": int(home_score),
-            "away_score": int(away_score),
-            "utc_date":   m.get("utcDate"),
+            "api_id":          m.get("id"),
+            "home_id":         home_id,
+            "away_id":         away_id,
+            "home_score":      int(home_score),
+            "away_score":      int(away_score),
+            "result_override": result_override,
+            "utc_date":        m.get("utcDate"),
         })
 
     log.info("football-data.org: found %d finished matches", len(results))
@@ -203,10 +218,10 @@ def sync_results(conn: duckdb.DuckDBPyConnection, dry_run: bool = False) -> int:
         conn.execute("SELECT fixture_id FROM match_results").fetchall()
     )
 
-    # Our fixture index: (home_id, away_id) → fixture_id
+    # Our fixture index: (home_id, away_id) → fixture_id — covers ALL stages
     fixture_index = {}
     rows = conn.execute("""
-        SELECT fixture_id, home_team, away_team FROM fixtures WHERE stage = 'group'
+        SELECT fixture_id, home_team, away_team FROM fixtures
     """).fetchall()
     for fid, home, away in rows:
         fixture_index[(home, away)] = fid
@@ -231,12 +246,14 @@ def sync_results(conn: duckdb.DuckDBPyConnection, dry_run: bool = False) -> int:
             log.debug("Result already recorded for fixture %d", fid)
             continue
 
+        pk_note = f" (PKs→{m['result_override']})" if m.get("result_override") else ""
         log.info(
-            "Recording: fixture %d  %s %d–%d %s",
-            fid, m["home_id"], m["home_score"], m["away_score"], m["away_id"]
+            "Recording: fixture %d  %s %d–%d %s%s",
+            fid, m["home_id"], m["home_score"], m["away_score"], m["away_id"], pk_note
         )
         if not dry_run:
-            record_result(conn, fid, m["home_score"], m["away_score"])
+            record_result(conn, fid, m["home_score"], m["away_score"],
+                          result_override=m.get("result_override"))
         new_count += 1
 
     if dry_run:

@@ -271,12 +271,20 @@
   <!-- ── Knockout Bracket ────────────────────────────────────────────── -->
   <section class="section" id="section-knockout">
     <div class="card">
-      <div class="card-title">Round of 32 — Expected Bracket</div>
-      <div id="bracket-wrap" class="bracket-wrap"><div class="loading"><span class="spinner">⚙</span></div></div>
+      <div class="card-title">Quarterfinals — Match Predictions</div>
+      <div id="ko-qf-cards" class="bracket-wrap"><div class="loading"><span class="spinner">⚙</span></div></div>
     </div>
     <div class="card">
-      <div class="card-title">Deep Run Probabilities</div>
+      <div class="card-title">Championship Odds — Remaining 8 Teams</div>
       <div id="ko-table" style="overflow-x:auto"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Round of 16 — Results</div>
+      <div id="ko-r16-results" style="overflow-x:auto"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Round of 32 — Results</div>
+      <div id="ko-r32-results" style="overflow-x:auto"></div>
     </div>
   </section>
 
@@ -774,83 +782,162 @@ window._setMF = g=>{ activeMatchFilter=g; renderMatches(); };
 
 // ── Knockout ─────────────────────────────────────────────────────────────────
 async function renderKnockout() {
-  const [r32, deep, koConf] = await Promise.all([
-    q(`SELECT gs1.team_name AS team_a_name, gs2.team_name AS team_b_name,
-              gs1.team_id AS team_a_id, gs2.team_id AS team_b_id,
-              gs1.group_letter AS group_a, gs2.group_letter AS group_b,
-              gs1.advance_prob AS a_prob, gs2.advance_prob AS b_prob
-       FROM group_sim_results gs1
-       JOIN group_sim_results gs2
-         ON ASCII(gs2.group_letter)=ASCII(gs1.group_letter)+1
-        AND gs1.finish_1st=(SELECT MAX(finish_1st) FROM group_sim_results g WHERE g.group_letter=gs1.group_letter)
-        AND gs2.finish_2nd=(SELECT MAX(finish_2nd) FROM group_sim_results g WHERE g.group_letter=gs2.group_letter)
-       ORDER BY gs1.group_letter`),
-    q(`SELECT team_id, team_name, round_of_32, round_of_16, quarter_final, semi_final, final, champion
-       FROM ko_sim_results ORDER BY champion DESC LIMIT 32`),
-    q(`SELECT AVG(confidence) AS c, COUNT(*) AS n FROM bayesian_probs WHERE confidence IS NOT NULL AND computed_at=(SELECT MAX(computed_at) FROM bayesian_probs)`)
-  ]);
-  const kc = koConf[0]?.c ?? 0;
+  const [qfMatches, r16Results, r32Results, deep] = await Promise.all([
+    // QF: scheduled/live fixtures with bayesian probs
+    q(`SELECT f.fixture_id, f.home_team, f.away_team,
+              f.home_name, f.away_name, f.match_date,
+              COALESCE(f.home_score, -1) AS home_score,
+              COALESCE(f.away_score, -1) AS away_score,
+              f.status,
+              bp.home_win, bp.draw, bp.away_win, bp.confidence
+       FROM fixtures f
+       LEFT JOIN bayesian_probs bp ON f.fixture_id = bp.fixture_id
+         AND bp.computed_at = (SELECT MAX(computed_at) FROM bayesian_probs bp2 WHERE bp2.fixture_id = f.fixture_id)
+       WHERE f.stage = 'qf'
+       ORDER BY f.match_date, f.fixture_id`),
 
-  if (r32.length) {
-    const half = Math.ceil(r32.length/2);
-    const kcCol = confColor(kc);
-    document.getElementById('bracket-wrap').innerHTML = `
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:.72rem;color:var(--muted)">
-      ${confRing(kc, 28)}
-      <span>Data quality: <strong style="color:${kcCol}">${confLabel(kc)}</strong>
-        · ${(kc*100).toFixed(0)}% market-informed
-        · ${kc<0.3?'Projections based on Elo ratings — will sharpen as odds arrive':'Bayesian blend of Elo + market odds'}
-      </span>
-    </div>
-    <div class="bracket">
-      <div class="b-round">
-        <div class="b-round-title">R32 — Left</div>
-        ${r32.slice(0,half).map(matchupHtml).join('')}
-      </div>
-      <div class="b-round">
-        <div class="b-round-title">R32 — Right</div>
-        ${r32.slice(half).map(matchupHtml).join('')}
-      </div>
-      <div class="b-round">
-        <div class="b-round-title">QF · SF · Final</div>
-        <div style="color:var(--muted);font-size:.78rem;padding:20px 0;text-align:center;line-height:1.9">
-          Bracket fills in<br>after group stage.<br><br>
-          See <strong style="color:var(--text)">Deep Run</strong><br>table below.
-        </div>
-      </div>
+    // R16: finished results
+    q(`SELECT f.fixture_id, f.home_team, f.away_team,
+              f.home_name, f.away_name, f.match_date,
+              COALESCE(mr.home_score, f.home_score, -1) AS home_score,
+              COALESCE(mr.away_score, f.away_score, -1) AS away_score,
+              mr.result
+       FROM fixtures f
+       LEFT JOIN match_results mr ON f.fixture_id = mr.fixture_id
+       WHERE f.stage = 'r16'
+       ORDER BY f.match_date, f.fixture_id`),
+
+    // R32: finished results
+    q(`SELECT f.fixture_id, f.home_team, f.away_team,
+              f.home_name, f.away_name, f.match_date,
+              COALESCE(mr.home_score, f.home_score, -1) AS home_score,
+              COALESCE(mr.away_score, f.away_score, -1) AS away_score,
+              mr.result
+       FROM fixtures f
+       LEFT JOIN match_results mr ON f.fixture_id = mr.fixture_id
+       WHERE f.stage = 'r32'
+       ORDER BY f.match_date, f.fixture_id`),
+
+    // Championship odds for QF teams (remaining 8)
+    q(`SELECT ks.team_id, ks.team_name, ks.quarter_final, ks.semi_final, ks.final, ks.champion
+       FROM ko_sim_results ks
+       WHERE ks.team_id IN (
+         SELECT home_team FROM fixtures WHERE stage='qf'
+         UNION SELECT away_team FROM fixtures WHERE stage='qf'
+       )
+       ORDER BY ks.champion DESC`)
+  ]);
+
+  // ── QF prediction cards ───────────────────────────────────────────────────
+  const qfEl = document.getElementById('ko-qf-cards');
+  if (qfMatches.length) {
+    qfEl.innerHTML = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;padding:4px 0">
+      ${qfMatches.map(m => koMatchCard(m, true)).join('')}
     </div>`;
   } else {
-    document.getElementById('bracket-wrap').innerHTML='<div class="empty">Run pipeline to generate bracket.</div>';
+    qfEl.innerHTML = '<div class="empty">QF fixtures not yet loaded — run pipeline.</div>';
   }
 
+  // ── Championship odds table ───────────────────────────────────────────────
+  const koEl = document.getElementById('ko-table');
   if (deep.length) {
-    document.getElementById('ko-table').innerHTML = `
-    <table class="tbl">
-      <thead><tr>
-        <th>Team</th><th>R32</th><th>R16</th><th>QF</th><th>SF</th><th>Final</th><th>Champion</th>
-      </tr></thead>
+    koEl.innerHTML = `<table class="tbl">
+      <thead><tr><th>Team</th><th>QF→SF</th><th>SF→Final</th><th>Final</th><th style="color:var(--gold)">Champion</th></tr></thead>
       <tbody>
-        ${deep.map(t=>`<tr>
-          <td><strong>${flag(t.team_id)} ${t.team_name}</strong></td>
-          <td>${pct(t.round_of_32)}</td><td>${pct(t.round_of_16)}</td>
-          <td>${pct(t.quarter_final)}</td><td>${pct(t.semi_final)}</td>
-          <td>${pct(t.final)}</td>
-          <td><strong style="color:var(--gold)">${pct(t.champion)}</strong></td>
-        </tr>`).join('')}
+        ${deep.map(t => {
+          const isTop = t.champion >= 0.20;
+          return `<tr style="${isTop?'background:rgba(255,210,0,.05)':''}">
+            <td><strong>${flag(t.team_id)} ${t.team_name}</strong></td>
+            <td>${pct(t.quarter_final)}</td>
+            <td>${pct(t.semi_final)}</td>
+            <td>${pct(t.final)}</td>
+            <td><strong style="color:var(--gold);font-size:1.05em">${pct(t.champion)}</strong></td>
+          </tr>`;
+        }).join('')}
       </tbody>
     </table>`;
+  } else {
+    koEl.innerHTML = '<div class="empty">Run pipeline to generate championship odds.</div>';
   }
+
+  // ── R16 results ───────────────────────────────────────────────────────────
+  document.getElementById('ko-r16-results').innerHTML =
+    r16Results.length ? koResultsGrid(r16Results) : '<div class="empty">No R16 results yet.</div>';
+
+  // ── R32 results ───────────────────────────────────────────────────────────
+  document.getElementById('ko-r32-results').innerHTML =
+    r32Results.length ? koResultsGrid(r32Results) : '<div class="empty">No R32 results yet.</div>';
 }
 
-function matchupHtml(m) {
-  return `<div class="b-match">
-    <div style="font-size:.58rem;color:var(--muted);padding:3px 9px;background:var(--surface);
-                border-bottom:1px solid var(--border)">
-      Group ${m.group_a} 1st vs Group ${m.group_b} 2nd</div>
-    <div class="b-team"><span>${flag(m.team_a_id)} ${m.team_a_name||'TBD'}</span>
-      <span class="b-prob">${m.a_prob?(m.a_prob*100).toFixed(0)+'%':''}</span></div>
-    <div class="b-team"><span>${flag(m.team_b_id)} ${m.team_b_name||'TBD'}</span>
-      <span class="b-prob">${m.b_prob?(m.b_prob*100).toFixed(0)+'%':''}</span></div>
+function koMatchCard(m, showPred) {
+  const finished  = m.home_score >= 0 && m.status === 'finished';
+  const hw = m.home_win ?? 0, dw = m.draw ?? 0, aw = m.away_win ?? 0;
+  const conf = m.confidence ?? 0;
+  const confCol = confColor(conf);
+  const dateStr = m.match_date ? String(m.match_date).slice(0,10) : '';
+
+  // Who's favoured?
+  const homeFav = hw >= aw;
+  const favPct  = Math.max(hw, aw);
+
+  return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <div style="padding:6px 12px;font-size:.65rem;color:var(--muted);background:var(--surface);
+                border-bottom:1px solid var(--border);display:flex;justify-content:space-between">
+      <span>Quarterfinal · ${dateStr}</span>
+      ${conf>0?`<span style="color:${confCol}">${confLabel(conf)}</span>`:'<span>Elo only</span>'}
+    </div>
+    ${finished
+      ? `<div style="padding:14px 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center">
+           <div>
+             <div style="font-size:1rem;font-weight:700">${flag(m.home_team)} ${m.home_name}</div>
+           </div>
+           <div style="font-size:1.6rem;font-weight:800;color:var(--text);letter-spacing:2px">
+             ${m.home_score} – ${m.away_score}
+           </div>
+           <div>
+             <div style="font-size:1rem;font-weight:700">${flag(m.away_team)} ${m.away_name}</div>
+           </div>
+         </div>`
+      : `<div style="padding:14px 16px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;text-align:center">
+           <div>
+             <div style="font-size:1rem;font-weight:700">${flag(m.home_team)} ${m.home_name}</div>
+             ${showPred && hw>0 ? `<div style="font-size:1.4rem;font-weight:800;color:${hw>=aw?'var(--green)':'var(--muted)'}">${(hw*100).toFixed(0)}%</div>` : ''}
+           </div>
+           <div style="font-size:.9rem;font-weight:700;color:var(--muted)">vs</div>
+           <div>
+             <div style="font-size:1rem;font-weight:700">${flag(m.away_team)} ${m.away_name}</div>
+             ${showPred && aw>0 ? `<div style="font-size:1.4rem;font-weight:800;color:${aw>hw?'var(--green)':'var(--muted)'}">${(aw*100).toFixed(0)}%</div>` : ''}
+           </div>
+         </div>
+         ${showPred && dw>0 ? `<div style="padding:4px 16px 10px;font-size:.7rem;color:var(--muted);text-align:center">
+           Draw: ${(dw*100).toFixed(0)}% · ${conf>0?`${(conf*100).toFixed(0)}% market-informed`:'Pure Elo model'}
+         </div>` : ''}`
+    }
+  </div>`;
+}
+
+function koResultsGrid(matches) {
+  return `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;padding:4px 0">
+    ${matches.map(m => {
+      const hs = m.home_score ?? -1, as_ = m.away_score ?? -1;
+      const hasScore = hs >= 0 && as_ >= 0;
+      const homeWon = m.result === 'home_win';
+      const awayWon = m.result === 'away_win';
+      const dateStr = m.match_date ? String(m.match_date).slice(0,10) : '';
+      return `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;
+                          padding:10px 14px;display:grid;grid-template-columns:1fr auto 1fr;
+                          align-items:center;gap:6px;text-align:center">
+        <div style="font-size:.82rem;font-weight:${homeWon?'800':'500'};color:${homeWon?'var(--text)':'var(--muted)'}">
+          ${flag(m.home_team)} ${m.home_name}
+        </div>
+        <div style="font-size:1.1rem;font-weight:700;color:var(--text);white-space:nowrap">
+          ${hasScore ? `${hs} – ${as_}` : '– –'}
+        </div>
+        <div style="font-size:.82rem;font-weight:${awayWon?'800':'500'};color:${awayWon?'var(--text)':'var(--muted)'}">
+          ${flag(m.away_team)} ${m.away_name}
+        </div>
+      </div>`;
+    }).join('')}
   </div>`;
 }
 

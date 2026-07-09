@@ -73,7 +73,38 @@
     {"id": 69, "stage": "group", "group": "J", "round": 3, "date": "2026-06-27", "home": "ALG", "away": "AUT", "venue": "Kansas City Stadium",         "home_score": null, "away_score": null, "status": "scheduled"},
     {"id": 70, "stage": "group", "group": "J", "round": 3, "date": "2026-06-27", "home": "JOR", "away": "ARG", "venue": "Dallas Stadium",              "home_score": null, "away_score": null, "status": "scheduled"},
     {"id": 71, "stage": "group", "group": "K", "round": 3, "date": "2026-06-27", "home": "COL", "away": "POR", "venue": "Miami Stadium",               "home_score": null, "away_score": null, "status": "scheduled"},
-    {"id": 72, "stage": "group", "group": "K", "round": 3, "date": "2026-06-27", "home": "COD", "away": "UZB", "venue": "Atlanta Stadium",             "home_score": null, "away_score": null, "status": "scheduled"}
+    {"id": 72, "stage": "group", "group": "K", "round": 3, "date": "2026-06-27", "home": "COD", "away": "UZB", "venue": "Atlanta Stadium",             "home_score": null, "away_score": null, "status": "scheduled"},
+
+    {"id": 101, "stage": "r32", "group": null, "round": 1, "date": "2026-06-28", "home": "CAN", "away": "RSA", "venue": "BMO Field, Toronto",            "home_score": 1, "away_score": 0, "status": "finished"},
+    {"id": 102, "stage": "r32", "group": null, "round": 1, "date": "2026-06-29", "home": "BRA", "away": "JPN", "venue": "Rose Bowl, Pasadena",            "home_score": 2, "away_score": 1, "status": "finished"},
+    {"id": 103, "stage": "r32", "group": null, "round": 1, "date": "2026-06-29", "home": "GER", "away": "PAR", "venue": "MetLife Stadium, NJ",            "home_score": 1, "away_score": 1, "advances": "away", "status": "finished"},
+    {"id": 104, "stage": "r32", "group": null, "round": 1, "date": "2026-06-29", "home": "NED", "away": "MAR", "venue": "AT&T Stadium, Dallas",           "home_score": 1, "away_score": 1, "advances": "away", "status": "finished"},
+    {"id": 105, "stage": "r32", "group": null, "round": 1, "date": "2026-06-30", "home": "NOR", "away": "CIV", "venue": "Arrowhead, Kansas City",         "home_score": 2, "away_score": 1, "status": "finished"},
+    {"id": 106, "stage": "r32", "group": null, "round": 1, "date": "2026-06-30", "home": "FRA", "away": "SWE", "venue": "Levi's Stadium, San Jose",       "home_score": 3, "away_score": 0, "status": "finished"},
+    {"id": 107, "stage": "r32", "group": null, "round": 1, "date": "2026-06-30", "home": "MEX", "away": "ECU", "venue": "Estadio Azteca, Mexico City",    "home_score": 2, "away_score": 0, "status": "finished"},
+    {"id": 108, "stage": "r32", "group": null, "round": 1, "date": "2026-07-01", "home": "ENG", "away": "COD", "venue": "Lincoln Financial, Philadelphia", "home_score": 2, "away_score": 1, "status": "finished"},
+    {"id": 109, "stage": "r32", "group": null, "round": 1, "date": "2026-07-01", "home": "BEL", "away": "SEN", "venue": "Estadio Guadalajara",            "home_score": 3, "away_score": 2, "status": "finished"},
+    {"id": 110, "stage": "r32", "group": null, "round": 1, "date": "2026-07-01", "home": "USA", "away": "BIH", "venue": "SoFi Stadium, Inglewood",        "home_score": 2, "away_score": 0, "status": "finished"},
+    {"id": 111, "stage": "r32", "group": null, "round": 1, "date": "2026-07-02", "home": "ESP", "away": "AUT", "venue": "Hard Rock Stadium, Miami",       "home_score": 3, "away_score": 0, "status": "finished"},
+    {"id": 112, "stage": "r32", "group": null, "round": 1, "date": "2026-07-02", "home": "POR", "away": "CRO", "venue": "Empower Field, Denver",          "home_score": 2, "away_score": 1, "status": "finished"},
+    {"id": 113, "stage": "r32", "group": null, "round": 1, "date": "2026-07-02", "home": "SUI", "away": "ALG", "venue": "Lumen Field, Seattle",           "home_score": 2, "away_score": 0, "status": "finished"},
+    {"id": 114, "stage": "r32", "group": null, "round": 1, "date": "2026-07-03", "home": "EGY", "away": "AUS", "venue": "NRG Stadium, Houston",           "home_score": 1, "away_score": 1, "advances": "home", "status": "finished"},
+    {"id": 115, "stage": "r32", "group": null, "round": 1, "date": "2026-07-03", "home": "ARG", "away": "CPV", "venue": "BC Place, Vancouver",            "home_score": 3, "away_score": 2, "status": "finished"},
+    {"id": 116, "stage": "r32", "group": null, "round": 1, "date": "2026-07-03", "home": "COL", "away": "GHA", "venue": "Estadio Monterrey",              "home_score": 1, "away_score": 0, "status": "finished"},
+
+    {"id": 201, "stage": "r16", "group": null, "round": 2, "date": "2026-07-04", "home": "MAR", "away": "CAN", "venue": "Gillette Stadium, Foxborough",   "home_score": 3, "away_score": 0, "status": "finished"},
+    {"id": 202, "stage": "r16", "group": null, "round": 2, "date": "2026-07-04", "home": "FRA", "away": "PAR", "venue": "AT&T Stadium, Dallas",           "home_score": 1, "away_score": 0, "status": "finished"},
+    {"id": 203, "stage": "r16", "group": null, "round": 2, "date": "2026-07-05", "home": "NOR", "away": "BRA", "venue": "Arrowhead, Kansas City",         "home_score": 2, "away_score": 1, "status": "finished"},
+    {"id": 204, "stage": "r16", "group": null, "round": 2, "date": "2026-07-05", "home": "ENG", "away": "MEX", "venue": "MetLife Stadium, NJ",            "home_score": 3, "away_score": 2, "status": "finished"},
+    {"id": 205, "stage": "r16", "group": null, "round": 2, "date": "2026-07-06", "home": "ESP", "away": "POR", "venue": "SoFi Stadium, Inglewood",        "home_score": 1, "away_score": 0, "status": "finished"},
+    {"id": 206, "stage": "r16", "group": null, "round": 2, "date": "2026-07-06", "home": "BEL", "away": "USA", "venue": "Levi's Stadium, San Jose",       "home_score": 4, "away_score": 1, "status": "finished"},
+    {"id": 207, "stage": "r16", "group": null, "round": 2, "date": "2026-07-07", "home": "ARG", "away": "EGY", "venue": "Rose Bowl, Pasadena",            "home_score": 3, "away_score": 2, "status": "finished"},
+    {"id": 208, "stage": "r16", "group": null, "round": 2, "date": "2026-07-07", "home": "SUI", "away": "COL", "venue": "BC Place, Vancouver",            "home_score": 0, "away_score": 0, "advances": "home", "status": "finished"},
+
+    {"id": 301, "stage": "qf",  "group": null, "round": 3, "date": "2026-07-09", "home": "FRA", "away": "MAR", "venue": "Gillette Stadium, Foxborough",   "home_score": null, "away_score": null, "status": "scheduled"},
+    {"id": 302, "stage": "qf",  "group": null, "round": 3, "date": "2026-07-10", "home": "ESP", "away": "BEL", "venue": "SoFi Stadium, Inglewood",        "home_score": null, "away_score": null, "status": "scheduled"},
+    {"id": 303, "stage": "qf",  "group": null, "round": 3, "date": "2026-07-11", "home": "NOR", "away": "ENG", "venue": "Hard Rock Stadium, Miami",       "home_score": null, "away_score": null, "status": "scheduled"},
+    {"id": 304, "stage": "qf",  "group": null, "round": 3, "date": "2026-07-11", "home": "ARG", "away": "SUI", "venue": "Arrowhead, Kansas City",         "home_score": null, "away_score": null, "status": "scheduled"}
   ],
-  "total": 72
+  "total": 104
 }

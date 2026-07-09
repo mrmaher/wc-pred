@@ -150,7 +150,8 @@ def init_schema(conn: duckdb.DuckDBPyConnection) -> None:
 
 def seed_static_data(conn: duckdb.DuckDBPyConnection) -> None:
     """Load teams and fixtures from JSON seed files into the DB (idempotent)."""
-    teams_file   = ROOT / "data" / "teams.json"
+    from datetime import datetime, timezone
+    teams_file    = ROOT / "data" / "teams.json"
     fixtures_file = ROOT / "data" / "fixtures.json"
 
     if teams_file.exists():
@@ -162,12 +163,59 @@ def seed_static_data(conn: duckdb.DuckDBPyConnection) -> None:
 
     if fixtures_file.exists():
         fixtures = json.loads(fixtures_file.read_text())["fixtures"]
+
+        # Insert any new fixtures (idempotent — skips existing rows)
         conn.executemany("""
             INSERT OR IGNORE INTO fixtures
               (fixture_id, stage, group_letter, round, match_date, home_team, away_team, status)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         """, [(f["id"], f["stage"], f.get("group"), f.get("round"), f.get("date"),
-               f["home"], f["away"], f.get("status","scheduled")) for f in fixtures])
+               f["home"], f["away"], f.get("status", "scheduled")) for f in fixtures])
+
+        # For finished fixtures, update status + scores in case they were seeded as 'scheduled'
+        finished_updates = [
+            (f["home_score"], f["away_score"], f["id"])
+            for f in fixtures
+            if f.get("status") == "finished"
+            and f.get("home_score") is not None and f.get("away_score") is not None
+        ]
+        if finished_updates:
+            conn.executemany("""
+                UPDATE fixtures SET status = 'finished', home_score = ?, away_score = ?
+                WHERE fixture_id = ?
+            """, finished_updates)
+
+        # Seed match_results for finished KO fixtures so the dashboard has results
+        # even if the football-data.org API hasn't synced yet.
+        # 'advances' field overrides result for penalty-shootout matches.
+        now = datetime.now(timezone.utc)
+        for f in fixtures:
+            if f.get("status") != "finished":
+                continue
+            if f.get("home_score") is None or f.get("away_score") is None:
+                continue
+            if f.get("stage") == "group":
+                continue  # group results come from sync_results API call
+
+            hs = f["home_score"]
+            aws = f["away_score"]
+            advances = f.get("advances")  # 'home' | 'away' | None (PK tiebreaker)
+            if advances == "home":
+                result = "home_win"
+            elif advances == "away":
+                result = "away_win"
+            elif hs > aws:
+                result = "home_win"
+            elif aws > hs:
+                result = "away_win"
+            else:
+                result = "draw"
+
+            conn.execute("""
+                INSERT OR IGNORE INTO match_results
+                  (fixture_id, home_score, away_score, result, confirmed_at)
+                VALUES (?, ?, ?, ?, ?)
+            """, (f["id"], hs, aws, result, now))
 
     conn.commit()
 

@@ -233,16 +233,20 @@ def _match_fixture(event: dict, fixtures: list) -> int | None:
 # ── Results collection ────────────────────────────────────────────────────────
 
 def record_result(conn: duckdb.DuckDBPyConnection,
-                  fixture_id: int, home_score: int, away_score: int) -> None:
+                  fixture_id: int, home_score: int, away_score: int,
+                  result_override: str | None = None) -> None:
     """
     Record a confirmed match result and update fixture status.
-    Also updates the seed Elo in teams table based on the actual outcome.
-    Called manually or via a future results-API integration.
+    result_override: pass 'home_win' or 'away_win' for penalty-shootout matches
+    where the fullTime score is level but one team advances.
     """
     now = datetime.now(timezone.utc)
-    result = ("home_win" if home_score > away_score
-              else "away_win" if away_score > home_score
-              else "draw")
+    if result_override:
+        result = result_override
+    else:
+        result = ("home_win" if home_score > away_score
+                  else "away_win" if away_score > home_score
+                  else "draw")
 
     conn.execute("""
         INSERT OR REPLACE INTO match_results

@@ -86,56 +86,69 @@ def group_map(conn: duckdb.DuckDBPyConnection) -> dict[str, list[str]]:
     return dict(sorted(groups.items()))
 
 
+def build_actual_ko_bracket(conn: duckdb.DuckDBPyConnection) -> list[tuple[str, str]]:
+    """
+    Load the current-round knockout bracket from actual DB fixtures.
+
+    Finds the most advanced KO stage that still has unplayed matches and
+    returns those matchups. As rounds finish and new fixtures are added,
+    this naturally advances to the next round.
+    """
+    priority = {"qf": 1, "sf": 2, "final": 3, "r16": 4, "r32": 5}
+
+    scheduled = conn.execute("""
+        SELECT stage, home_team, away_team
+        FROM fixtures
+        WHERE stage IN ('r32','r16','qf','sf','final')
+          AND status IN ('scheduled','live')
+        ORDER BY match_date ASC
+    """).fetchall()
+
+    if not scheduled:
+        log.info("No scheduled KO fixtures — KO simulation skipped")
+        return []
+
+    current_stage = min(scheduled, key=lambda r: priority.get(r[0], 9))[0]
+    bracket = [(row[1], row[2]) for row in scheduled if row[0] == current_stage]
+    log.info("KO bracket: %d '%s' fixture(s) to simulate", len(bracket), current_stage)
+    return bracket
+
+
 def build_knockout_bracket(
     group_standings: dict[str, list[dict]],
     groups: list[str]
 ) -> list[tuple[str, str]]:
     """
-    Build 32-team R32 bracket for the 2026 World Cup format:
-      - Top 2 from each of 12 groups = 24 teams
-      - 8 best 3rd-place finishers (by avg_points, then advance_prob) = 8 teams
-      - Total = 32 teams = 16 matchups — a power of 2, so no team ever gets dropped.
-
-    Pairing: Group-1st seeds face the weakest available opponents first.
+    Fallback: derive R32 bracket from group simulation results.
+    Used only if no KO fixtures exist in the DB yet.
     """
     firsts, seconds, thirds = [], [], []
-
     for g in groups:
         s = group_standings.get(g, [])
         if len(s) > 0: firsts.append(s[0])
         if len(s) > 1: seconds.append(s[1])
         if len(s) > 2: thirds.append(s[2])
 
-    # 8 best 3rd-place teams — ranked by expected points, tiebroken by advance_prob
     best_thirds = sorted(
         thirds,
         key=lambda t: (t.get("avg_points", 0), t.get("advance_prob", 0)),
         reverse=True
     )[:8]
 
-    # Bracket: pair 1st-place seeds against 2nd-place from adjacent groups,
-    # then slot best-thirds against remaining 2nd-place teams.
-    # Simple sequential pairing keeps the logic transparent.
-    seeded = [t["team_id"] for t in firsts]        # 12 group winners
-    unseeded_2nd = [t["team_id"] for t in seconds] # 12 runners-up
-    wild_cards = [t["team_id"] for t in best_thirds] # 8 best 3rds
+    seeded       = [t["team_id"] for t in firsts]
+    unseeded_2nd = [t["team_id"] for t in seconds]
+    wild_cards   = [t["team_id"] for t in best_thirds]
 
-    # 32 qualifiers: pair group winners against runners-up/wildcards
-    # Adjacent group cross-pairing: A1 vs B2, B1 vs A2, etc. (6 pairs → 12 teams)
     bracket = []
     for i in range(0, len(seeded) - 1, 2):
-        ga_winner  = seeded[i]
-        gb_runner  = unseeded_2nd[i + 1] if i + 1 < len(unseeded_2nd) else None
-        gb_winner  = seeded[i + 1]
-        ga_runner  = unseeded_2nd[i] if i < len(unseeded_2nd) else None
+        ga_winner = seeded[i]
+        gb_runner = unseeded_2nd[i + 1] if i + 1 < len(unseeded_2nd) else None
+        gb_winner = seeded[i + 1]
+        ga_runner = unseeded_2nd[i] if i < len(unseeded_2nd) else None
         if ga_winner and gb_runner: bracket.append((ga_winner, gb_runner))
         if gb_winner and ga_runner: bracket.append((gb_winner, ga_runner))
-
-    # Slot 8 wild-card 3rd-place teams against the 4 remaining seeded/2nd teams
-    # (after 6 pairs above, 12 seeded and 12 runners-up are used; add wild-card matchups)
     for i in range(0, len(wild_cards) - 1, 2):
         bracket.append((wild_cards[i], wild_cards[i + 1]))
-
     return bracket
 
 
@@ -236,7 +249,12 @@ def run(skip_collect: bool = False, n_sims: int = 10000) -> dict:
 
     # ── Step 4: Knockout simulation ───────────────────────────────────────────
     log.info("Step 4: Simulating knockout bracket...")
-    bracket = build_knockout_bracket(group_standings, list(groups.keys()))
+    # Prefer actual KO fixtures from DB (populated once group stage ends).
+    # Fall back to group-sim-derived bracket only if DB has no KO fixtures yet.
+    bracket = build_actual_ko_bracket(conn)
+    if not bracket:
+        log.info("  No KO fixtures in DB — falling back to group-sim bracket")
+        bracket = build_knockout_bracket(group_standings, list(groups.keys()))
     all_ko_teams = {t for pair in bracket for t in pair if t}
     ko_elo = {t: elo_data.get(t, 1700) for t in all_ko_teams}
 
