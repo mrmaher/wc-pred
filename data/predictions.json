@@ -1,8 +1,8 @@
 {
   "meta": {
-    "generated_at": "2026-07-11T17:44:32.704266+00:00",
+    "generated_at": "2026-07-11T18:43:17.593040+00:00",
     "n_simulations": 10000,
-    "pipeline_sec": 31.09,
+    "pipeline_sec": 8.23,
     "odds_available": true,
     "value_threshold": 0.05
   },
@@ -14,9 +14,9 @@
         "elo": 1818.24169921875,
         "confederation": "CONCACAF",
         "advance_prob": 1.0,
-        "avg_points": 7.35,
-        "finish_1st": 0.756,
-        "finish_2nd": 0.243,
+        "avg_points": 7.37,
+        "finish_1st": 0.762,
+        "finish_2nd": 0.238,
         "finish_3rd": 0.0,
         "finish_4th": 0.0
       },
@@ -25,36 +25,36 @@
         "team_name": "Korea Republic",
         "elo": 1822.7218017578125,
         "confederation": "AFC",
-        "advance_prob": 0.646,
-        "avg_points": 4.64,
-        "finish_1st": 0.243,
-        "finish_2nd": 0.403,
-        "finish_3rd": 0.189,
-        "finish_4th": 0.165
+        "advance_prob": 0.635,
+        "avg_points": 4.6,
+        "finish_1st": 0.238,
+        "finish_2nd": 0.397,
+        "finish_3rd": 0.203,
+        "finish_4th": 0.162
       },
       {
         "team_id": "CZE",
         "team_name": "Czechia",
         "elo": 1830.75830078125,
         "confederation": "UEFA",
-        "advance_prob": 0.216,
-        "avg_points": 2.39,
+        "advance_prob": 0.223,
+        "avg_points": 2.41,
         "finish_1st": 0.0,
-        "finish_2nd": 0.216,
-        "finish_3rd": 0.471,
-        "finish_4th": 0.313
+        "finish_2nd": 0.223,
+        "finish_3rd": 0.466,
+        "finish_4th": 0.312
       },
       {
         "team_id": "RSA",
         "team_name": "South Africa",
         "elo": 1672.2781982421875,
         "confederation": "CAF",
-        "advance_prob": 0.138,
-        "avg_points": 1.91,
+        "advance_prob": 0.142,
+        "avg_points": 1.9,
         "finish_1st": 0.0,
-        "finish_2nd": 0.138,
-        "finish_3rd": 0.34,
-        "finish_4th": 0.522
+        "finish_2nd": 0.142,
+        "finish_3rd": 0.332,
+        "finish_4th": 0.526
       }
     ],
     "B": [
@@ -71,10 +71,10 @@
         "finish_4th": 0.0
       },
       {
-        "team_id": "BIH",
-        "team_name": "Bosnia & Herzegovina",
-        "elo": 1757.607421875,
-        "confederation": "UEFA",
+        "team_id": "CAN",
+        "team_name": "Canada",
+        "elo": 1742.37890625,
+        "confederation": "CONCACAF",
         "advance_prob": 0.503,
         "avg_points": 4.0,
         "finish_1st": 0.0,
@@ -83,10 +83,10 @@
         "finish_4th": 0.0
       },
       {
-        "team_id": "CAN",
-        "team_name": "Canada",
-        "elo": 1742.37890625,
-        "confederation": "CONCACAF",
+        "team_id": "BIH",
+        "team_name": "Bosnia & Herzegovina",
+        "elo": 1757.607421875,
+        "confederation": "UEFA",
         "advance_prob": 0.497,
         "avg_points": 4.0,
         "finish_1st": 0.0,
@@ -100,7 +100,7 @@
         "elo": 1591.392578125,
         "confederation": "AFC",
         "advance_prob": 0.0,
-        "avg_points": 0.41,
+        "avg_points": 0.42,
         "finish_1st": 0.0,
         "finish_2nd": 0.0,
         "finish_3rd": 0.0,
@@ -113,11 +113,11 @@
         "team_name": "Brazil",
         "elo": 2060.029296875,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.851,
+        "advance_prob": 0.847,
         "avg_points": 6.06,
-        "finish_1st": 0.538,
-        "finish_2nd": 0.313,
-        "finish_3rd": 0.149,
+        "finish_1st": 0.542,
+        "finish_2nd": 0.305,
+        "finish_3rd": 0.153,
         "finish_4th": 0.0
       },
       {
@@ -125,11 +125,11 @@
         "team_name": "Morocco",
         "elo": 1858.9615478515625,
         "confederation": "CAF",
-        "advance_prob": 0.709,
-        "avg_points": 5.41,
-        "finish_1st": 0.288,
-        "finish_2nd": 0.421,
-        "finish_3rd": 0.291,
+        "advance_prob": 0.707,
+        "avg_points": 5.38,
+        "finish_1st": 0.282,
+        "finish_2nd": 0.425,
+        "finish_3rd": 0.293,
         "finish_4th": 0.0
       },
       {
@@ -137,12 +137,12 @@
         "team_name": "Scotland",
         "elo": 1853.970703125,
         "confederation": "UEFA",
-        "advance_prob": 0.44,
-        "avg_points": 4.45,
-        "finish_1st": 0.173,
-        "finish_2nd": 0.267,
-        "finish_3rd": 0.468,
-        "finish_4th": 0.092
+        "advance_prob": 0.446,
+        "avg_points": 4.48,
+        "finish_1st": 0.175,
+        "finish_2nd": 0.271,
+        "finish_3rd": 0.466,
+        "finish_4th": 0.088
       },
       {
         "team_id": "HAI",
@@ -150,11 +150,11 @@
         "elo": 1526.999267578125,
         "confederation": "CONCACAF",
         "advance_prob": 0.0,
-        "avg_points": 0.49,
+        "avg_points": 0.48,
         "finish_1st": 0.0,
         "finish_2nd": 0.0,
-        "finish_3rd": 0.092,
-        "finish_4th": 0.908
+        "finish_3rd": 0.088,
+        "finish_4th": 0.912
       }
     ],
     "D": [
@@ -163,11 +163,11 @@
         "team_name": "USA",
         "elo": 1789.736328125,
         "confederation": "CONCACAF",
-        "advance_prob": 0.953,
+        "advance_prob": 0.95,
         "avg_points": 6.0,
-        "finish_1st": 0.582,
-        "finish_2nd": 0.372,
-        "finish_3rd": 0.047,
+        "finish_1st": 0.591,
+        "finish_2nd": 0.359,
+        "finish_3rd": 0.051,
         "finish_4th": 0.0
       },
       {
@@ -175,36 +175,36 @@
         "team_name": "T\u00fcrkiye",
         "elo": 1836.263671875,
         "confederation": "UEFA",
-        "advance_prob": 0.498,
+        "advance_prob": 0.503,
         "avg_points": 4.66,
-        "finish_1st": 0.215,
-        "finish_2nd": 0.283,
-        "finish_3rd": 0.319,
-        "finish_4th": 0.182
+        "finish_1st": 0.211,
+        "finish_2nd": 0.292,
+        "finish_3rd": 0.314,
+        "finish_4th": 0.183
       },
       {
         "team_id": "PAR",
         "team_name": "Paraguay",
         "elo": 1702.5567626953125,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.331,
+        "advance_prob": 0.338,
         "avg_points": 4.22,
         "finish_1st": 0.137,
-        "finish_2nd": 0.194,
-        "finish_3rd": 0.399,
-        "finish_4th": 0.271
+        "finish_2nd": 0.201,
+        "finish_3rd": 0.397,
+        "finish_4th": 0.265
       },
       {
         "team_id": "AUS",
         "team_name": "Australia",
         "elo": 1753.4432373046875,
         "confederation": "AFC",
-        "advance_prob": 0.217,
-        "avg_points": 2.66,
-        "finish_1st": 0.066,
-        "finish_2nd": 0.151,
-        "finish_3rd": 0.235,
-        "finish_4th": 0.547
+        "advance_prob": 0.21,
+        "avg_points": 2.65,
+        "finish_1st": 0.062,
+        "finish_2nd": 0.148,
+        "finish_3rd": 0.238,
+        "finish_4th": 0.552
       }
     ],
     "E": [
@@ -215,8 +215,8 @@
         "confederation": "UEFA",
         "advance_prob": 1.0,
         "avg_points": 7.8,
-        "finish_1st": 0.848,
-        "finish_2nd": 0.152,
+        "finish_1st": 0.852,
+        "finish_2nd": 0.148,
         "finish_3rd": 0.0,
         "finish_4th": 0.0
       },
@@ -225,24 +225,24 @@
         "team_name": "Ecuador",
         "elo": 1842.221923828125,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.544,
+        "advance_prob": 0.545,
         "avg_points": 3.66,
-        "finish_1st": 0.126,
-        "finish_2nd": 0.418,
-        "finish_3rd": 0.332,
-        "finish_4th": 0.124
+        "finish_1st": 0.125,
+        "finish_2nd": 0.42,
+        "finish_3rd": 0.335,
+        "finish_4th": 0.12
       },
       {
         "team_id": "CIV",
         "team_name": "C\u00f4te d'Ivoire",
         "elo": 1757.191162109375,
         "confederation": "CAF",
-        "advance_prob": 0.365,
+        "advance_prob": 0.363,
         "avg_points": 3.32,
-        "finish_1st": 0.026,
-        "finish_2nd": 0.339,
-        "finish_3rd": 0.419,
-        "finish_4th": 0.216
+        "finish_1st": 0.023,
+        "finish_2nd": 0.34,
+        "finish_3rd": 0.424,
+        "finish_4th": 0.212
       },
       {
         "team_id": "CUW",
@@ -253,8 +253,8 @@
         "avg_points": 1.62,
         "finish_1st": 0.0,
         "finish_2nd": 0.091,
-        "finish_3rd": 0.249,
-        "finish_4th": 0.66
+        "finish_3rd": 0.241,
+        "finish_4th": 0.668
       }
     ],
     "F": [
@@ -263,11 +263,11 @@
         "team_name": "Netherlands",
         "elo": 1998.603515625,
         "confederation": "UEFA",
-        "advance_prob": 0.931,
-        "avg_points": 6.2,
-        "finish_1st": 0.668,
-        "finish_2nd": 0.263,
-        "finish_3rd": 0.069,
+        "advance_prob": 0.934,
+        "avg_points": 6.21,
+        "finish_1st": 0.675,
+        "finish_2nd": 0.259,
+        "finish_3rd": 0.066,
         "finish_4th": 0.0
       },
       {
@@ -275,36 +275,36 @@
         "team_name": "Sweden",
         "elo": 1887.7591552734375,
         "confederation": "UEFA",
-        "advance_prob": 0.516,
+        "advance_prob": 0.51,
         "avg_points": 4.44,
-        "finish_1st": 0.128,
-        "finish_2nd": 0.387,
-        "finish_3rd": 0.396,
-        "finish_4th": 0.088
+        "finish_1st": 0.124,
+        "finish_2nd": 0.386,
+        "finish_3rd": 0.398,
+        "finish_4th": 0.092
       },
       {
         "team_id": "JPN",
         "team_name": "Japan",
         "elo": 1863.2408447265625,
         "confederation": "AFC",
-        "advance_prob": 0.483,
-        "avg_points": 4.07,
-        "finish_1st": 0.167,
-        "finish_2nd": 0.316,
-        "finish_3rd": 0.315,
-        "finish_4th": 0.202
+        "advance_prob": 0.485,
+        "avg_points": 4.06,
+        "finish_1st": 0.168,
+        "finish_2nd": 0.317,
+        "finish_3rd": 0.309,
+        "finish_4th": 0.206
       },
       {
         "team_id": "TUN",
         "team_name": "Tunisia",
         "elo": 1751.396484375,
         "confederation": "CAF",
-        "advance_prob": 0.07,
-        "avg_points": 1.65,
-        "finish_1st": 0.036,
-        "finish_2nd": 0.034,
-        "finish_3rd": 0.22,
-        "finish_4th": 0.71
+        "advance_prob": 0.072,
+        "avg_points": 1.66,
+        "finish_1st": 0.033,
+        "finish_2nd": 0.039,
+        "finish_3rd": 0.226,
+        "finish_4th": 0.702
       }
     ],
     "G": [
@@ -313,48 +313,48 @@
         "team_name": "Belgium",
         "elo": 1942.2261962890625,
         "confederation": "UEFA",
-        "advance_prob": 0.818,
+        "advance_prob": 0.816,
         "avg_points": 4.45,
-        "finish_1st": 0.392,
-        "finish_2nd": 0.425,
-        "finish_3rd": 0.119,
-        "finish_4th": 0.064
+        "finish_1st": 0.393,
+        "finish_2nd": 0.423,
+        "finish_3rd": 0.122,
+        "finish_4th": 0.061
       },
       {
         "team_id": "IRN",
         "team_name": "IR Iran",
         "elo": 1803.688232421875,
         "confederation": "AFC",
-        "advance_prob": 0.526,
+        "advance_prob": 0.527,
         "avg_points": 3.69,
-        "finish_1st": 0.278,
+        "finish_1st": 0.279,
         "finish_2nd": 0.248,
-        "finish_3rd": 0.359,
-        "finish_4th": 0.115
+        "finish_3rd": 0.355,
+        "finish_4th": 0.118
       },
       {
         "team_id": "EGY",
         "team_name": "Egypt",
         "elo": 1716.311767578125,
         "confederation": "CAF",
-        "advance_prob": 0.459,
-        "avg_points": 3.94,
-        "finish_1st": 0.269,
+        "advance_prob": 0.455,
+        "avg_points": 3.92,
+        "finish_1st": 0.265,
         "finish_2nd": 0.19,
-        "finish_3rd": 0.311,
-        "finish_4th": 0.231
+        "finish_3rd": 0.308,
+        "finish_4th": 0.237
       },
       {
         "team_id": "NZL",
         "team_name": "New Zealand",
         "elo": 1575.687255859375,
         "confederation": "OFC",
-        "advance_prob": 0.198,
-        "avg_points": 2.35,
-        "finish_1st": 0.061,
-        "finish_2nd": 0.138,
-        "finish_3rd": 0.211,
-        "finish_4th": 0.591
+        "advance_prob": 0.201,
+        "avg_points": 2.36,
+        "finish_1st": 0.063,
+        "finish_2nd": 0.139,
+        "finish_3rd": 0.215,
+        "finish_4th": 0.583
       }
     ],
     "H": [
@@ -363,11 +363,11 @@
         "team_name": "Spain",
         "elo": 2059.773681640625,
         "confederation": "UEFA",
-        "advance_prob": 0.904,
-        "avg_points": 5.94,
-        "finish_1st": 0.682,
-        "finish_2nd": 0.223,
-        "finish_3rd": 0.096,
+        "advance_prob": 0.901,
+        "avg_points": 5.96,
+        "finish_1st": 0.694,
+        "finish_2nd": 0.207,
+        "finish_3rd": 0.099,
         "finish_4th": 0.0
       },
       {
@@ -375,36 +375,36 @@
         "team_name": "Uruguay",
         "elo": 1892.3538818359375,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.548,
+        "advance_prob": 0.546,
         "avg_points": 3.83,
-        "finish_1st": 0.226,
-        "finish_2nd": 0.322,
-        "finish_3rd": 0.254,
-        "finish_4th": 0.198
+        "finish_1st": 0.219,
+        "finish_2nd": 0.328,
+        "finish_3rd": 0.256,
+        "finish_4th": 0.197
       },
       {
         "team_id": "CPV",
         "team_name": "Cabo Verde",
         "elo": 1654.1806640625,
         "confederation": "CAF",
-        "advance_prob": 0.323,
-        "avg_points": 3.15,
-        "finish_1st": 0.047,
-        "finish_2nd": 0.276,
-        "finish_3rd": 0.304,
-        "finish_4th": 0.373
+        "advance_prob": 0.334,
+        "avg_points": 3.19,
+        "finish_1st": 0.045,
+        "finish_2nd": 0.289,
+        "finish_3rd": 0.302,
+        "finish_4th": 0.364
       },
       {
         "team_id": "SAU",
         "team_name": "Saudi Arabia",
         "elo": 1717.8193359375,
         "confederation": "AFC",
-        "advance_prob": 0.225,
-        "avg_points": 2.45,
-        "finish_1st": 0.045,
-        "finish_2nd": 0.179,
-        "finish_3rd": 0.346,
-        "finish_4th": 0.429
+        "advance_prob": 0.218,
+        "avg_points": 2.41,
+        "finish_1st": 0.041,
+        "finish_2nd": 0.177,
+        "finish_3rd": 0.343,
+        "finish_4th": 0.439
       }
     ],
     "I": [
@@ -425,36 +425,36 @@
         "team_name": "Norway",
         "elo": 1908.794677734375,
         "confederation": "UEFA",
-        "advance_prob": 0.951,
+        "advance_prob": 0.95,
         "avg_points": 6.26,
         "finish_1st": 0.329,
-        "finish_2nd": 0.622,
-        "finish_3rd": 0.022,
-        "finish_4th": 0.027
-      },
-      {
-        "team_id": "IRQ",
-        "team_name": "Iraq",
-        "elo": 1642.027099609375,
-        "confederation": "AFC",
-        "advance_prob": 0.025,
-        "avg_points": 0.61,
-        "finish_1st": 0.0,
-        "finish_2nd": 0.025,
-        "finish_3rd": 0.064,
-        "finish_4th": 0.911
+        "finish_2nd": 0.621,
+        "finish_3rd": 0.025,
+        "finish_4th": 0.025
       },
       {
         "team_id": "SEN",
         "team_name": "Senegal",
         "elo": 1877.972900390625,
         "confederation": "CAF",
-        "advance_prob": 0.024,
+        "advance_prob": 0.027,
         "avg_points": 3.0,
         "finish_1st": 0.0,
-        "finish_2nd": 0.024,
-        "finish_3rd": 0.914,
-        "finish_4th": 0.062
+        "finish_2nd": 0.027,
+        "finish_3rd": 0.91,
+        "finish_4th": 0.063
+      },
+      {
+        "team_id": "IRQ",
+        "team_name": "Iraq",
+        "elo": 1642.027099609375,
+        "confederation": "AFC",
+        "advance_prob": 0.023,
+        "avg_points": 0.62,
+        "finish_1st": 0.0,
+        "finish_2nd": 0.023,
+        "finish_3rd": 0.065,
+        "finish_4th": 0.912
       }
     ],
     "J": [
@@ -463,11 +463,11 @@
         "team_name": "Argentina",
         "elo": 2142.799072265625,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.999,
-        "avg_points": 8.63,
-        "finish_1st": 0.981,
-        "finish_2nd": 0.018,
-        "finish_3rd": 0.001,
+        "advance_prob": 0.998,
+        "avg_points": 8.64,
+        "finish_1st": 0.979,
+        "finish_2nd": 0.019,
+        "finish_3rd": 0.002,
         "finish_4th": 0.0
       },
       {
@@ -475,36 +475,36 @@
         "team_name": "Austria",
         "elo": 1866.859619140625,
         "confederation": "UEFA",
-        "advance_prob": 0.652,
-        "avg_points": 4.65,
+        "advance_prob": 0.646,
+        "avg_points": 4.64,
         "finish_1st": 0.01,
-        "finish_2nd": 0.642,
-        "finish_3rd": 0.311,
-        "finish_4th": 0.036
+        "finish_2nd": 0.635,
+        "finish_3rd": 0.32,
+        "finish_4th": 0.035
       },
       {
         "team_id": "ALG",
         "team_name": "Algeria",
         "elo": 1783.140380859375,
         "confederation": "CAF",
-        "advance_prob": 0.304,
-        "avg_points": 2.96,
-        "finish_1st": 0.004,
-        "finish_2nd": 0.3,
-        "finish_3rd": 0.43,
-        "finish_4th": 0.266
+        "advance_prob": 0.311,
+        "avg_points": 2.98,
+        "finish_1st": 0.005,
+        "finish_2nd": 0.306,
+        "finish_3rd": 0.42,
+        "finish_4th": 0.269
       },
       {
         "team_id": "JOR",
         "team_name": "Jordan",
         "elo": 1649.2010498046875,
         "confederation": "AFC",
-        "advance_prob": 0.045,
-        "avg_points": 1.21,
+        "advance_prob": 0.046,
+        "avg_points": 1.2,
         "finish_1st": 0.005,
         "finish_2nd": 0.04,
-        "finish_3rd": 0.257,
-        "finish_4th": 0.698
+        "finish_3rd": 0.258,
+        "finish_4th": 0.697
       }
     ],
     "K": [
@@ -513,23 +513,23 @@
         "team_name": "Colombia",
         "elo": 1916.4820556640625,
         "confederation": "CONMEBOL",
-        "advance_prob": 0.901,
-        "avg_points": 6.46,
-        "finish_1st": 0.471,
-        "finish_2nd": 0.429,
-        "finish_3rd": 0.072,
-        "finish_4th": 0.027
+        "advance_prob": 0.895,
+        "avg_points": 6.45,
+        "finish_1st": 0.461,
+        "finish_2nd": 0.434,
+        "finish_3rd": 0.076,
+        "finish_4th": 0.028
       },
       {
         "team_id": "POR",
         "team_name": "Portugal",
         "elo": 2007.5179443359375,
         "confederation": "UEFA",
-        "advance_prob": 0.853,
-        "avg_points": 5.68,
-        "finish_1st": 0.529,
-        "finish_2nd": 0.325,
-        "finish_3rd": 0.147,
+        "advance_prob": 0.858,
+        "avg_points": 5.71,
+        "finish_1st": 0.539,
+        "finish_2nd": 0.32,
+        "finish_3rd": 0.142,
         "finish_4th": 0.0
       },
       {
@@ -550,11 +550,11 @@
         "elo": 1589.5328369140625,
         "confederation": "AFC",
         "advance_prob": 0.0,
-        "avg_points": 0.49,
+        "avg_points": 0.48,
         "finish_1st": 0.0,
         "finish_2nd": 0.0,
-        "finish_3rd": 0.027,
-        "finish_4th": 0.973
+        "finish_3rd": 0.028,
+        "finish_4th": 0.972
       }
     ],
     "L": [
@@ -563,48 +563,48 @@
         "team_name": "England",
         "elo": 1995.0233154296875,
         "confederation": "UEFA",
-        "advance_prob": 0.928,
-        "avg_points": 6.32,
-        "finish_1st": 0.756,
-        "finish_2nd": 0.172,
-        "finish_3rd": 0.071,
-        "finish_4th": 0.001
+        "advance_prob": 0.921,
+        "avg_points": 6.31,
+        "finish_1st": 0.75,
+        "finish_2nd": 0.171,
+        "finish_3rd": 0.077,
+        "finish_4th": 0.002
       },
       {
         "team_id": "CRO",
         "team_name": "Croatia",
         "elo": 1945.992431640625,
         "confederation": "UEFA",
-        "advance_prob": 0.771,
-        "avg_points": 5.18,
-        "finish_1st": 0.176,
-        "finish_2nd": 0.595,
-        "finish_3rd": 0.187,
-        "finish_4th": 0.043
+        "advance_prob": 0.774,
+        "avg_points": 5.19,
+        "finish_1st": 0.177,
+        "finish_2nd": 0.597,
+        "finish_3rd": 0.19,
+        "finish_4th": 0.036
       },
       {
         "team_id": "PAN",
         "team_name": "Panama",
         "elo": 1692.9766845703125,
         "confederation": "CONCACAF",
-        "advance_prob": 0.206,
-        "avg_points": 2.59,
-        "finish_1st": 0.068,
-        "finish_2nd": 0.139,
-        "finish_3rd": 0.326,
-        "finish_4th": 0.468
+        "advance_prob": 0.213,
+        "avg_points": 2.61,
+        "finish_1st": 0.07,
+        "finish_2nd": 0.142,
+        "finish_3rd": 0.324,
+        "finish_4th": 0.463
       },
       {
         "team_id": "GHA",
         "team_name": "Ghana",
         "elo": 1679.007568359375,
         "confederation": "CAF",
-        "advance_prob": 0.095,
-        "avg_points": 2.33,
-        "finish_1st": 0.001,
-        "finish_2nd": 0.093,
-        "finish_3rd": 0.417,
-        "finish_4th": 0.488
+        "advance_prob": 0.092,
+        "avg_points": 2.31,
+        "finish_1st": 0.002,
+        "finish_2nd": 0.09,
+        "finish_3rd": 0.41,
+        "finish_4th": 0.499
       }
     ]
   },
@@ -1932,23 +1932,23 @@
   },
   "knockout_sims": {
     "NOR": {
-      "champion": 0.098,
-      "final": 0.3653,
+      "champion": 0.0964,
+      "final": 0.3762,
       "semi_final": 0.0,
       "quarter_final": 0.0,
       "round_of_16": 0.0,
-      "round_of_32": 0.3653
+      "round_of_32": 0.3762
     },
     "ENG": {
-      "champion": 0.2267,
-      "final": 0.6347,
+      "champion": 0.2236,
+      "final": 0.6238,
       "semi_final": 0.0,
       "quarter_final": 0.0,
       "round_of_16": 0.0,
-      "round_of_32": 0.6347
+      "round_of_32": 0.6238
     },
     "ARG": {
-      "champion": 0.5452,
+      "champion": 0.5453,
       "final": 0.7394,
       "semi_final": 0.0,
       "quarter_final": 0.0,
@@ -1956,7 +1956,7 @@
       "round_of_32": 0.7394
     },
     "SUI": {
-      "champion": 0.1301,
+      "champion": 0.1347,
       "final": 0.2606,
       "semi_final": 0.0,
       "quarter_final": 0.0,
